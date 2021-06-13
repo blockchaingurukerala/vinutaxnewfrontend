@@ -147,13 +147,13 @@ export class ReportComponent implements OnInit {
   hmrcCall(){
     this.api.hmrcCall().subscribe((data:any)=>{
       console.log(data);
-      window.alert(data.message);
-      this.api.hmrcDataUploaded(this.email,this.selectedYear,this.selectedQuarter).subscribe(async (data:any)=>{
-        if((data.msg=="Successfully Inserted")){
-          window.alert("successfully Inserted");
-          this.quarterChange();
-        }
-      });  
+      // window.alert(data.message);
+      // this.api.hmrcDataUploaded(this.email,this.selectedYear,this.selectedQuarter).subscribe(async (data:any)=>{
+      //   if((data.msg=="Successfully Inserted")){
+      //     window.alert("successfully Inserted");
+      //     this.quarterChange();
+      //   }
+      // });  
    });
     
    

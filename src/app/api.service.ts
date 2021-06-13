@@ -66,10 +66,13 @@ export class ApiService {
     //return this.http.get("http://localhost:8080/applicationCall");
     
     
-    this.headers.append("Accept","application/vnd.hmrc.1.0+json");    
-    this.headers.append("Access-Control-Allow-Origin", "*");
+    //this.headers.append("Accept","application/vnd.hmrc.1.0+json");    
+    // this.headers.append("Access-Control-Allow-Origin", "*");
     // this.headers.set('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
-    return this.http.get("https://api.service.hmrc.gov.uk/hello/world",{headers: this.headers});
+    //return this.http.get("https://api.service.hmrc.gov.uk/hello/world",{headers: this.headers});
+      return this.http.get("http://localhost:3000/userCall");
+      
+
  }
  checkHmrcDataUploaded(email:string,year:string,quarter:string){
   return this.http.post("http://localhost:3000/checkHmrcUploaded",{"userEmailId":email,"year":year,"quarter":quarter});
