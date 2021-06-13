@@ -1,0 +1,80 @@
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li ><a routerLink="/summary">Summary</a></li>
+        <li ><a routerLink="/dashboard">Income</a></li>
+        <li><a routerLink="/expence">Expence</a></li>
+        <li class="active"><a routerLink="/report">Report</a></li>    
+        <li><a routerLink="/allaccount">All Account</a></li>      
+      </ul>
+      <div class="col col-sm-4 col-md-2 col-lg-2">
+
+      </div>
+      <div class="col col-sm-4 col-md-8 col-lg-8">
+        <div class="table-responsive">
+          <table class="table ">
+              <tr>
+                <th  colspan="1" style="text-align: center;font-size: larger;">
+                  <select class="form-control" [(ngModel)]="selectedYear" (change)="yearChange()">
+                    <option value="19">19-20</option>                    
+                    <option value="20"  selected>20-21</option>                    
+                    <option value="21">21-22</option>
+                    <option value="22">22-23</option>
+                    <option value="23">23-24</option>
+                    <option value="24">24-25</option>
+                    <option value="25">25-26</option>
+                  </select>                                    
+                </th> 
+                <th  colspan="1" style="text-align: center;font-size: larger;">
+                  <select class="form-control" [(ngModel)]="selectedQuarter" (change)="quarterChange()">
+                    <option value="0" selected>All</option> 
+                    <option value="1">Q1</option>
+                    <option value="2">Q2</option>
+                    <option value="3">Q3</option>
+                    <option value="4">Q4</option>
+                  </select>                                    
+                </th>                                       
+            </tr>
+              <tr>
+                <th  colspan="2" style="text-align: center;font-weight: 800;font-size: larger;">REPORT</th>                        
+            </tr>
+              <tr>
+                  <th  colspan="2">Incomes</th>                        
+              </tr>
+              <!-- <tr *ngFor="let income of incomes; let i = index;"> -->
+                <tr *ngFor="let income of consolidatedincomes | keyvalue; let i = index;">
+                <td>{{income.key}}</td>
+                <td>{{income.value}}</td>
+                <!-- <td>{{income.category}}</td>
+                <td>{{income.amount}}</td> -->
+              </tr>
+              <tr>
+                <td style="text-align: center;font-weight: bold;">Total Income</td>
+                <td style="font-weight: bold;">{{totalincome}}</td>
+              </tr>
+              <tr>
+                <th colspan="2">Expences</th>                        
+            </tr>
+            <tr *ngFor="let expence of consolidatedexpences | keyvalue; let i = index;">
+              <td>{{expence.key}}</td>
+              <td>{{expence.value}}</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;font-weight: bold;">Total Expence</td>
+              <td style="font-weight: bold;">{{totalexpence}}</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;font-weight: bold;">Net Income</td>
+              <td style="font-weight: bold;">{{netincome}}</td>
+            </tr>
+            <tr>
+              <td colspan="2" align="center"><button type="button" [disabled]="hmrcbtndisabled" class="btn btn-primary" (click)="hmrcCall()">SAVE TO HMRC</button></td>
+            </tr>
+          </table>
+        </div> 
+      </div>
+      <div class="col col-sm-4 col-md-2 col-lg-2">
+
+      </div>
+          
+</div>
+

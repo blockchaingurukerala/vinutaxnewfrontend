@@ -1,0 +1,70 @@
+<div class="container">
+  <ul class="nav nav-tabs">
+      <li ><a routerLink="/summary">Summary</a></li>
+      <li class="active"><a routerLink="/dashboard">Income</a></li>
+      <li><a routerLink="/expence">Expence</a></li>
+      <li><a routerLink="/report">Report</a></li>  
+      <li><a routerLink="/allaccount">All Account</a></li>         
+    </ul>
+  <div class="row">
+      <div class=" col-sm-12 col-md-12 col-lg-12">
+          <div class = "panel panel-primary">
+              <div class = "panel-heading">
+                  <h2 class = "panel-title">Income</h2>
+              </div>           
+             
+              <div class="table-responsive">
+                  <form #addressForm="ngForm" ngNativeValidate  (ngSubmit)="updateIncome()">
+                      <!-- some code here - see full code at the end of this tutorial -->                          
+                      <section >
+                          <!-- input fields inside the *ngFor -->
+                          <table class="table table-striped">
+                              <tr>
+                                  <th style="text-align: center;">No</th>
+                                  <th style="text-align: center;">Category</th>
+                                  <th style="text-align: center;">Date</th>
+                                  <th style="text-align: center;">Description</th>
+                                  <th style="text-align: center;">Amount</th>
+                              </tr>
+                              <tr *ngFor="let income of incomes; let i = index;let last = last;">
+                                <td>{{i+1}}</td>
+                                
+                                <td>
+                                  <input name="filterCato_{{i}}" list="options" class="form-control" placeholder="Category" [(ngModel)]="income.category" required>
+                                  <datalist id="options">
+                                    <option *ngFor="let c of options" >{{c}}</option>
+                                  </datalist>
+                                  <!-- <input name="filterCato_{{i}}" type = "text" [(ngModel)]="selectedUser" (input) = "filterUsers()"> -->
+                                  <!-- <select name="selctCatogory_{{i}}" [(ngModel)]="income.date">                                                                     
+                                       <option *ngFor="let c of filterdOptions" [ngValue]="c">{{c.value}}</option>
+                                  </select> -->
+                                  
+                                </td>
+                                  <td><input type="date" class="form-control" [(ngModel)]="income.date"
+                                    name="date_{{i}}" placeholder="Date" required/></td>
+                                  <td><input type="text" class="form-control" [(ngModel)]="income.description"
+                                      name="description_{{i}}" placeholder="Description" required/></td>
+                                  <td><input type="number" class="form-control" [(ngModel)]="income.amount"
+                                      name="amount_{{i}}" placeholder="Amount" required/>  </td>
+                                  <td>
+                                      <button type="button" class="btn btn-danger btn-sm" (click)="removeIncomeField(i)"><i class="glyphicon glyphicon-remove"></i></button>
+                                  </td>
+                                  <td *ngIf="last">
+                                      <button type="button" class="btn btn-primary" (click)="addNewIncomeField(i)"><i class="glyphicon glyphicon-plus"></i></button>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <br>
+                              </tr>
+                              <tr>
+                                  <td colspan="5" align="center"><button type="submit"  class="btn btn-primary">SAVE</button></td>
+                              </tr>
+                          </table>  
+                       </section>
+                     </form>
+              </div>
+          </div>
+      </div>
+     
+  </div>
+</div>
