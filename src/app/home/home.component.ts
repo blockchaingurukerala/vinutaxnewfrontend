@@ -11,8 +11,8 @@ export class HomeComponent implements OnInit ,AfterContentChecked{
    fullname="";
    loggedin=false;
   constructor(private sharedService:SharedService,private router:Router) {
-    if(localStorage.getItem("loggedIn")=="true"){
-      this.router.navigate(['/summary']);
+    if(localStorage.getItem("loggedIn")!="true"){
+      this.router.navigate(['']);
     }
    }
   ngOnInit(): void {

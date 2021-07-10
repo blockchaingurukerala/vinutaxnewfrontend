@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
           } else {
              if(result){
                window.alert("success");
-               window.alert(data[0].userFullName);
+               //window.alert(data[0].userFullName);
                console.log(data[0]);
                this.loggedIn=true;
                this.sharedService.updateComp1Val(data[0].userFullName);

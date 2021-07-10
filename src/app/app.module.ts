@@ -15,6 +15,7 @@ import { ReportComponent } from './report/report.component';
 import { SummaryComponent } from './summary/summary.component';
 import {ChartsModule} from 'ng2-charts';
 import { AllaccountsComponent } from './allaccounts/allaccounts.component';
+import { DisplayFromHMRCComponent } from './display-from-hmrc/display-from-hmrc.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +26,8 @@ import { AllaccountsComponent } from './allaccounts/allaccounts.component';
     ExpenceComponent,
     ReportComponent,
     SummaryComponent,
-    AllaccountsComponent
+    AllaccountsComponent,
+    DisplayFromHMRCComponent
   ],
   imports: [
     BrowserModule,

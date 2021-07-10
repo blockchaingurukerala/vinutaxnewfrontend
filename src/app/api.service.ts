@@ -16,10 +16,11 @@ export class ApiService {
   }
   insertNewUser(userfullname:string,useremail:string,password:string){      
     return this.http.post("http://localhost:3000/insert",{"userFullName":userfullname,"userEmailId":useremail,"userPassword":this.findHash(password)})
+    //return this.http.post("/api/insert",{"userFullName":userfullname,"userEmailId":useremail,"userPassword":this.findHash(password)})
   }
   checkUserNameAvailable(userEmail:String){
-    //return this.http.post("https://exambackend.herokuapp.com/insert",{"user":user})     
-    return this.http.post("http://localhost:3000/checkAvailability",{"userEmailId":userEmail}) ;  
+    return this.http.post("http://localhost:3000/checkAvailability",{"userEmailId":userEmail}) ;     
+   // return this.http.post("http://localhost:3000/checkAvailability",{"userEmailId":userEmail}) ;  
   }
   authenticateUser(userEmail:string,password:string){    
     return this.http.post("http://localhost:3000/authenticate",{"userEmailId":userEmail,"password":this.findHash(password)}) ; 
@@ -59,20 +60,8 @@ export class ApiService {
 //   // this.headers.append("Accept","application/vnd.hmrc.1.0+json");  
 //   // return this.http.get("https://test-api.service.hmrc.gov.uk/hello/world",{headers: this.headers});
 //  }
- hmrcCall(){
-    //return this.http.get("https://api.service.hmrc.gov.uk/hello/world");
-    //request oauth token
-      
-    //return this.http.get("http://localhost:8080/applicationCall");
-    
-    
-    //this.headers.append("Accept","application/vnd.hmrc.1.0+json");    
-    // this.headers.append("Access-Control-Allow-Origin", "*");
-    // this.headers.set('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
-    //return this.http.get("https://api.service.hmrc.gov.uk/hello/world",{headers: this.headers});
-      return this.http.get("http://localhost:3000/userCall");
-      
-
+ hmrcCall(){   
+      return this.http.get("http://localhost:3000/userCall"); 
  }
  checkHmrcDataUploaded(email:string,year:string,quarter:string){
   return this.http.post("http://localhost:3000/checkHmrcUploaded",{"userEmailId":email,"year":year,"quarter":quarter});

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
+import { Router} from '@angular/router';
 import {ApiService} from '../api.service'
 
 @Component({
@@ -25,9 +25,12 @@ export class ReportComponent implements OnInit {
   consolidatedincomes = new Map<string, number>();
   consolidatedexpences= new Map<string, number>();
   constructor(private router:Router,private api:ApiService) { 
+    console.log("in report");
+   
     if(localStorage.getItem("loggedIn")!="true"){
       this.router.navigate(['']);
-    }
+      }    
+    
     if((this.today.getTime()> new Date('2020-04-06').getTime())&&(this.today.getTime()< new Date('2021-04-05').getTime())){
       this.selectedYear="20";
     }

@@ -8,16 +8,20 @@ import {ExpenceComponent} from './expence/expence.component'
 import { ReportComponent } from './report/report.component';
 import {SummaryComponent} from './summary/summary.component';
 import { AllaccountsComponent } from './allaccounts/allaccounts.component';
+import { DisplayFromHMRCComponent } from './display-from-hmrc/display-from-hmrc.component';
 
 const routes: Routes = [{path:'login',component:LoginComponent},
                         {path:'home',component:HomeComponent},
                         {path:'signup',component:SignupComponent},
                         {path:'dashboard',component:DashboardComponent},                       
                         {path:'expence',component:ExpenceComponent},
-                        {path:'report',component:ReportComponent},
-                        {path:'',component:LoginComponent},
+                        {path:'report',component:ReportComponent},                     
+                         {path:'',component:LoginComponent},
                         {path:'summary',component:SummaryComponent},
-                        {path:'allaccount',component:AllaccountsComponent}
+                        {path:'allaccount',component:AllaccountsComponent},
+                        {path:'displayfromhmrc',component:DisplayFromHMRCComponent}
+                       //{path:'report1',redirectTo:'report',pathMatch: 'full'}
+                        // {path: '**', redirectTo: 'login' }
                       ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
