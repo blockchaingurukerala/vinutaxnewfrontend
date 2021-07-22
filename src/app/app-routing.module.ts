@@ -9,6 +9,8 @@ import { ReportComponent } from './report/report.component';
 import {SummaryComponent} from './summary/summary.component';
 import { AllaccountsComponent } from './allaccounts/allaccounts.component';
 import { DisplayFromHMRCComponent } from './display-from-hmrc/display-from-hmrc.component';
+import { CustomerInvoiceComponent } from './customer-invoice/customer-invoice.component';
+import { SupplierInvoiceComponent } from './supplier-invoice/supplier-invoice.component';
 
 const routes: Routes = [{path:'login',component:LoginComponent},
                         {path:'home',component:HomeComponent},
@@ -19,9 +21,9 @@ const routes: Routes = [{path:'login',component:LoginComponent},
                          {path:'',component:LoginComponent},
                         {path:'summary',component:SummaryComponent},
                         {path:'allaccount',component:AllaccountsComponent},
-                        {path:'displayfromhmrc',component:DisplayFromHMRCComponent}
-                       //{path:'report1',redirectTo:'report',pathMatch: 'full'}
-                        // {path: '**', redirectTo: 'login' }
+                        {path:'displayfromhmrc',component:DisplayFromHMRCComponent},
+                        {path:'customerinvoice',component:CustomerInvoiceComponent},
+                        {path:'supplierinvoice',component:SupplierInvoiceComponent}
                       ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

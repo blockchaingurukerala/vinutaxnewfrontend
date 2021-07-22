@@ -16,6 +16,8 @@ import { SummaryComponent } from './summary/summary.component';
 import {ChartsModule} from 'ng2-charts';
 import { AllaccountsComponent } from './allaccounts/allaccounts.component';
 import { DisplayFromHMRCComponent } from './display-from-hmrc/display-from-hmrc.component';
+import { CustomerInvoiceComponent } from './customer-invoice/customer-invoice.component';
+import { SupplierInvoiceComponent } from './supplier-invoice/supplier-invoice.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +29,9 @@ import { DisplayFromHMRCComponent } from './display-from-hmrc/display-from-hmrc.
     ReportComponent,
     SummaryComponent,
     AllaccountsComponent,
-    DisplayFromHMRCComponent
+    DisplayFromHMRCComponent,
+    CustomerInvoiceComponent,
+    SupplierInvoiceComponent
   ],
   imports: [
     BrowserModule,

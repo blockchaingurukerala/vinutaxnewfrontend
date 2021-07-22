@@ -81,4 +81,15 @@ modifyIncomes(email:string,originalincomes:any[],modifiedincomes:any[]){
 modifyExpences(email:string,originalexpences:any[],modifiedexpences:any[]){
   return this.http.post("http://localhost:3000/modifyExpences",{"email":email,"originalexpences":originalexpences,"modifiedexpences":modifiedexpences});
 }
+addCustomerDetils(name:string,email:string,contactno:string,address:string,whose:string){
+  return this.http.post("http://localhost:3000/addCustomerDetils",{"name":name,"email":email,"contactno":contactno,"address":address,"whose":whose});
+}
+       
+addCustomerInvoice(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string){
+  return this.http.post("http://localhost:3000/addCustomerInvoice",{"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails,"whose":whose});
+}
+createNextCustomerInvoiceNumber(whose:string){
+  return this.http.post("http://localhost:3000/createNextCustomerInvoiceNumber",{"whose":whose});
+}
+
 }
