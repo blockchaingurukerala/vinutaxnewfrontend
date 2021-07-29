@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { ApiService } from '../api.service';
+import {Router} from '@angular/router';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 class Product{
@@ -34,7 +35,8 @@ class Invoice{
 })
 export class CustomerInvoiceComponent implements OnInit {
   invoice = new Invoice(); 
-  
+  names=[];
+  i=0;
   generatePDF(action = 'open') {
     let docDefinition = {
       content: [
@@ -146,7 +148,7 @@ export class CustomerInvoiceComponent implements OnInit {
   EnterValidData(){
    window.alert("Enter Valid Data");
   }
-  constructor(private api:ApiService) {
+  constructor(private api:ApiService,private router:Router) {
     var today = new Date().toISOString().split('T')[0];
     //window.alert(today);
     this.invoice.date=today
@@ -154,10 +156,34 @@ export class CustomerInvoiceComponent implements OnInit {
     var whose=localStorage.getItem("uEmail"); 
     this.api.createNextCustomerInvoiceNumber(whose).subscribe((data:any)=>{
       this.invoice.invoiceno=data.msg;
-    })
+    });
+    this.api.getAllCustomers(whose).subscribe((data:any)=>{
+      data.forEach(element => {
+        this.names.push(element);
+      });
+    });
+
    }
 
   ngOnInit(): void {
+  }
+  onCustomerSelection(e){
+    let userFullName = e.target.value;
+    let customer = this.names.filter(x => x.userFullName === userFullName)[0];
+    console.log(customer);
+    if(customer){
+      this.invoice.address=customer.userAddress;
+      this.invoice.contactNo=customer.userContactNo;
+      this.invoice.email=customer.userEmailId;
+    }
+    else{
+      this.invoice.address="";
+      this.invoice.contactNo=Number("");
+      this.invoice.email="";
+
+    }
+    
+
   }
   approveInvoice(){
     var whose=localStorage.getItem("uEmail");  
@@ -165,14 +191,30 @@ export class CustomerInvoiceComponent implements OnInit {
     this.api.addCustomerDetils(this.invoice.customerName,this.invoice.email,this.invoice.contactNo.toString(),this.invoice.address,whose).subscribe((data:any)=>{
       for(i=0;i<this.invoice.products.length;i++){
         sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
+      }    
+      if(data.msg!="Database Error"){
+        this.api.addCustomerInvoice(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose,data.msg).subscribe((data:any)=>{
+          window.alert(data.msg);
+          this.router.navigate(['/report']);          
+        });
       }
-      //window.alert(sum.toFixed(2));
-  
-      this.api.addCustomerInvoice(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose).subscribe((data:any)=>{
-        window.alert(data.msg);
-      });
+    });    
+  }
+  saveInvoiceonDraft(){
+    var whose=localStorage.getItem("uEmail");  
+    var i: number,sum=0;
+    this.api.addCustomerDetils(this.invoice.customerName,this.invoice.email,this.invoice.contactNo.toString(),this.invoice.address,whose).subscribe((data:any)=>{
+      for(i=0;i<this.invoice.products.length;i++){
+        sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
+      }    
+      if(data.msg!="Database Error"){
+        this.api.addCustomerInvoiceDraft(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose,data.msg).subscribe((data:any)=>{
+          window.alert(data.msg);
+          this.router.navigate(['/report']);          
+        });
+      }
     });
-    
+
   }
 
 }
