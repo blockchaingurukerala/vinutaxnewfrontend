@@ -1,0 +1,26 @@
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li ><a routerLink="/summary">Summary</a></li>
+        <li ><a routerLink="/dashboard">Income</a></li>
+        <li ><a routerLink="/expence">Expence</a></li>
+        <li><a routerLink="/report">Report</a></li>    
+        <li><a routerLink="/allaccount">All Account</a></li> 
+        <li class="dropdown active">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                Business <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+               <li><a routerLink="/displaycustomerinvoices">Invoice</a></li>
+               <li><a routerLink="/displaysupplierinvoices">Bills To Pay</a></li>  
+            </ul>
+        </li>     
+      </ul>
+    <div class="row"> 
+        <div class="col col-12 col-lg-4 col-md-4 col-sm-4"></div> 
+        <div class="col col-12 col-lg-4 col-md-4 col-sm-4">
+           <button type="button" class="btn btn-primary">New Invoice</button>
+        </div>      
+        <div class="col col-12 col-lg-4 col-md-4 col-sm-4"></div> 
+    </div>
+</div>
+

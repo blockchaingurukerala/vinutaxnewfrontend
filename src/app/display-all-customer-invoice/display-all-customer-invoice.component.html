@@ -1,0 +1,69 @@
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li ><a routerLink="/summary">Summary</a></li>
+        <li ><a routerLink="/dashboard">Income</a></li>
+        <li ><a routerLink="/expence">Expence</a></li>
+        <li><a routerLink="/report">Report</a></li>    
+        <li><a routerLink="/allaccount">All Account</a></li> 
+        <li class="dropdown active">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                Business <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+               <li><a routerLink="/displaycustomerinvoices">Invoice</a></li>
+               <li><a routerLink="/displaysupplierinvoices">Bills To Pay</a></li>  
+            </ul>
+        </li>     
+      </ul>
+      <br>
+    <div class="row">       
+        <div class="col col-12 col-lg-4 col-md-4 col-sm-4"></div> 
+        <div class="col col-12 col-lg-4 col-md-4 col-sm-4">
+           <button type="button" class="btn btn-primary " style="width: 200px" (click)="displayNewinvoice()">New Invoice</button>
+        </div>      
+        <div class="col col-12 col-lg-4 col-md-4 col-sm-4"></div> 
+    </div>
+    <div class="row">       
+        <div class="col col-12 col-lg-2 col-md-2 col-sm-2">
+
+        </div>  
+        <div class="col col-12 col-lg-8 col-md-8 col-sm-8">
+            <ul class="nav nav-tabs">
+                <li class="active" ><a routerLink="/displaycustomerinvoices">All</a></li>
+                <li ><a routerLink="/dashboard">Draft</a></li>
+                <li ><a routerLink="/expence">Awating Payment</a></li>
+                <li><a routerLink="/report">Paid</a></li> 
+              </ul>
+        </div>  
+        <div class="col col-12 col-lg-2 col-md-2 col-sm-2">
+
+        </div>         
+    </div>
+    <div class="row">
+        <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
+            <table class="table">
+                <tr>
+                    <th>Invoice</th>
+                    <th>Reference</th>
+                    <th>To</th>
+                    <th>Date</th>
+                    <th>Due Date</th>
+                    <th>Total Amount</th>
+                    <th>Paid</th>
+                    <th>Status</th>
+                </tr>
+                <tr *ngFor="let customerinvoice of customerinvoices; let i = index;let last = last;">
+                    <td>{{customerinvoice.invoiceid}}</td>
+                    <td>{{customerinvoice.reference}}</td>
+                    <td>{{customerinvoice.customername}}</td>
+                    <td>{{customerinvoice.date}}</td>
+                    <td>{{customerinvoice.duedate}}</td>
+                    <td>{{customerinvoice.totalamount}}</td>
+                    <td>0</td>
+                    <td>{{customerinvoice.status}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+

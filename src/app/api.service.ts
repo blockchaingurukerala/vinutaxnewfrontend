@@ -97,5 +97,13 @@ createNextCustomerInvoiceNumber(whose:string){
 getAllCustomers(whose:string){
   return this.http.post("http://localhost:3000/getAllCustomers",{"whose":whose});
 }
-
+getAllCustomerInvoioce(whose:string){
+  return this.http.post("http://localhost:3000/getAllCustomerInvoioce",{"whose":whose});
+}
+getAllCustomerDraftInvoioce(whose:string){
+  return this.http.post("http://localhost:3000/getAllCustomerDraftInvoioce",{"whose":whose});
+}
+getCustomerNameFromId(id:string){
+  return this.http.post("http://localhost:3000/getCustomerNameFromId",{"id":id});
+}
 }

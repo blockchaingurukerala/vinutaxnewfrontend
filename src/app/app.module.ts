@@ -18,6 +18,9 @@ import { AllaccountsComponent } from './allaccounts/allaccounts.component';
 import { DisplayFromHMRCComponent } from './display-from-hmrc/display-from-hmrc.component';
 import { CustomerInvoiceComponent } from './customer-invoice/customer-invoice.component';
 import { SupplierInvoiceComponent } from './supplier-invoice/supplier-invoice.component';
+import { DisplayAllCustomerInvoiceComponent } from './display-all-customer-invoice/display-all-customer-invoice.component';
+import { DisplayAllSupplierInvoiceComponent } from './display-all-supplier-invoice/display-all-supplier-invoice.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +34,10 @@ import { SupplierInvoiceComponent } from './supplier-invoice/supplier-invoice.co
     AllaccountsComponent,
     DisplayFromHMRCComponent,
     CustomerInvoiceComponent,
-    SupplierInvoiceComponent
+    SupplierInvoiceComponent,
+    DisplayAllCustomerInvoiceComponent,
+    DisplayAllSupplierInvoiceComponent
+   
   ],
   imports: [
     BrowserModule,
