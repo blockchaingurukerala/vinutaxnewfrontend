@@ -1,0 +1,125 @@
+import { Component, OnInit } from '@angular/core';
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import { ApiService } from '../api.service';
+import {Router} from '@angular/router';
+import {SharedService} from '../shared.service'
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+class Product{
+  name: string;
+  price: number;
+  qty: number;
+}
+class Invoice{
+  customerName: string;
+  address: string;
+  contactNo: number;
+  email: string;
+  date:string;
+  duedate:string;
+  invoiceno:string;
+  referenceno:string;
+  products: Product[] = [];
+  additionalDetails: string;  
+
+  constructor(){
+    // Initially one empty product row we will show 
+   
+  }
+}
+
+@Component({
+  selector: 'app-editinvoicecustomer',
+  templateUrl: './editinvoicecustomer.component.html',
+  styleUrls: ['./editinvoicecustomer.component.css']
+})
+export class EditinvoicecustomerComponent implements OnInit {
+
+  invoice = new Invoice(); 
+  name="";
+  i=0;
+  addProduct(){
+    this.invoice.products.push(new Product());
+  }
+  EnterValidData(){
+   window.alert("Enter Valid Data");
+  }
+  constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
+    var id=this.sharedservice.getidforcustomeredit();
+    var status=this.sharedservice.getcustomerinvoicestatus();
+    if(status=="approved"){
+      this.api.getCustomerInvoioceFromId(id).subscribe((data)=>{     
+        this.api.getCustomerNameFromId(data[0].customerid).subscribe((customername:any)=>{        
+         this.name=customername.name;
+         this.invoice.date=data[0].date;
+         this.invoice.duedate=data[0].duedate;
+         this.invoice.invoiceno=data[0].invoiceid;
+         this.invoice.referenceno=data[0].reference;
+         this.invoice.additionalDetails=data[0].additionaldetails;    
+         for(var i=0;i<data[0].products.length;i++)  {
+          this.invoice.products.push(new Product());
+           this.invoice.products[i]=data[0].products[i];
+         }  
+        })
+      });
+    }
+    else if(status=="draft") {
+      this.api.getDraftCustomerInvoioceFromId(id).subscribe((data)=>{
+        this.api.getCustomerNameFromId(data[0].customerid).subscribe((customername:any)=>{        
+          this.name=customername.name;
+         })
+      });
+    }
+   }
+
+  ngOnInit(): void {
+  }
+  // onCustomerSelection(e){
+  //   let userFullName = e.target.value;
+  //   let customer = this.names.filter(x => x.userFullName === userFullName)[0];
+  //   console.log(customer);
+  //   if(customer){
+  //     this.invoice.address=customer.userAddress;
+  //     this.invoice.contactNo=customer.userContactNo;
+  //     this.invoice.email=customer.userEmailId;
+  //   }
+  //   else{
+  //     this.invoice.address="";
+  //     this.invoice.contactNo=Number("");
+  //     this.invoice.email="";
+  //   }
+  // }
+  approveInvoice(){
+    var whose=localStorage.getItem("uEmail");  
+    var i: number,sum=0;
+    this.api.addCustomerDetils(this.invoice.customerName,this.invoice.email,this.invoice.contactNo.toString(),this.invoice.address,whose).subscribe((data:any)=>{
+      for(i=0;i<this.invoice.products.length;i++){
+        sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
+      }    
+      if(data.msg!="Database Error"){
+        this.api.addCustomerInvoice(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose,data.msg).subscribe((data:any)=>{
+          window.alert(data.msg);
+          this.router.navigate(['/report']);          
+        });
+      }
+    });    
+  }
+  saveInvoiceonDraft(){
+    var whose=localStorage.getItem("uEmail");  
+    var i: number,sum=0;
+    this.api.addCustomerDetils(this.invoice.customerName,this.invoice.email,this.invoice.contactNo.toString(),this.invoice.address,whose).subscribe((data:any)=>{
+      for(i=0;i<this.invoice.products.length;i++){
+        sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
+      }    
+      if(data.msg!="Database Error"){
+        this.api.addCustomerInvoiceDraft(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose,data.msg).subscribe((data:any)=>{
+          window.alert(data.msg);
+          this.router.navigate(['/report']);          
+        });
+      }
+    });
+
+  }
+
+}

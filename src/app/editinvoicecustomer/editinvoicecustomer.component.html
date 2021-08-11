@@ -24,41 +24,19 @@
         <form #invoiceForm="ngForm">
           <div class="container-fluid pt-2 mb-5">
               <div class="row">
-                  <div class="col-md-8">
+                  <div class="col-md-12">
                       <div class="card border-secondary">
                           <div class="card-body">
-                              <h4 class="card-title">Customer Details</h4>
+                              <h4 class="card-title">Customer Name</h4>
                               <div class="row">
-                                  <div class="col-md-8">
+                                  <div class="col-md-12">
                                       <div class="form-group ">
                                           <label for="name">Name</label>
                                           <input type="text" class="form-control" name="name" id="name"   
                                                 [ngClass]="{'is-invalid': invoiceForm.submitted && CustName.invalid}"                                          
-                                              [(ngModel)]="invoice.customerName"  #CustName="ngModel"  list="names" (change)="onCustomerSelection($event)"  required>
-                                            <datalist id="names" >                                               
-                                                    <option *ngFor="let c of names;let i = index" [value]="c.userFullName">{{c.userFullName}}</option>                                               
-                                            </datalist>                                              
-                                      </div>
-                                      <div class="form-group">
-                                          <label for="address">Address</label>
-                                          <textarea class="form-control" name="address" id="address" row="3"
-                                              [ngClass]="{'is-invalid': invoiceForm.submitted && Address.invalid}"
-                                              [(ngModel)]="invoice.address" #Address="ngModel" required></textarea>
-                                      </div>
-                                  </div>
-                                  <div class="col-md-4">
-                                      <div class="form-group">
-                                          <label for="email">Email ID</label>
-                                          <input type="email" class="form-control" name="email" id="email"
-                                              [(ngModel)]="invoice.email" required>
-                                      </div>
-                                      <div class="form-group">
-                                          <label for="contactNo">Contact No.</label>
-                                          <input type="number" class="form-control" name="contactNo" id="contactNo"
-                                              [ngClass]="{'is-invalid': invoiceForm.submitted && ContactNo.invalid}"
-                                              [(ngModel)]="invoice.contactNo" #ContactNo="ngModel" required>
-                                      </div>
-                                  </div>
+                                              [(ngModel)]="name"  #CustName="ngModel"    readonly>                                                                                       
+                                      </div>                                      
+                                  </div>                                
                               </div>
                               <div class="row">
                                   <div class="col col-12 col-lg-3 col-md-3">
@@ -141,16 +119,7 @@
                       </div>
       
                   </div>
-                  <div class="col-md-4">
-                      <button type="button" class="btn btn-secondary btn-lg btn-block"
-                          (click)="invoiceForm.valid ? generatePDF('download') :  EnterValidData()">Download Invoice</button>
-                      <button type="button" class="btn btn-secondary btn-lg btn-block"
-                          (click)="invoiceForm.valid ? generatePDF('print') :  EnterValidData()">Print
-                          Invoice</button>
-                      <button type="submit" class="btn btn-secondary btn-lg btn-block"
-                          (click)="invoiceForm.valid ? generatePDF() : EnterValidData() ">Open
-                          Invoice</button>
-                  </div>
+                 
               </div>
 
           </div>
@@ -160,5 +129,6 @@
       </div>
           
 </div>
+
 
 

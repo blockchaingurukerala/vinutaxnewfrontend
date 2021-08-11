@@ -103,7 +103,14 @@ getAllCustomerInvoioce(whose:string){
 getAllCustomerDraftInvoioce(whose:string){
   return this.http.post("http://localhost:3000/getAllCustomerDraftInvoioce",{"whose":whose});
 }
+
 getCustomerNameFromId(id:string){
   return this.http.post("http://localhost:3000/getCustomerNameFromId",{"id":id});
+}
+getCustomerInvoioceFromId(id:string){
+  return this.http.post("http://localhost:3000/getCustomerInvoioceFromId",{"id":id});
+}
+getDraftCustomerInvoioceFromId(id:string){
+  return this.http.post("http://localhost:3000/getDraftCustomerInvoioceFromId",{"id":id});
 }
 }

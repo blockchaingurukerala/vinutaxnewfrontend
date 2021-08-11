@@ -12,8 +12,11 @@ import { DisplayFromHMRCComponent } from './display-from-hmrc/display-from-hmrc.
 import { CustomerInvoiceComponent } from './customer-invoice/customer-invoice.component';
 import { SupplierInvoiceComponent } from './supplier-invoice/supplier-invoice.component';
 import { DisplayAllCustomerInvoiceComponent } from './display-all-customer-invoice/display-all-customer-invoice.component';
+import { DisplayCustomerDraftInvoiceComponent } from './display-customer-draft-invoice/display-customer-draft-invoice.component';
+import { CustomerawaitingpaymentComponent } from './customerawaitingpayment/customerawaitingpayment.component';
+import { CustomerpaidComponent } from './customerpaid/customerpaid.component';
 import { DisplayAllSupplierInvoiceComponent } from './display-all-supplier-invoice/display-all-supplier-invoice.component';
-
+import { EditinvoicecustomerComponent } from './editinvoicecustomer/editinvoicecustomer.component';
 
 const routes: Routes = [{path:'login',component:LoginComponent},
                         {path:'home',component:HomeComponent},
@@ -28,8 +31,11 @@ const routes: Routes = [{path:'login',component:LoginComponent},
                         {path:'customerinvoice',component:CustomerInvoiceComponent},
                         {path:'supplierinvoice',component:SupplierInvoiceComponent},
                         {path:'displaycustomerinvoices',component:DisplayAllCustomerInvoiceComponent},
-                        {path:'displaysupplierinvoices',component:DisplayAllSupplierInvoiceComponent}
-                        
+                        {path:'displaycustomerdraftinvoices',component:DisplayCustomerDraftInvoiceComponent},
+                        {path:'customerawaitingpayment',component:CustomerawaitingpaymentComponent},
+                        {path:'customerpaid',component:CustomerpaidComponent},
+                        {path:'displaysupplierinvoices',component:DisplayAllSupplierInvoiceComponent},
+                        {path:'editcustomerinvoice',component:EditinvoicecustomerComponent},                        
                       ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

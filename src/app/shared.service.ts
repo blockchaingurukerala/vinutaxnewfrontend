@@ -6,13 +6,26 @@ import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
 })
 export class SharedService {
   comp1Val: string;
+  idforcustomeredit :string;
+  customerinvoicestatus:string;
+
   _comp1ValueBS = new BehaviorSubject<string>('');
   constructor() { 
     this.comp1Val;
     this._comp1ValueBS.next(this.comp1Val);
   }
-  updateComp1Val(val) {
+  updateComp1Val(val: string) {
     this.comp1Val = val;
     this._comp1ValueBS.next(this.comp1Val);
+  }
+  setidforcustomeredit(id:string,status:string){
+    this.idforcustomeredit=id;  
+    this.customerinvoicestatus=status; 
+  }
+  getidforcustomeredit(){
+    return this.idforcustomeredit;
+  }
+  getcustomerinvoicestatus(){
+    return this.customerinvoicestatus;
   }
 }

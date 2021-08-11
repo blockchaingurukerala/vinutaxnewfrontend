@@ -150,8 +150,11 @@ export class CustomerInvoiceComponent implements OnInit {
   }
   constructor(private api:ApiService,private router:Router) {
     var today = new Date().toISOString().split('T')[0];
+    var duedate=new Date()
     //window.alert(today);
-    this.invoice.date=today
+    this.invoice.date=today;
+    duedate.setDate(duedate.getDate() + 7);
+    this.invoice.duedate=new Date(duedate).toISOString().split('T')[0];
     //let latest_date =this.datepipe.transform(today, 'yyyy-MM-dd');
     var whose=localStorage.getItem("uEmail"); 
     this.api.createNextCustomerInvoiceNumber(whose).subscribe((data:any)=>{
