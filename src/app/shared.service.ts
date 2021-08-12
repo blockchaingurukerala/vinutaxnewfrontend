@@ -8,6 +8,7 @@ export class SharedService {
   comp1Val: string;
   idforcustomeredit :string;
   customerinvoicestatus:string;
+  
 
   _comp1ValueBS = new BehaviorSubject<string>('');
   constructor() { 

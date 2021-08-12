@@ -111,10 +111,10 @@
                       </div>
                       <div class="row">
                           <div class="col col-12 col-md-6 col-lg-6">
-                                <button type="button" class="btn btn-info" (click)="invoiceForm.valid ? saveInvoiceonDraft() : EnterValidData() ">Save Draft</button>
+                                <button type="button" class="btn btn-danger" (click)="deleteInvoice()">Delete</button>
                           </div>
                           <div class="col col-12 col-md-6 col-lg-6">
-                            <button type="button" class="btn btn-primary" (click)="invoiceForm.valid ? approveInvoice() : EnterValidData() ">Approve</button>
+                            <button type="button" class="btn btn-primary" (click)="invoiceForm.valid ? updateInvoice() : EnterValidData() ">Update</button>
                         </div>
                       </div>
       

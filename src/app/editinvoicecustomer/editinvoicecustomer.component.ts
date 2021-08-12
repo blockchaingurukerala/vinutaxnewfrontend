@@ -22,7 +22,6 @@ class Invoice{
   referenceno:string;
   products: Product[] = [];
   additionalDetails: string;  
-
   constructor(){
     // Initially one empty product row we will show 
    
@@ -90,36 +89,26 @@ export class EditinvoicecustomerComponent implements OnInit {
   //     this.invoice.email="";
   //   }
   // }
-  approveInvoice(){
+  updateInvoice(){
     var whose=localStorage.getItem("uEmail");  
+    var id=this.sharedservice.getidforcustomeredit();
     var i: number,sum=0;
-    this.api.addCustomerDetils(this.invoice.customerName,this.invoice.email,this.invoice.contactNo.toString(),this.invoice.address,whose).subscribe((data:any)=>{
+    
       for(i=0;i<this.invoice.products.length;i++){
         sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
-      }    
-      if(data.msg!="Database Error"){
-        this.api.addCustomerInvoice(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose,data.msg).subscribe((data:any)=>{
-          window.alert(data.msg);
-          this.router.navigate(['/report']);          
-        });
-      }
-    });    
+      }          
+      this.api.updteCustomerInvoice(id,this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails).subscribe((data:any)=>{
+        window.alert(data.msg);
+        this.router.navigate(['/displaycustomerinvoices']);          
+      });
+      
+       
   }
-  saveInvoiceonDraft(){
-    var whose=localStorage.getItem("uEmail");  
-    var i: number,sum=0;
-    this.api.addCustomerDetils(this.invoice.customerName,this.invoice.email,this.invoice.contactNo.toString(),this.invoice.address,whose).subscribe((data:any)=>{
-      for(i=0;i<this.invoice.products.length;i++){
-        sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
-      }    
-      if(data.msg!="Database Error"){
-        this.api.addCustomerInvoiceDraft(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose,data.msg).subscribe((data:any)=>{
-          window.alert(data.msg);
-          this.router.navigate(['/report']);          
-        });
-      }
+  deleteInvoice(){  
+    var id=this.sharedservice.getidforcustomeredit();
+    this.api.deleteCustomerInvoice(id).subscribe((data:any)=>{
+      window.alert(data.msg);
+      this.router.navigate(['/displaycustomerinvoices']);          
     });
-
   }
-
 }
