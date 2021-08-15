@@ -42,6 +42,8 @@ export class DisplayAllCustomerInvoiceComponent implements OnInit {
   editordelete(i,status){
    // window.alert(status)
     this.sharedapi.setidforcustomeredit(i,status);
-    this.router.navigate(['\editcustomerinvoice']);
+    //this.router.navigate(['\editcustomerinvoice']);
+     this.router.navigate(['\intermediatedisplay']);
+    
   }
 }

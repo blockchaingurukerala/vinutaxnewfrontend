@@ -1,0 +1,190 @@
+<div class="container">
+ 
+    <ul class="nav nav-tabs">
+        <li ><a routerLink="/summary">Summary</a></li>
+        <li ><a routerLink="/dashboard">Income</a></li>
+        <li ><a routerLink="/expence">Expence</a></li>
+        <li  ><a routerLink="/report">Report</a></li>    
+        <li ><a routerLink="/allaccount">All Account</a></li>  
+        <!-- <li class="active"><a routerLink="/customerinvoice">Business</a></li>  -->
+        <li class="dropdown ">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                Business <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+               <li><a routerLink="/displaycustomerinvoices">Invoice</a></li>
+               <li><a routerLink="/displaysupplierinvoices">Bills To Pay</a></li>  
+            </ul>
+        </li>
+        
+          
+      </ul>
+      
+      <div class="row">       
+        <form #invoiceForm="ngForm">
+          <div class="container-fluid pt-2 mb-5">
+              <div class="row">
+                  <div class="col-md-12">
+                    <div class="card border-secondary mt-2">
+                        <div class="card-body"> 
+                           <br>                            
+                            <div class="row">
+                                <div class="col col-12 col-md-1 col-lg-1 col-sm-1">
+                                   <span style="color: blue;">{{status}}</span> 
+                                </div>
+                                <div class="col col-12 col-md-10 col-lg-10 col-sm-10"></div>
+                                <div class="col col-12 col-md-1 col-lg-1 col-sm-1">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Invoice Options
+                                        <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                          <li><a routerLink="/editcustomerinvoice">Edit</a></li>
+                                          <li><a style="cursor: pointer;" (click)="deleteInvoice()">Delete</a></li>
+                                          <li class="divider"></li> 
+                                          <li><a style="cursor: pointer;" (click)="generatePDF('download')">Download</a></li>
+                                          <li><a style="cursor: pointer;" (click)="generatePDF('print')">Print</a></li>
+                                        </ul>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                      <div class="card border-secondary">
+                          <div class="card-body">                              
+                              <!-- <div class="row">
+                                  <div class="col-md-12">
+                                      <div class="form-group ">
+                                          <label for="name">Name</label>
+                                          <input type="text" class="form-control" name="name" id="name"   
+                                                [ngClass]="{'is-invalid': invoiceForm.submitted && CustName.invalid}"                                          
+                                              [(ngModel)]="name"  #CustName="ngModel"    readonly>                                                                                       
+                                      </div>                                      
+                                  </div>                                
+                              </div> -->
+                              <div class="row">
+                                <div class="col col-12 col-lg-2 col-md-2">
+                                    <label for="namecust">Name</label>                                       
+                                    <span id="namecust" class="form-control"> {{name}}</span>
+
+                                    <!-- <input type="date" class="form-control" name="datetoday" id="datetoday"  [(ngModel)]="invoice.date"  readonly> -->
+                                 </div>
+                                  <div class="col col-12 col-lg-2 col-md-2">
+                                        <label for="datetoday">Date</label>                                       
+                                        <span id="datetoday" class="form-control"> {{invoice.date}}</span>
+    
+                                        <!-- <input type="date" class="form-control" name="datetoday" id="datetoday"  [(ngModel)]="invoice.date"  readonly> -->
+                                  </div>
+                                  <div class="col col-12 col-lg-2 col-md-2">
+                                    <label for="duedate">Due Date</label>                                    
+                                    <span id="duedate" class="form-control" >{{invoice.duedate}}</span>
+                                    <!-- <input type="date" class="form-control"  name="duedate" id="duedate"  [(ngModel)]="invoice.duedate"  readonly> -->
+                                </div>
+                                <div class="col col-12 col-lg-2 col-md-2">
+                                    <label for="invoice">Invoice#</label>
+                                    <span id="invoice" class="form-control">{{invoice.invoiceno}}</span>
+                                    <!-- <input type="text" class="form-control" name="invoice" id="invoice"   [(ngModel)]="invoice.invoiceno"  readonly> -->
+                                </div>
+                               
+                                <div class="col col-12 col-lg-2 col-md-2">
+                                    <label for="reference">Reference</label>                                   
+                                    <span id="reference" class="form-control"> {{invoice.referenceno}}</span>
+                                    <!-- <input type="text" class="form-control" name="reference" id="reference" [(ngModel)]="invoice.referenceno" readonly > -->
+                                </div>
+                                <div class="col col-12 col-lg-2 col-md-2">
+                                    <label for="addtional">Additional Details#</label>
+                                    <span id="addtional" class="form-control">{{invoice.additionalDetails}}</span>
+                                    <!-- <input type="text" class="form-control" name="invoice" id="invoice"   [(ngModel)]="invoice.invoiceno"  readonly> -->
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                      <br><br>
+                      <div class="card border-secondary mt-2">
+                          <div class="card-body">
+                              <h4 class="card-title d-flex justify-content-between">Order Details </h4>
+                              <div class="row">
+                                  <table class="table table-bordered ">
+                                      <thead >
+                                          <tr>
+                                              <th width="25%">Product</th>
+                                              <th width="25%">Price</th>
+                                              <th width="25%">Quantity</th>
+                                              <th width="25%">Amount</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr *ngFor="let product of invoice.products; let i=index">
+                                              <td >
+                                                  <!-- <input type="text" class="form-control" name="productName{{i}}"
+                                                      [ngClass]="{'is-invalid': invoiceForm.submitted && ProductName.invalid}"
+                                                      id="productName" [(ngModel)]="product.name" #ProductName="ngModel"
+                                                      readonly> -->
+                                                      {{product.name}}
+                                              </td>
+                                              <td>
+                                                  <!-- <input type="number" class="form-control" name="price{{i}}" id="price"
+                                                      [ngClass]="{'is-invalid': invoiceForm.submitted && ProductPrice.invalid}"
+                                                      [(ngModel)]="product.price" #ProductPrice="ngModel" readonly> -->
+                                                      {{product.price}}
+                                              </td>
+                                              <td>
+                                                  <!-- <input type="number" class="form-control" name="quantity{{i}}" id="quantity"
+                                                      [ngClass]="{'is-invalid': invoiceForm.submitted && ProductQty.invalid}"
+                                                      [(ngModel)]="product.qty" #ProductQty="ngModel" readonly> -->
+                                                      {{product.qty}}
+                                              </td>
+                                              <td>
+                                                  {{product.price * product.qty || ''}}
+                                              </td>
+                                          </tr>
+                                          <!-- <tr>                                             
+                                              <td colspan="4" align="right"><h3>Total  {{totalmamount}}  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</h3> </td>                                                                                            
+                                          </tr> -->
+                                      </tbody>
+                                     
+                                  </table>
+                                  <!-- <table class="table">
+                                      <tr>
+                                          <td>&nbsp;</td><td>&nbsp;</td>
+                                          <td><h3>Total  {{totalmamount}}</h3></td>
+                                      </tr>
+                                  </table> -->
+                                  <div class="row ">
+                                      <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+                                      <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+                                      <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4" style="border-top: 1px double #333;border-bottom: 2px double #333;">
+                                          <h3>Total  {{totalmamount}}</h3>                                         
+                                         
+                                    </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <br>
+                      <div class="card border-secondary ">
+                          <div class="card-body">
+                            <div class="row">
+                                <div class="col col-12 col-md-6 col-lg-6 col-sm-6 col-xs-6" style="text-align: center;">
+                                      <button type="button" class="btn btn-danger" (click)="deleteInvoice()" style="width: 50%">Delete</button>
+                                </div>
+                                <div class="col col-12 col-md-6 col-lg-6 col-sm-6 col-xs-6" style="text-align: center;">
+                                  <button type="button" class="btn btn-primary" (click)="invoiceForm.valid ? editInvoice() : EnterValidData() " style="width: 50%">Edit</button>
+                              </div>
+                            </div>  
+                          </div>
+                      </div>
+                           
+                  </div>                 
+              </div>
+          </div>
+      </form>
+
+
+      </div>
+          
+</div>
+
+
+
+

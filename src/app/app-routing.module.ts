@@ -17,6 +17,7 @@ import { CustomerawaitingpaymentComponent } from './customerawaitingpayment/cust
 import { CustomerpaidComponent } from './customerpaid/customerpaid.component';
 import { DisplayAllSupplierInvoiceComponent } from './display-all-supplier-invoice/display-all-supplier-invoice.component';
 import { EditinvoicecustomerComponent } from './editinvoicecustomer/editinvoicecustomer.component';
+import { CustomerinvoiceintermediatedisplayComponent } from './customerinvoiceintermediatedisplay/customerinvoiceintermediatedisplay.component';
 
 const routes: Routes = [{path:'login',component:LoginComponent},
                         {path:'home',component:HomeComponent},
@@ -35,7 +36,8 @@ const routes: Routes = [{path:'login',component:LoginComponent},
                         {path:'customerawaitingpayment',component:CustomerawaitingpaymentComponent},
                         {path:'customerpaid',component:CustomerpaidComponent},
                         {path:'displaysupplierinvoices',component:DisplayAllSupplierInvoiceComponent},
-                        {path:'editcustomerinvoice',component:EditinvoicecustomerComponent},                        
+                        {path:'editcustomerinvoice',component:EditinvoicecustomerComponent},  
+                        {path:'intermediatedisplay',component:CustomerinvoiceintermediatedisplayComponent},                    
                       ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

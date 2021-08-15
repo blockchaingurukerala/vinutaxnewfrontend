@@ -116,7 +116,13 @@ getDraftCustomerInvoioceFromId(id:string){
 updteCustomerInvoice(id:string,date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string){
   return this.http.post("http://localhost:3000/updteCustomerInvoice",{"id":id,"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails});
 }
+updteCustomerInvoiceDraft(id:string,date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string){
+  return this.http.post("http://localhost:3000/updteCustomerInvoiceDraft",{"id":id,"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails});
+}
 deleteCustomerInvoice(id:string){
   return this.http.post("http://localhost:3000/deleteCustomerInvoice",{"id":id});
+}
+deleteCustomerInvoiceFromDraft(id:string){
+  return this.http.post("http://localhost:3000/deleteCustomerInvoiceFromDraft",{"id":id});
 }
 }

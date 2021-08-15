@@ -38,6 +38,9 @@ export class EditinvoicecustomerComponent implements OnInit {
   invoice = new Invoice(); 
   name="";
   i=0;
+  status="";
+  aprove=true;
+  draft=false;
   addProduct(){
     this.invoice.products.push(new Product());
   }
@@ -47,7 +50,10 @@ export class EditinvoicecustomerComponent implements OnInit {
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     var id=this.sharedservice.getidforcustomeredit();
     var status=this.sharedservice.getcustomerinvoicestatus();
+    this.status=status;
     if(status=="approved"){
+      this.aprove=true;
+      this.draft=false;
       this.api.getCustomerInvoioceFromId(id).subscribe((data)=>{     
         this.api.getCustomerNameFromId(data[0].customerid).subscribe((customername:any)=>{        
          this.name=customername.name;
@@ -64,10 +70,21 @@ export class EditinvoicecustomerComponent implements OnInit {
       });
     }
     else if(status=="draft") {
+      this.aprove=false;
+      this.draft=true;
       this.api.getDraftCustomerInvoioceFromId(id).subscribe((data)=>{
         this.api.getCustomerNameFromId(data[0].customerid).subscribe((customername:any)=>{        
-          this.name=customername.name;
-         })
+            this.name=customername.name;
+            this.invoice.date=data[0].date;
+            this.invoice.duedate=data[0].duedate;
+            this.invoice.invoiceno=data[0].invoiceid;
+            this.invoice.referenceno=data[0].reference;
+            this.invoice.additionalDetails=data[0].additionaldetails;    
+            for(var i=0;i<data[0].products.length;i++)  {
+              this.invoice.products.push(new Product());
+              this.invoice.products[i]=data[0].products[i];
+            }  
+        })
       });
     }
    }
@@ -92,23 +109,42 @@ export class EditinvoicecustomerComponent implements OnInit {
   updateInvoice(){
     var whose=localStorage.getItem("uEmail");  
     var id=this.sharedservice.getidforcustomeredit();
-    var i: number,sum=0;
-    
+    var i: number,sum=0;    
       for(i=0;i<this.invoice.products.length;i++){
         sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
-      }          
-      this.api.updteCustomerInvoice(id,this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails).subscribe((data:any)=>{
-        window.alert(data.msg);
-        this.router.navigate(['/displaycustomerinvoices']);          
-      });
+      }   
+      if(this.status=="approved"){
+        this.api.updteCustomerInvoice(id,this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails).subscribe((data:any)=>{
+          window.alert(data.msg);
+          this.router.navigate(['/displaycustomerinvoices']);          
+        });
+      }
+      else  if(this.status=="draft"){  
+        this.api.updteCustomerInvoiceDraft(id,this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails).subscribe((data:any)=>{
+          window.alert(data.msg);
+          this.router.navigate(['/displaycustomerinvoices']);          
+        });
+      }     
+    
       
        
   }
   deleteInvoice(){  
     var id=this.sharedservice.getidforcustomeredit();
-    this.api.deleteCustomerInvoice(id).subscribe((data:any)=>{
-      window.alert(data.msg);
-      this.router.navigate(['/displaycustomerinvoices']);          
-    });
+    if(this.status=="approved"){
+      this.api.deleteCustomerInvoice(id).subscribe((data:any)=>{
+        window.alert(data.msg);
+        this.router.navigate(['/displaycustomerinvoices']);          
+      });
+    }
+    else  if(this.status=="draft"){ 
+      this.api.deleteCustomerInvoiceFromDraft(id).subscribe((data:any)=>{
+        window.alert(data.msg);
+        this.router.navigate(['/displaycustomerinvoices']);          
+      }); 
+    }   
+  }
+  aprovedraftinvoice(){
+    window.alert("not completed");
   }
 }

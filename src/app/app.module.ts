@@ -24,6 +24,7 @@ import { DisplayCustomerDraftInvoiceComponent } from './display-customer-draft-i
 import { CustomerawaitingpaymentComponent } from './customerawaitingpayment/customerawaitingpayment.component';
 import { CustomerpaidComponent } from './customerpaid/customerpaid.component';
 import { EditinvoicecustomerComponent } from './editinvoicecustomer/editinvoicecustomer.component';
+import { CustomerinvoiceintermediatedisplayComponent } from './customerinvoiceintermediatedisplay/customerinvoiceintermediatedisplay.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { EditinvoicecustomerComponent } from './editinvoicecustomer/editinvoicec
     DisplayCustomerDraftInvoiceComponent,
     CustomerawaitingpaymentComponent,
     CustomerpaidComponent,
-    EditinvoicecustomerComponent
+    EditinvoicecustomerComponent,
+    CustomerinvoiceintermediatedisplayComponent
    
   ],
   imports: [
