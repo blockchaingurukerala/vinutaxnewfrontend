@@ -125,4 +125,16 @@ deleteCustomerInvoice(id:string){
 deleteCustomerInvoiceFromDraft(id:string){
   return this.http.post("http://localhost:3000/deleteCustomerInvoiceFromDraft",{"id":id});
 }
+aprovedraftinvoice(id:string){
+  return this.http.post("http://localhost:3000/aprovedraftinvoice",{"id":id});
+}
+getCustomerDetails(id:string){
+  return this.http.post("http://localhost:3000/getCustomerDetails",{"id":id});
+}
+getAllInvoioceOfACustomer(whose:string,customerid:string){
+  return this.http.post("http://localhost:3000/getAllInvoioceOfACustomer",{"whose":whose,"customerid":customerid});
+}
+getAllInvoioceOfACustomerDraft(whose:string,customerid:string){
+  return this.http.post("http://localhost:3000/getAllInvoioceOfACustomerDraft",{"whose":whose,"customerid":customerid});
+}
 }

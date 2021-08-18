@@ -145,6 +145,11 @@ export class EditinvoicecustomerComponent implements OnInit {
     }   
   }
   aprovedraftinvoice(){
-    window.alert("not completed");
+    var id=this.sharedservice.getidforcustomeredit();
+    this.api.aprovedraftinvoice(id).subscribe((data:any)=>{
+      window.alert(data.msg);
+      this.router.navigate(['/displaycustomerinvoices']); 
+    });
+   
   }
 }

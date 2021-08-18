@@ -19,7 +19,7 @@ export class DisplayAllCustomerInvoiceComponent implements OnInit {
       //console.log(data);    
       data.forEach(element => {
         this.api.getCustomerNameFromId(element.customerid).subscribe((nameobj:any)=>{
-          this.customerinvoices.push({"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":nameobj.name,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved"});
+          this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":nameobj.name,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved"});
         });        
       });
     }); 
@@ -27,7 +27,7 @@ export class DisplayAllCustomerInvoiceComponent implements OnInit {
       //console.log(data);    
       data.forEach(element => {
         this.api.getCustomerNameFromId(element.customerid).subscribe((nameobj:any)=>{
-          this.customerinvoices.push({"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":nameobj.name,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"draft"});
+          this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":nameobj.name,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"draft"});
         });        
       });
     }); 
@@ -45,5 +45,8 @@ export class DisplayAllCustomerInvoiceComponent implements OnInit {
     //this.router.navigate(['\editcustomerinvoice']);
      this.router.navigate(['\intermediatedisplay']);
     
+  }
+  customerclicked(i){   
+    this.sharedapi.setSelectedCustomerID(i);
   }
 }
