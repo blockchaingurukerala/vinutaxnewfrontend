@@ -3,29 +3,6 @@ import { ApiService } from '../api.service';
 import {Router} from '@angular/router';
 import {SharedService} from '../shared.service';
 
-
-class Product{
-  name: string;
-  price: number;
-  qty: number;
-}
-class Invoice{
-  customerName: string;
-  address: string;
-  contactNo: number;
-  email: string;
-  date:string;
-  duedate:string;
-  invoiceno:string;
-  referenceno:string;
-  products: Product[] = [];
-  additionalDetails: string;  
-  constructor(){
-    // Initially one empty product row we will show 
-   
-  }
-}
-
 @Component({
   selector: 'app-individualcustomer',
   templateUrl: './individualcustomer.component.html',
@@ -33,7 +10,8 @@ class Invoice{
 })
 export class IndividualcustomerComponent implements OnInit {
   totalmamount=0;
-  invoice = new Invoice();  
+  editing=false;
+  noediting=true;
    customerid="";
    userFullName ="";
    userEmailId ="";
@@ -49,7 +27,8 @@ export class IndividualcustomerComponent implements OnInit {
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     // var id=this.sharedservice.getidforcustomeredit();
     this.customerid=this.sharedservice.getSelectedCustomer();
-   
+   this.editing=false;
+   this.noediting=true;
     this.api.getCustomerDetails(this.customerid).subscribe((data:any)=>{      
       this.userFullName=data[0].userFullName;
       this.userEmailId=data[0].userEmailId;
@@ -91,7 +70,17 @@ export class IndividualcustomerComponent implements OnInit {
      this.sharedservice.setSelectedCustomerID(i);
    }
   editInvoice(){   
-        this.router.navigate(['/editcustomerinvoice']);  
+        this.router.navigate(['\editcustomerinvoice']);  
+  }
+  enableEditing(){
+    this.editing=true;
+    this.noediting=false;
+  }
+  updateCustomer(){
+    this.api.updateCustomer(this.customerid,this.userFullName,this.userEmailId,this.userContactNo,this.userAddress).subscribe((data:any)=>{
+      window.alert(data.msg);      
+      this.router.navigate(['\displaycustomerinvoices']); 
+    });    
   }
   // deleteInvoice(){  
   //   var id=this.sharedservice.getidforcustomeredit();

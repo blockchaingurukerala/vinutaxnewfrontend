@@ -24,7 +24,7 @@
                       <div class="card border-secondary">
                           <div class="card-body">                              
                             <h4 class="card-title d-flex justify-content-between">Customer Details </h4>
-                              <div class="row">
+                              <div class="row" *ngIf="noediting">
                                 <div class="col col-12 col-lg-6 col-md-6">
                                     <label for="namecust">Name</label> 
                                     <input type="text" class="form-control" name="namecust" id="namecust"  [(ngModel)]="userFullName"  readonly>
@@ -48,7 +48,36 @@
                                     <br>
                                     <div class="row">
                                         <div class="col col-12 col-md-12 col-lg-12 col-md-offset-3 col-lg-offset-3  col-sm-offset-3  col-xs-offset-3">
-                                            <button type="button" class="btn btn-primary" style="width: 50%;">EDIT</button>                                     
+                                            <button type="button" class="btn btn-primary" style="width: 50%;" (click)="enableEditing()">EDIT</button>                                     
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="row" *ngIf="editing">
+                                <div class="col col-12 col-lg-6 col-md-6">
+                                    <label for="namecust">Name</label> 
+                                    <input type="text" class="form-control" name="namecust" id="namecust"  [(ngModel)]="userFullName"  >
+                                </div>
+                                <div class="col col-12 col-lg-6 col-md-6">
+                                    <label for="emailcust">Email</label> 
+                                    <input type="email" class="form-control" name="emailcust" id="emailcust"  [(ngModel)]="userEmailId"  >
+                                </div>
+                                <div class="col col-12 col-lg-6 col-md-6">
+                                    <label for="addrcust">Email</label> 
+                                    <textarea name="addrcust" id="addrcust" class="form-control" rows="4"  [(ngModel)]="userAddress" ></textarea>
+                                    <!-- <input type="email" class="form-control" name="emailcust" id="emailcust"  [(ngModel)]="userEmailId"  readonly> -->
+                                </div>
+                                <div class="col col-12 col-lg-6 col-md-6">
+                                    <div class="row">
+                                        <div class="col col-12 col-md-12 col-lg-12">
+                                            <label for="phonecust">Contact Number</label> 
+                                            <input type="text" class="form-control" name="phonecust" id="phonecust"  [(ngModel)]="userContactNo"  >                                        
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col col-12 col-md-12 col-lg-12 col-md-offset-3 col-lg-offset-3  col-sm-offset-3  col-xs-offset-3">
+                                            <button type="button" class="btn btn-primary" style="width: 50%;" (click)="updateCustomer()">SAVE</button>                                     
                                         </div>
                                     </div>
                                 </div>

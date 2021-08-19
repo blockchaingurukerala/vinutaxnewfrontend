@@ -137,4 +137,7 @@ getAllInvoioceOfACustomer(whose:string,customerid:string){
 getAllInvoioceOfACustomerDraft(whose:string,customerid:string){
   return this.http.post("http://localhost:3000/getAllInvoioceOfACustomerDraft",{"whose":whose,"customerid":customerid});
 }
+updateCustomer(id:string,userFullName:string,userEmailId:string,userContactNo:string,userAddress:string){
+  return this.http.post("http://localhost:3000/updateCustomer",{"id":id,"userFullName":userFullName,"userEmailId":userEmailId,"userContactNo":userContactNo,"userAddress":userAddress});
+}
 }
