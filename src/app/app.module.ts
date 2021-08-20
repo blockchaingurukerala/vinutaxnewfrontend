@@ -26,6 +26,8 @@ import { CustomerpaidComponent } from './customerpaid/customerpaid.component';
 import { EditinvoicecustomerComponent } from './editinvoicecustomer/editinvoicecustomer.component';
 import { CustomerinvoiceintermediatedisplayComponent } from './customerinvoiceintermediatedisplay/customerinvoiceintermediatedisplay.component';
 import { IndividualcustomerComponent } from './individualcustomer/individualcustomer.component';
+import { DisplayallcustomersComponent } from './displayallcustomers/displayallcustomers.component';
+import { DisplayallsuppliersComponent } from './displayallsuppliers/displayallsuppliers.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,9 @@ import { IndividualcustomerComponent } from './individualcustomer/individualcust
     CustomerpaidComponent,
     EditinvoicecustomerComponent,
     CustomerinvoiceintermediatedisplayComponent,
-    IndividualcustomerComponent
+    IndividualcustomerComponent,
+    DisplayallcustomersComponent,
+    DisplayallsuppliersComponent
    
   ],
   imports: [

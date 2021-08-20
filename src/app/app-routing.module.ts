@@ -19,6 +19,8 @@ import { DisplayAllSupplierInvoiceComponent } from './display-all-supplier-invoi
 import { EditinvoicecustomerComponent } from './editinvoicecustomer/editinvoicecustomer.component';
 import { CustomerinvoiceintermediatedisplayComponent } from './customerinvoiceintermediatedisplay/customerinvoiceintermediatedisplay.component';
 import { IndividualcustomerComponent } from './individualcustomer/individualcustomer.component';
+import { DisplayallcustomersComponent } from './displayallcustomers/displayallcustomers.component';
+import { DisplayallsuppliersComponent } from './displayallsuppliers/displayallsuppliers.component';
 const routes: Routes = [{path:'login',component:LoginComponent},
                         {path:'home',component:HomeComponent},
                         {path:'signup',component:SignupComponent},
@@ -38,7 +40,10 @@ const routes: Routes = [{path:'login',component:LoginComponent},
                         {path:'displaysupplierinvoices',component:DisplayAllSupplierInvoiceComponent},
                         {path:'editcustomerinvoice',component:EditinvoicecustomerComponent},  
                         {path:'intermediatedisplay',component:CustomerinvoiceintermediatedisplayComponent},   
-                        {path:'individualcustomer',component:IndividualcustomerComponent},                 
+                        {path:'individualcustomer',component:IndividualcustomerComponent}, 
+                        {path:'allcustomers',component:DisplayallcustomersComponent},     
+                        {path:'allsuppliers',component:DisplayallsuppliersComponent},  
+
                       ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
