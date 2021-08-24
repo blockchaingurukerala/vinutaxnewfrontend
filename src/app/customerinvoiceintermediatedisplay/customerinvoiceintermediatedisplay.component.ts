@@ -225,5 +225,11 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
     }
    
   }
+  setasCustomer(){   
+    this.sharedservice.setCustomerOrSupplier("Customer");
+  }
+  setasSupplier(){   
+    this.sharedservice.setCustomerOrSupplier("Supplier");
+  }
 
 }

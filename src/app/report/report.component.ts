@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
 import {ApiService} from '../api.service'
-
+import { SharedService } from '../shared.service';
 @Component({
   selector: 'app-report',
   templateUrl: './report.component.html',
@@ -24,7 +24,7 @@ export class ReportComponent implements OnInit {
      
   consolidatedincomes = new Map<string, number>();
   consolidatedexpences= new Map<string, number>();
-  constructor(private router:Router,private api:ApiService) { 
+  constructor(private router:Router,private api:ApiService,private sharedapi:SharedService) { 
     console.log("in report");
    
     if(localStorage.getItem("loggedIn")!="true"){
@@ -160,5 +160,12 @@ export class ReportComponent implements OnInit {
    });
     
    
+  } 
+  setasCustomer(){   
+    this.sharedapi.setCustomerOrSupplier("Customer");
   }
+  setasSupplier(){   
+    this.sharedapi.setCustomerOrSupplier("Supplier");
+  }
+
 }

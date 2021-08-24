@@ -10,11 +10,11 @@
                 Business <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-               <li><a routerLink="/displaycustomerinvoices">Invoice</a></li>
-               <li><a routerLink="/allcustomers">Customers</a></li>
-               <li><a routerLink="/displaysupplierinvoices">Bills To Pay</a></li> 
-               <li><a routerLink="/allsuppliers">Suppliers</a></li> 
-            </ul>
+                <li><a routerLink="/displaycustomerinvoices" (click)="setasCustomer();" >Invoice</a></li>
+                <li><a routerLink="/allcustomers" (click)="setasCustomer();">Customers</a></li>
+                <li><a routerLink="/displaycustomerinvoices" (click)="setasSupplier();">Bills To Pay</a></li> 
+                <li><a routerLink="/allcustomers" (click)="setasSupplier();">Suppliers</a></li> 
+             </ul>
         </li>      
       </ul>
       <br>
@@ -43,7 +43,7 @@
     </div>
     <div class="row">
         <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
-            <table class="table">
+            <table class="table  table-hover">
                 <tr>
                     <th>Invoice</th>
                     <th>Reference</th>
@@ -54,16 +54,18 @@
                     <th>Paid</th>
                     <th>Status</th>
                 </tr>
-                <tr *ngFor="let customerinvoice of customerinvoices; let i = index;let last = last;">
-                    <td>{{customerinvoice.invoiceid}}</td>
-                    <td>{{customerinvoice.reference}}</td>
-                    <td>{{customerinvoice.customername}}</td>
-                    <td>{{customerinvoice.date}}</td>
-                    <td>{{customerinvoice.duedate}}</td>
-                    <td>{{customerinvoice.totalamount}}</td>
-                    <td>0</td>
-                    <td>{{customerinvoice.status}}</td>
-                </tr>
+                <tbody>
+                    <tr *ngFor="let customerinvoice of customerinvoices; let i = index;let last = last;" (click)="editordelete(customerinvoice.id,customerinvoice.status);">
+                        <td>{{customerinvoice.invoiceid}}</td>
+                        <td>{{customerinvoice.reference}}</td>
+                        <td><a routerLink="/individualcustomer" (click)="customerclicked(customerinvoice.customerid);">{{customerinvoice.customername}}</a></td>
+                        <td>{{customerinvoice.date}}</td>
+                        <td>{{customerinvoice.duedate}}</td>
+                        <td>{{customerinvoice.totalamount}}</td>
+                        <td>0</td>
+                        <td>{{customerinvoice.status}}</td>
+                    </tr>
+                </tbody>              
             </table>
         </div>
     </div>

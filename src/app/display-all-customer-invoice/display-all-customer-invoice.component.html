@@ -10,18 +10,27 @@
                 Business <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-               <li><a routerLink="/displaycustomerinvoices">Invoice</a></li>
-               <li><a routerLink="/allcustomers">Customers</a></li>
-               <li><a routerLink="/displaysupplierinvoices">Bills To Pay</a></li> 
-               <li><a routerLink="/allsuppliers">Suppliers</a></li> 
-            </ul>
+                <li><a routerLink="/displaycustomerinvoices" (click)="setasCustomer();" >Invoice</a></li>
+                <li><a routerLink="/allcustomers" (click)="setasCustomer();">Customers</a></li>
+                <li><a routerLink="/displaycustomerinvoices" (click)="setasSupplier();">Bills To Pay</a></li> 
+                <li><a routerLink="/allcustomers" (click)="setasSupplier();">Suppliers</a></li> 
+             </ul>
+             
         </li>      
       </ul>
       <br>
+
+      <div class="row">       
+        <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
+            <button type="button" class="btn btn-info " style="width: 100%" >{{displaycustomerorsupplier}}</button>
+        </div>
+    </div>
+    <br>
+
     <div class="row">       
         <div class="col col-12 col-lg-4 col-md-4 col-sm-4"></div> 
         <div class="col col-12 col-lg-4 col-md-4 col-sm-4">
-           <button type="button" class="btn btn-primary " style="width: 200px" (click)="displayNewinvoice()">New Invoice</button>
+           <button type="button" class="btn btn-primary " style="width: 200px" (click)="displayNewinvoice()">{{invoicebuttonname}}</button>
         </div>      
         <div class="col col-12 col-lg-4 col-md-4 col-sm-4"></div> 
     </div>
@@ -38,7 +47,7 @@
               </ul>
         </div>  
         <div class="col col-12 col-lg-4 col-md-4 col-sm-4">
-
+            
         </div>         
     </div>
     <div class="row">

@@ -11,11 +11,11 @@
                 Business <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-               <li><a routerLink="/displaycustomerinvoices">Invoice</a></li>
-               <li><a routerLink="/allcustomers">Customers</a></li>
-               <li><a routerLink="/displaysupplierinvoices">Bills To Pay</a></li> 
-               <li><a routerLink="/allsuppliers">Suppliers</a></li> 
-            </ul>
+                <li><a routerLink="/displaycustomerinvoices" (click)="setasCustomer();" >Invoice</a></li>
+                <li><a routerLink="/allcustomers" (click)="setasCustomer();">Customers</a></li>
+                <li><a routerLink="/displaycustomerinvoices" (click)="setasSupplier();">Bills To Pay</a></li> 
+                <li><a routerLink="/allcustomers" (click)="setasSupplier();">Suppliers</a></li> 
+             </ul>
         </li>  
       </ul>
       <div class="row">       
@@ -23,6 +23,13 @@
           <div class="container-fluid pt-2 mb-5">
               <div class="row">
                   <div class="col-md-12">  
+                        <p>   
+                            <br>            
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                VIEW CUSTOMER DETAILS
+                            </button>
+                        </p> 
+                        <div class="collapse" id="collapseExample" [ngClass]="{'in': isOpen}">
                       <div class="card border-secondary">
                           <div class="card-body">                              
                             <h4 class="card-title d-flex justify-content-between">Customer Details </h4>
@@ -86,6 +93,7 @@
                               </div>
                           </div>
                       </div>
+                    </div>
                       <br><br>
                       <div class="card border-secondary mt-2">
                           <div class="card-body">

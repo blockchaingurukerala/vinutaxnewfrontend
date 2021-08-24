@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
-
+import { SharedService } from '../shared.service';
 import {ApiService} from '../api.service'
+
 @Component({
   selector: 'app-expence',
   templateUrl: './expence.component.html',
@@ -20,7 +21,7 @@ export class ExpenceComponent implements OnInit {
   email="";
   categoryadded=false;
   expenceid=0;
-  constructor(private router:Router,private api:ApiService) {
+  constructor(private router:Router,private api:ApiService,private sharedapi:SharedService) {
     if(localStorage.getItem("loggedIn")!="true"){
       this.router.navigate(['']);
     }
@@ -114,5 +115,11 @@ export class ExpenceComponent implements OnInit {
   }
   removeExpenceField(i: number) {
     this.expences.splice(i, 1);
+  }
+  setasCustomer(){   
+    this.sharedapi.setCustomerOrSupplier("Customer");
+  }
+  setasSupplier(){   
+    this.sharedapi.setCustomerOrSupplier("Supplier");
   }
 }

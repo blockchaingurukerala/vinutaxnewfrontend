@@ -20,7 +20,7 @@ export class IndividualcustomerComponent implements OnInit {
     customerinvoices = []; 
     customerdrftinvoices=[];
      whose=localStorage.getItem("uEmail"); 
-
+     isOpen:boolean;
   EnterValidData(){
    window.alert("Enter Valid Data");
   }
@@ -79,6 +79,7 @@ export class IndividualcustomerComponent implements OnInit {
   updateCustomer(){
     this.api.updateCustomer(this.customerid,this.userFullName,this.userEmailId,this.userContactNo,this.userAddress).subscribe((data:any)=>{
       window.alert(data.msg);      
+      this.isOpen=false;
       this.router.navigate(['\displaycustomerinvoices']); 
     });    
   }
@@ -99,5 +100,11 @@ export class IndividualcustomerComponent implements OnInit {
   //   }
    
   // }
+  setasCustomer(){   
+    this.sharedservice.setCustomerOrSupplier("Customer");
+  }
+  setasSupplier(){   
+    this.sharedservice.setCustomerOrSupplier("Supplier");
+  }
 
 }

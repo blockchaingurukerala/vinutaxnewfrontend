@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
+import { SharedService } from '../shared.service';
 
 @Component({
   selector: 'app-summary',
@@ -49,7 +50,7 @@ export class SummaryComponent implements OnInit {
   public pieChartDataExpence = [];
   public pieChartTypeExpence = 'pie';
   
-  constructor(private router:Router,private api:ApiService) { 
+  constructor(private router:Router,private api:ApiService,private sharedapi:SharedService) { 
     if(localStorage.getItem("loggedIn")!="true"){
       this.router.navigate(['']);
     }
@@ -203,6 +204,12 @@ export class SummaryComponent implements OnInit {
     localStorage.removeItem("uName");
     localStorage.removeItem("loggedIn");
     this.router.navigate(['']);
+  }
+  setasCustomer(){   
+    this.sharedapi.setCustomerOrSupplier("Customer");
+  }
+  setasSupplier(){   
+    this.sharedapi.setCustomerOrSupplier("Supplier");
   }
 
 }

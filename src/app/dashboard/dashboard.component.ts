@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {ApiService} from '../api.service'
+import { SharedService } from '../shared.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +23,7 @@ export class DashboardComponent implements OnInit {
   email="";
   incomeid=0;
 //category drop down ends
-  constructor(private router:Router,private api:ApiService) { 
+  constructor(private router:Router,private api:ApiService,private sharedapi:SharedService) { 
     if(localStorage.getItem("loggedIn")!="true"){
       this.router.navigate(['']);
     }
@@ -117,6 +118,11 @@ export class DashboardComponent implements OnInit {
   removeIncomeField(i: number) {
     this.incomes.splice(i, 1);
   }
-  
+  setasCustomer(){   
+    this.sharedapi.setCustomerOrSupplier("Customer");
+  }
+  setasSupplier(){   
+    this.sharedapi.setCustomerOrSupplier("Supplier");
+  }
 
 }

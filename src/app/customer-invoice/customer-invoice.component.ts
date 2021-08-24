@@ -3,6 +3,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { ApiService } from '../api.service';
 import {Router} from '@angular/router';
+import { SharedService } from '../shared.service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 class Product{
@@ -37,6 +38,8 @@ export class CustomerInvoiceComponent implements OnInit {
   invoice = new Invoice(); 
   names=[];
   i=0;
+
+  heading="";
   generatePDF(action = 'open') {
     let docDefinition = {
       content: [
@@ -148,23 +151,39 @@ export class CustomerInvoiceComponent implements OnInit {
   EnterValidData(){
    window.alert("Enter Valid Data");
   }
-  constructor(private api:ApiService,private router:Router) {
-    var today = new Date().toISOString().split('T')[0];
-    var duedate=new Date()
-    //window.alert(today);
-    this.invoice.date=today;
-    duedate.setDate(duedate.getDate() + 7);
-    this.invoice.duedate=new Date(duedate).toISOString().split('T')[0];
-    //let latest_date =this.datepipe.transform(today, 'yyyy-MM-dd');
-    var whose=localStorage.getItem("uEmail"); 
-    this.api.createNextCustomerInvoiceNumber(whose).subscribe((data:any)=>{
-      this.invoice.invoiceno=data.msg;
-    });
-    this.api.getAllCustomers(whose).subscribe((data:any)=>{
-      data.forEach(element => {
-        this.names.push(element);
+  constructor(private api:ApiService,private router:Router,private sharedapi:SharedService) {
+    if(this.sharedapi.getCustomerOrSupplier()=="Customer"){
+      this.heading="Customer Details";
+      var today = new Date().toISOString().split('T')[0];
+      var duedate=new Date()
+      //window.alert(today);
+      this.invoice.date=today;
+      duedate.setDate(duedate.getDate() + 7);
+      this.invoice.duedate=new Date(duedate).toISOString().split('T')[0];
+      //let latest_date =this.datepipe.transform(today, 'yyyy-MM-dd');
+      var whose=localStorage.getItem("uEmail"); 
+      this.api.createNextCustomerInvoiceNumber(whose).subscribe((data:any)=>{
+        this.invoice.invoiceno=data.msg;
       });
-    });
+      this.api.getAllCustomers(whose).subscribe((data:any)=>{
+        data.forEach(element => {
+          this.names.push(element);
+        });
+      });
+    }
+    else if(this.sharedapi.getCustomerOrSupplier()=="Supplier"){
+      this.heading="Supplier Details";
+      var whose=localStorage.getItem("uEmail"); 
+      this.api.getAllSuppliers(whose).subscribe((data:any)=>{
+        data.forEach(element => {
+          this.names.push(element);
+        });
+      });
+    }
+    else{
+      this.heading="NONE";
+    }
+   
 
    }
 
@@ -183,9 +202,7 @@ export class CustomerInvoiceComponent implements OnInit {
       this.invoice.address="";
       this.invoice.contactNo=Number("");
       this.invoice.email="";
-
-    }
-    
+    }    
 
   }
   approveInvoice(){
@@ -218,6 +235,38 @@ export class CustomerInvoiceComponent implements OnInit {
       }
     });
 
+  }
+  setasCustomer(){   
+    this.sharedapi.setCustomerOrSupplier("Customer");
+    this.heading="Customer Details";
+    var today = new Date().toISOString().split('T')[0];
+    var duedate=new Date()
+    //window.alert(today);
+    this.invoice.date=today;
+    duedate.setDate(duedate.getDate() + 7);
+    this.invoice.duedate=new Date(duedate).toISOString().split('T')[0];
+    //let latest_date =this.datepipe.transform(today, 'yyyy-MM-dd');
+    var whose=localStorage.getItem("uEmail"); 
+    this.names=[];
+    this.api.createNextCustomerInvoiceNumber(whose).subscribe((data:any)=>{
+      this.invoice.invoiceno=data.msg;
+    });
+    this.api.getAllCustomers(whose).subscribe((data:any)=>{
+      data.forEach(element => {
+        this.names.push(element);
+      });
+    });
+  }
+  setasSupplier(){   
+    this.sharedapi.setCustomerOrSupplier("Supplier");
+    this.names=[];
+    this.heading="Supplier Details";
+      var whose=localStorage.getItem("uEmail"); 
+      this.api.getAllSuppliers(whose).subscribe((data:any)=>{
+        data.forEach(element => {
+          this.names.push(element);
+        });
+      });
   }
 
 }

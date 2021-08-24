@@ -10,11 +10,11 @@
                 Business <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-               <li><a routerLink="/displaycustomerinvoices">Invoice</a></li>
-               <li><a routerLink="/allcustomers">Customers</a></li>
-               <li><a routerLink="/displaysupplierinvoices">Bills To Pay</a></li> 
-               <li><a routerLink="/allsuppliers">Suppliers</a></li> 
-            </ul>
+                <li><a routerLink="/displaycustomerinvoices" (click)="setasCustomer();" >Invoice</a></li>
+                <li><a routerLink="/allcustomers" (click)="setasCustomer();">Customers</a></li>
+                <li><a routerLink="/displaycustomerinvoices" (click)="setasSupplier();">Bills To Pay</a></li> 
+                <li><a routerLink="/allcustomers" (click)="setasSupplier();">Suppliers</a></li> 
+             </ul>
         </li>      
       </ul>
       <br>

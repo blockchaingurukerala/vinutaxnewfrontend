@@ -9,7 +9,7 @@ export class SharedService {
   idforcustomeredit :string;
   customerinvoicestatus:string;
   selectedcustomer :string;
-  
+  customerOrSupplier:string;
 
   _comp1ValueBS = new BehaviorSubject<string>('');
   constructor() { 
@@ -36,4 +36,11 @@ export class SharedService {
   getSelectedCustomer(){
     return this.selectedcustomer;
   }
+  setCustomerOrSupplier(user:string){
+    this.customerOrSupplier=user;
+  }
+  getCustomerOrSupplier(){
+    return this.customerOrSupplier;
+  }
+
 }

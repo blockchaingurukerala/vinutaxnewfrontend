@@ -46,4 +46,10 @@ export class DisplayallcustomersComponent implements OnInit {
     });
 
   }
+  setasCustomer(){   
+    this.sharedapi.setCustomerOrSupplier("Customer");
+  }
+  setasSupplier(){   
+    this.sharedapi.setCustomerOrSupplier("Supplier");
+  }
 }

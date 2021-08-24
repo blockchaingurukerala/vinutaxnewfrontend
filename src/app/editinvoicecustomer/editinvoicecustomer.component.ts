@@ -152,4 +152,10 @@ export class EditinvoicecustomerComponent implements OnInit {
     });
    
   }
+  setasCustomer(){   
+    this.sharedservice.setCustomerOrSupplier("Customer");
+  }
+  setasSupplier(){   
+    this.sharedservice.setCustomerOrSupplier("Supplier");
+  }
 }

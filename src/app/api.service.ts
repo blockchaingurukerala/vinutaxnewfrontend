@@ -97,15 +97,28 @@ createNextCustomerInvoiceNumber(whose:string){
 getAllCustomers(whose:string){
   return this.http.post("http://localhost:3000/getAllCustomers",{"whose":whose});
 }
+getAllSuppliers(whose:string){
+  return this.http.post("http://localhost:3000/getAllSuppliers",{"whose":whose});
+}
 getAllCustomerInvoioce(whose:string){
   return this.http.post("http://localhost:3000/getAllCustomerInvoioce",{"whose":whose});
+}
+getAllSupplierInvoioce(whose:string){
+  return this.http.post("http://localhost:3000/getAllSupplierInvoioce",{"whose":whose});
 }
 getAllCustomerDraftInvoioce(whose:string){
   return this.http.post("http://localhost:3000/getAllCustomerDraftInvoioce",{"whose":whose});
 }
+getAllSupplierDraftInvoioce(whose:string){
+  return this.http.post("http://localhost:3000/getAllSupplierDraftInvoioce",{"whose":whose});
+}
 
 getCustomerNameFromId(id:string){
   return this.http.post("http://localhost:3000/getCustomerNameFromId",{"id":id});
+}
+
+getSupplierNameFromId(id:string){
+  return this.http.post("http://localhost:3000/getSupplierNameFromId",{"id":id});
 }
 getCustomerInvoioceFromId(id:string){
   return this.http.post("http://localhost:3000/getCustomerInvoioceFromId",{"id":id});
