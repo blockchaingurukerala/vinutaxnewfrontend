@@ -84,12 +84,20 @@ modifyExpences(email:string,originalexpences:any[],modifiedexpences:any[]){
 addCustomerDetils(name:string,email:string,contactno:string,address:string,whose:string){
   return this.http.post("http://localhost:3000/addCustomerDetils",{"name":name,"email":email,"contactno":contactno,"address":address,"whose":whose});
 }
-       
+addSupplierDetils(name:string,email:string,contactno:string,address:string,whose:string){
+  return this.http.post("http://localhost:3000/addSupplierDetils",{"name":name,"email":email,"contactno":contactno,"address":address,"whose":whose});
+}     
 addCustomerInvoice(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string){
   return this.http.post("http://localhost:3000/addCustomerInvoice",{"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails,"whose":whose,"customerid":customerid});
 }
+addSupplierInvoice(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string){
+  return this.http.post("http://localhost:3000/addSupplierInvoice",{"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails,"whose":whose,"customerid":customerid});
+}
 addCustomerInvoiceDraft(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string){
   return this.http.post("http://localhost:3000/addCustomerInvoiceDraft",{"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails,"whose":whose,"customerid":customerid});
+}
+addSupplierInvoiceDraft(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string){
+  return this.http.post("http://localhost:3000/addSupplierInvoiceDraft",{"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails,"whose":whose,"customerid":customerid});
 }
 createNextCustomerInvoiceNumber(whose:string){
   return this.http.post("http://localhost:3000/createNextCustomerInvoiceNumber",{"whose":whose});
@@ -109,6 +117,7 @@ getAllSupplierInvoioce(whose:string){
 getAllCustomerDraftInvoioce(whose:string){
   return this.http.post("http://localhost:3000/getAllCustomerDraftInvoioce",{"whose":whose});
 }
+
 getAllSupplierDraftInvoioce(whose:string){
   return this.http.post("http://localhost:3000/getAllSupplierDraftInvoioce",{"whose":whose});
 }

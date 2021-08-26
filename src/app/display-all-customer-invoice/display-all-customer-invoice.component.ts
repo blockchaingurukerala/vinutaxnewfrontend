@@ -81,6 +81,8 @@ export class DisplayAllCustomerInvoiceComponent implements OnInit {
     this.sharedapi.setSelectedCustomerID(i);
   }
   setasCustomer(){   
+    this.customerinvoices = []; 
+    this.customerdrftinvoices=[];
     this.sharedapi.setCustomerOrSupplier("Customer");
     this.displaycustomerorsupplier="Customer";
     this.invoicebuttonname="New Customer Invoice"
@@ -105,6 +107,8 @@ export class DisplayAllCustomerInvoiceComponent implements OnInit {
     this.sharedapi.setCustomerOrSupplier("Supplier");
     this.displaycustomerorsupplier="Supplier";
     this.invoicebuttonname="New Supplier Invoice";
+    this.customerinvoices = []; 
+    this.customerdrftinvoices=[];
     this.api.getAllSupplierInvoioce(this.whose).subscribe((data:any)=>{
       //console.log(data);    
       data.forEach(element => {

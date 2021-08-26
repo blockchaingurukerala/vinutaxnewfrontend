@@ -17,11 +17,16 @@
                 <li><a routerLink="/displaycustomerinvoices" (click)="setasSupplier();">Bills To Pay</a></li> 
                 <li><a routerLink="/allcustomers" (click)="setasSupplier();">Suppliers</a></li> 
              </ul>
-        </li>  
-        
-          
+        </li> 
       </ul>
-      
+      <br>
+
+      <div class="row">       
+        <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
+            <button type="button" class="btn btn-info " style="width: 100%" >{{displaycustomerorsupplier}}</button>
+        </div>
+    </div>
+    <br>
       <div class="row">       
         <form #invoiceForm="ngForm">
           <div class="container-fluid pt-2 mb-5">
@@ -71,9 +76,13 @@
                                     <label for="duedate">Due Date</label>
                                     <input type="date" class="form-control"  name="duedate" id="duedate"  [(ngModel)]="invoice.duedate" required>
                                 </div>
-                                <div class="col col-12 col-lg-3 col-md-3">
+                                <div class="col col-12 col-lg-3 col-md-3" *ngIf=showreadonly>
                                     <label for="invoice">Invoice#</label>
                                     <input type="text" class="form-control" name="invoice" id="invoice"   [(ngModel)]="invoice.invoiceno" required readonly>
+                                </div>
+                                <div class="col col-12 col-lg-3 col-md-3" *ngIf=show>                                    
+                                    <label for="invoice">Invoice#</label>
+                                    <input type="text" class="form-control" name="invoice" id="invoice"   [(ngModel)]="invoice.invoiceno" required >
                                 </div>
                                 <div class="col col-12 col-lg-3 col-md-3">
                                     <label for="reference">Reference</label>

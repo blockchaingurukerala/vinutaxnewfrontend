@@ -38,8 +38,10 @@ export class CustomerInvoiceComponent implements OnInit {
   invoice = new Invoice(); 
   names=[];
   i=0;
-
+  displaycustomerorsupplier="NONE";
   heading="";
+  showreadonly=true;
+  show=false;
   generatePDF(action = 'open') {
     let docDefinition = {
       content: [
@@ -154,6 +156,9 @@ export class CustomerInvoiceComponent implements OnInit {
   constructor(private api:ApiService,private router:Router,private sharedapi:SharedService) {
     if(this.sharedapi.getCustomerOrSupplier()=="Customer"){
       this.heading="Customer Details";
+      this.displaycustomerorsupplier="New Customer Invoice";
+      this.showreadonly=true;
+      this.show=false;
       var today = new Date().toISOString().split('T')[0];
       var duedate=new Date()
       //window.alert(today);
@@ -173,7 +178,10 @@ export class CustomerInvoiceComponent implements OnInit {
     }
     else if(this.sharedapi.getCustomerOrSupplier()=="Supplier"){
       this.heading="Supplier Details";
+      this.displaycustomerorsupplier="New Supplier Invoice";
       var whose=localStorage.getItem("uEmail"); 
+      this.showreadonly=false;
+      this.show=true;
       this.api.getAllSuppliers(whose).subscribe((data:any)=>{
         data.forEach(element => {
           this.names.push(element);
@@ -182,9 +190,12 @@ export class CustomerInvoiceComponent implements OnInit {
     }
     else{
       this.heading="NONE";
-    }
-   
-
+      this.displaycustomerorsupplier="NONE";
+      this.showreadonly=true;
+      this.show=false;
+      window.alert("Do not Refresh the page");
+      this.router.navigate(['/report']);
+    }   
    }
 
   ngOnInit(): void {
@@ -208,33 +219,72 @@ export class CustomerInvoiceComponent implements OnInit {
   approveInvoice(){
     var whose=localStorage.getItem("uEmail");  
     var i: number,sum=0;
-    this.api.addCustomerDetils(this.invoice.customerName,this.invoice.email,this.invoice.contactNo.toString(),this.invoice.address,whose).subscribe((data:any)=>{
-      for(i=0;i<this.invoice.products.length;i++){
-        sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
-      }    
-      if(data.msg!="Database Error"){
-        this.api.addCustomerInvoice(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose,data.msg).subscribe((data:any)=>{
-          window.alert(data.msg);
-          this.router.navigate(['/report']);          
-        });
-      }
-    });    
+    if(this.sharedapi.getCustomerOrSupplier()=="Customer"){
+      this.api.addCustomerDetils(this.invoice.customerName,this.invoice.email,this.invoice.contactNo.toString(),this.invoice.address,whose).subscribe((data:any)=>{
+        for(i=0;i<this.invoice.products.length;i++){
+          sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
+        }    
+        if(data.msg!="Database Error"){
+          this.api.addCustomerInvoice(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose,data.msg).subscribe((data:any)=>{
+            window.alert(data.msg);
+            this.router.navigate(['/report']);          
+          });
+        }
+      });    
+    }
+    else if(this.sharedapi.getCustomerOrSupplier()=="Supplier"){
+      this.api.addSupplierDetils(this.invoice.customerName,this.invoice.email,this.invoice.contactNo.toString(),this.invoice.address,whose).subscribe((data:any)=>{
+        for(i=0;i<this.invoice.products.length;i++){
+          sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
+        }    
+        if(data.msg!="Database Error"){
+          this.api.addSupplierInvoice(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose,data.msg).subscribe((data:any)=>{
+            window.alert(data.msg);
+            this.router.navigate(['/report']);          
+          });
+        }
+      });    
+    }
+    else{
+      window.alert("Do not Refresh the page");
+      this.router.navigate(['/report']);
+    }
+ 
   }
   saveInvoiceonDraft(){
     var whose=localStorage.getItem("uEmail");  
     var i: number,sum=0;
-    this.api.addCustomerDetils(this.invoice.customerName,this.invoice.email,this.invoice.contactNo.toString(),this.invoice.address,whose).subscribe((data:any)=>{
-      for(i=0;i<this.invoice.products.length;i++){
-        sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
-      }    
-      if(data.msg!="Database Error"){
-        this.api.addCustomerInvoiceDraft(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose,data.msg).subscribe((data:any)=>{
-          window.alert(data.msg);
-          this.router.navigate(['/report']);          
-        });
-      }
-    });
-
+    if(this.sharedapi.getCustomerOrSupplier()=="Customer"){
+      this.api.addCustomerDetils(this.invoice.customerName,this.invoice.email,this.invoice.contactNo.toString(),this.invoice.address,whose).subscribe((data:any)=>{
+        for(i=0;i<this.invoice.products.length;i++){
+          sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
+        }    
+        if(data.msg!="Database Error"){
+          this.api.addCustomerInvoiceDraft(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose,data.msg).subscribe((data:any)=>{
+            window.alert(data.msg);
+            this.router.navigate(['/report']);          
+          });
+        }
+      });
+  
+    }
+    else if(this.sharedapi.getCustomerOrSupplier()=="Supplier"){
+      this.api.addSupplierDetils(this.invoice.customerName,this.invoice.email,this.invoice.contactNo.toString(),this.invoice.address,whose).subscribe((data:any)=>{
+        for(i=0;i<this.invoice.products.length;i++){
+          sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
+        }    
+        if(data.msg!="Database Error"){
+          this.api.addSupplierInvoiceDraft(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose,data.msg).subscribe((data:any)=>{
+            window.alert(data.msg);
+            this.router.navigate(['/report']);          
+          });
+        }
+      });  
+    }
+    else{
+      window.alert("Do not Refresh the page");
+      this.router.navigate(['/report']);
+    }   
   }
   setasCustomer(){   
     this.sharedapi.setCustomerOrSupplier("Customer");
