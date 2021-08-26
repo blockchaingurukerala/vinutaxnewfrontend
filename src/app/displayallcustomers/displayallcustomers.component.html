@@ -17,18 +17,25 @@
              </ul>
         </li>      
       </ul>
+      <br>
 
+      <div class="row">       
+        <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
+            <button type="button" class="btn btn-info " style="width: 100%" >{{displaycustomerorsupplier}}</button>
+        </div>
+    </div>
+    <br>
       <div class="row">
           <p>   
               <br>            
                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                   ADD NEW CUSTOMER
+                   {{addnewuserbtn}}
                 </button>
             </p>    
             <div class="collapse" id="collapseExample" [ngClass]="{'in': isOpen}">
             <div class="card card-body">
                 <form (ngSubmit)="addNewCustomer()" ngNativeValidate>
-                    <h4 class="card-title d-flex justify-content-between">Customer Details </h4>
+                    <h4 class="card-title d-flex justify-content-between">{{userdetails}} </h4>
                     <div class="row" >
                         <div class="col col-12 col-lg-6 col-md-6">
                             <label for="namecust">Name</label> 
@@ -65,7 +72,7 @@
 
       <br>
     <div class="row">
-        <h3>all customers</h3>
+        <h3>{{allusers}}</h3>
         <table class="table table-hover">
             <thead>
                 <th>Name</th>
