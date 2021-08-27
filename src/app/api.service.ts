@@ -132,34 +132,67 @@ getSupplierNameFromId(id:string){
 getCustomerInvoioceFromId(id:string){
   return this.http.post("http://localhost:3000/getCustomerInvoioceFromId",{"id":id});
 }
+getSupplierInvoioceFromId(id:string){
+  return this.http.post("http://localhost:3000/getSupplierInvoioceFromId",{"id":id});
+}
 getDraftCustomerInvoioceFromId(id:string){
   return this.http.post("http://localhost:3000/getDraftCustomerInvoioceFromId",{"id":id});
+}
+getDraftSupplierInvoioceFromId(id:string){
+  return this.http.post("http://localhost:3000/getDraftSupplierInvoioceFromId",{"id":id});
 }
 updteCustomerInvoice(id:string,date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string){
   return this.http.post("http://localhost:3000/updteCustomerInvoice",{"id":id,"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails});
 }
+updteSupplierInvoice(id:string,date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string){
+  return this.http.post("http://localhost:3000/updteSupplierInvoice",{"id":id,"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails});
+}
 updteCustomerInvoiceDraft(id:string,date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string){
   return this.http.post("http://localhost:3000/updteCustomerInvoiceDraft",{"id":id,"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails});
+}
+updteSupplierInvoiceDraft(id:string,date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string){
+  return this.http.post("http://localhost:3000/updteSupplierInvoiceDraft",{"id":id,"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails});
 }
 deleteCustomerInvoice(id:string){
   return this.http.post("http://localhost:3000/deleteCustomerInvoice",{"id":id});
 }
+deleteSupplierInvoice(id:string){
+  return this.http.post("http://localhost:3000/deleteSupplierInvoice",{"id":id});
+}
 deleteCustomerInvoiceFromDraft(id:string){
   return this.http.post("http://localhost:3000/deleteCustomerInvoiceFromDraft",{"id":id});
+}
+deleteSupplierInvoiceFromDraft(id:string){
+  return this.http.post("http://localhost:3000/deleteSupplierInvoiceFromDraft",{"id":id});
 }
 aprovedraftinvoice(id:string){
   return this.http.post("http://localhost:3000/aprovedraftinvoice",{"id":id});
 }
+aprovedraftinvoiceSupplier(id:string){
+  return this.http.post("http://localhost:3000/aprovedraftinvoiceSupplier",{"id":id});
+}
 getCustomerDetails(id:string){
   return this.http.post("http://localhost:3000/getCustomerDetails",{"id":id});
+}
+getSupplierDetails(id:string){
+  return this.http.post("http://localhost:3000/getSupplierDetails",{"id":id});
 }
 getAllInvoioceOfACustomer(whose:string,customerid:string){
   return this.http.post("http://localhost:3000/getAllInvoioceOfACustomer",{"whose":whose,"customerid":customerid});
 }
+getAllInvoioceOfASupplier(whose:string,customerid:string){
+  return this.http.post("http://localhost:3000/getAllInvoioceOfASupplier",{"whose":whose,"customerid":customerid});
+}
 getAllInvoioceOfACustomerDraft(whose:string,customerid:string){
   return this.http.post("http://localhost:3000/getAllInvoioceOfACustomerDraft",{"whose":whose,"customerid":customerid});
 }
+getAllInvoioceOfASupplierDraft(whose:string,customerid:string){
+  return this.http.post("http://localhost:3000/getAllInvoioceOfASupplierDraft",{"whose":whose,"customerid":customerid});
+}
 updateCustomer(id:string,userFullName:string,userEmailId:string,userContactNo:string,userAddress:string){
   return this.http.post("http://localhost:3000/updateCustomer",{"id":id,"userFullName":userFullName,"userEmailId":userEmailId,"userContactNo":userContactNo,"userAddress":userAddress});
+}
+updateSupplier(id:string,userFullName:string,userEmailId:string,userContactNo:string,userAddress:string){
+  return this.http.post("http://localhost:3000/updateSupplier",{"id":id,"userFullName":userFullName,"userEmailId":userEmailId,"userContactNo":userContactNo,"userAddress":userAddress});
 }
 }

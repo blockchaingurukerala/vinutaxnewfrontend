@@ -41,6 +41,7 @@ export class EditinvoicecustomerComponent implements OnInit {
   status="";
   aprove=true;
   draft=false;
+  displaycustomerorsupplier="NONE";
   addProduct(){
     this.invoice.products.push(new Product());
   }
@@ -51,42 +52,90 @@ export class EditinvoicecustomerComponent implements OnInit {
     var id=this.sharedservice.getidforcustomeredit();
     var status=this.sharedservice.getcustomerinvoicestatus();
     this.status=status;
-    if(status=="approved"){
-      this.aprove=true;
-      this.draft=false;
-      this.api.getCustomerInvoioceFromId(id).subscribe((data)=>{     
-        this.api.getCustomerNameFromId(data[0].customerid).subscribe((customername:any)=>{        
-         this.name=customername.name;
-         this.invoice.date=data[0].date;
-         this.invoice.duedate=data[0].duedate;
-         this.invoice.invoiceno=data[0].invoiceid;
-         this.invoice.referenceno=data[0].reference;
-         this.invoice.additionalDetails=data[0].additionaldetails;    
-         for(var i=0;i<data[0].products.length;i++)  {
-          this.invoice.products.push(new Product());
-           this.invoice.products[i]=data[0].products[i];
-         }  
-        })
-      });
+    if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
+      this.displaycustomerorsupplier="Customer"; 
+      if(status=="approved"){
+        this.aprove=true;
+        this.draft=false;
+        this.api.getCustomerInvoioceFromId(id).subscribe((data)=>{     
+          this.api.getCustomerNameFromId(data[0].customerid).subscribe((customername:any)=>{        
+           this.name=customername.name;
+           this.invoice.date=data[0].date;
+           this.invoice.duedate=data[0].duedate;
+           this.invoice.invoiceno=data[0].invoiceid;
+           this.invoice.referenceno=data[0].reference;
+           this.invoice.additionalDetails=data[0].additionaldetails;    
+           for(var i=0;i<data[0].products.length;i++)  {
+            this.invoice.products.push(new Product());
+             this.invoice.products[i]=data[0].products[i];
+           }  
+          })
+        });
+      }
+      else if(status=="draft") {
+        this.aprove=false;
+        this.draft=true;
+        this.api.getDraftCustomerInvoioceFromId(id).subscribe((data)=>{
+          this.api.getCustomerNameFromId(data[0].customerid).subscribe((customername:any)=>{        
+              this.name=customername.name;
+              this.invoice.date=data[0].date;
+              this.invoice.duedate=data[0].duedate;
+              this.invoice.invoiceno=data[0].invoiceid;
+              this.invoice.referenceno=data[0].reference;
+              this.invoice.additionalDetails=data[0].additionaldetails;    
+              for(var i=0;i<data[0].products.length;i++)  {
+                this.invoice.products.push(new Product());
+                this.invoice.products[i]=data[0].products[i];
+              }  
+          })
+        });
+      }
     }
-    else if(status=="draft") {
-      this.aprove=false;
-      this.draft=true;
-      this.api.getDraftCustomerInvoioceFromId(id).subscribe((data)=>{
-        this.api.getCustomerNameFromId(data[0].customerid).subscribe((customername:any)=>{        
-            this.name=customername.name;
-            this.invoice.date=data[0].date;
-            this.invoice.duedate=data[0].duedate;
-            this.invoice.invoiceno=data[0].invoiceid;
-            this.invoice.referenceno=data[0].reference;
-            this.invoice.additionalDetails=data[0].additionaldetails;    
-            for(var i=0;i<data[0].products.length;i++)  {
-              this.invoice.products.push(new Product());
-              this.invoice.products[i]=data[0].products[i];
-            }  
-        })
-      });
+     else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
+      this.displaycustomerorsupplier="Supplier"; 
+      if(status=="approved"){
+        this.aprove=true;
+        this.draft=false;
+        this.api.getSupplierInvoioceFromId(id).subscribe((data)=>{     
+          this.api.getSupplierNameFromId(data[0].customerid).subscribe((customername:any)=>{        
+           this.name=customername.name;
+           this.invoice.date=data[0].date;
+           this.invoice.duedate=data[0].duedate;
+           this.invoice.invoiceno=data[0].invoiceid;
+           this.invoice.referenceno=data[0].reference;
+           this.invoice.additionalDetails=data[0].additionaldetails;    
+           for(var i=0;i<data[0].products.length;i++)  {
+            this.invoice.products.push(new Product());
+             this.invoice.products[i]=data[0].products[i];
+           }  
+          })
+        });
+      }
+      else if(status=="draft") {
+        this.aprove=false;
+        this.draft=true;
+        this.api.getDraftSupplierInvoioceFromId(id).subscribe((data)=>{
+          this.api.getSupplierNameFromId(data[0].customerid).subscribe((customername:any)=>{        
+              this.name=customername.name;
+              this.invoice.date=data[0].date;
+              this.invoice.duedate=data[0].duedate;
+              this.invoice.invoiceno=data[0].invoiceid;
+              this.invoice.referenceno=data[0].reference;
+              this.invoice.additionalDetails=data[0].additionaldetails;    
+              for(var i=0;i<data[0].products.length;i++)  {
+                this.invoice.products.push(new Product());
+                this.invoice.products[i]=data[0].products[i];
+              }  
+          })
+        });
+      }
     }
+    else{    
+          this.displaycustomerorsupplier="NONE"; 
+          this.router.navigate(['/report']);     
+    }
+
+    
    }
 
   ngOnInit(): void {
@@ -113,44 +162,96 @@ export class EditinvoicecustomerComponent implements OnInit {
       for(i=0;i<this.invoice.products.length;i++){
         sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
       }   
+      if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
+        if(this.status=="approved"){
+          this.api.updteCustomerInvoice(id,this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails).subscribe((data:any)=>{
+            window.alert(data.msg);
+            this.router.navigate(['/displaycustomerinvoices']);          
+          });
+        }
+        else  if(this.status=="draft"){  
+          this.api.updteCustomerInvoiceDraft(id,this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails).subscribe((data:any)=>{
+            window.alert(data.msg);
+            this.router.navigate(['/displaycustomerinvoices']);          
+          });
+        }    
+      }
+       else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
+        if(this.status=="approved"){
+          this.api.updteSupplierInvoice(id,this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails).subscribe((data:any)=>{
+            window.alert(data.msg);
+            this.router.navigate(['/displaycustomerinvoices']);          
+          });
+        }
+        else  if(this.status=="draft"){  
+          this.api.updteSupplierInvoiceDraft(id,this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails).subscribe((data:any)=>{
+            window.alert(data.msg);
+            this.router.navigate(['/displaycustomerinvoices']);          
+          });
+        }  
+      }
+      else{    
+            window.alert("ERROR..Please Try again Later..");
+            this.displaycustomerorsupplier="NONE"; 
+            this.router.navigate(['/report']);     
+      }
+  }
+  deleteInvoice(){  
+    var id=this.sharedservice.getidforcustomeredit();
+    if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
       if(this.status=="approved"){
-        this.api.updteCustomerInvoice(id,this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails).subscribe((data:any)=>{
+        this.api.deleteCustomerInvoice(id).subscribe((data:any)=>{
           window.alert(data.msg);
           this.router.navigate(['/displaycustomerinvoices']);          
         });
       }
-      else  if(this.status=="draft"){  
-        this.api.updteCustomerInvoiceDraft(id,this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails).subscribe((data:any)=>{
+      else  if(this.status=="draft"){ 
+        this.api.deleteCustomerInvoiceFromDraft(id).subscribe((data:any)=>{
+          window.alert(data.msg);
+          this.router.navigate(['/displaycustomerinvoices']);          
+        }); 
+      }  
+    }
+     else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
+      if(this.status=="approved"){
+        this.api.deleteSupplierInvoice(id).subscribe((data:any)=>{
           window.alert(data.msg);
           this.router.navigate(['/displaycustomerinvoices']);          
         });
-      }     
-    
-      
-       
-  }
-  deleteInvoice(){  
-    var id=this.sharedservice.getidforcustomeredit();
-    if(this.status=="approved"){
-      this.api.deleteCustomerInvoice(id).subscribe((data:any)=>{
-        window.alert(data.msg);
-        this.router.navigate(['/displaycustomerinvoices']);          
-      });
+      }
+      else  if(this.status=="draft"){ 
+        this.api.deleteSupplierInvoiceFromDraft(id).subscribe((data:any)=>{
+          window.alert(data.msg);
+          this.router.navigate(['/displaycustomerinvoices']);          
+        }); 
+      }  
     }
-    else  if(this.status=="draft"){ 
-      this.api.deleteCustomerInvoiceFromDraft(id).subscribe((data:any)=>{
-        window.alert(data.msg);
-        this.router.navigate(['/displaycustomerinvoices']);          
-      }); 
-    }   
+    else{    
+          window.alert("ERROR..Please Try again Later..");
+          this.displaycustomerorsupplier="NONE"; 
+          this.router.navigate(['/report']);     
+    }
+    
   }
   aprovedraftinvoice(){
     var id=this.sharedservice.getidforcustomeredit();
-    this.api.aprovedraftinvoice(id).subscribe((data:any)=>{
-      window.alert(data.msg);
-      this.router.navigate(['/displaycustomerinvoices']); 
-    });
-   
+    if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
+      this.api.aprovedraftinvoice(id).subscribe((data:any)=>{
+        window.alert(data.msg);
+        this.router.navigate(['/displaycustomerinvoices']); 
+      });
+    }
+     else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
+      this.api.aprovedraftinvoiceSupplier(id).subscribe((data:any)=>{
+        window.alert(data.msg);
+        this.router.navigate(['/displaycustomerinvoices']); 
+      });
+    }
+    else{   
+          window.alert("ERROR..Please Try again Later.."); 
+          this.displaycustomerorsupplier="NONE"; 
+          this.router.navigate(['/report']);     
+    }
   }
   setasCustomer(){   
     this.sharedservice.setCustomerOrSupplier("Customer");

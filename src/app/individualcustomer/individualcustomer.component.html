@@ -18,6 +18,15 @@
              </ul>
         </li>  
       </ul>
+
+      <br>
+      <div class="row">       
+        <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
+            <button type="button" class="btn btn-info " style="width: 100%" >{{displaycustomerorsupplier}}</button>
+        </div>
+    </div>
+    <br>
+    
       <div class="row">       
         <form #invoiceForm="ngForm">
           <div class="container-fluid pt-2 mb-5">
@@ -26,7 +35,7 @@
                         <p>   
                             <br>            
                             <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                VIEW CUSTOMER DETAILS
+                                {{viewuserdetails}}
                             </button>
                         </p> 
                         <div class="collapse" id="collapseExample" [ngClass]="{'in': isOpen}">
