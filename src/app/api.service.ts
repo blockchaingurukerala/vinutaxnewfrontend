@@ -16,7 +16,7 @@ export class ApiService {
   }
   insertNewUser(userfullname:string,useremail:string,password:string){      
     return this.http.post("http://localhost:3000/insert",{"userFullName":userfullname,"userEmailId":useremail,"userPassword":this.findHash(password)})
-    //return this.http.post("/api/insert",{"userFullName":userfullname,"userEmailId":useremail,"userPassword":this.findHash(password)})
+    //return this.http.post("http://localhost:3000/insert",{"userFullName":userfullname,"userEmailId":useremail,"userPassword":this.findHash(password)})
   }
   checkUserNameAvailable(userEmail:String){
     return this.http.post("http://localhost:3000/checkAvailability",{"userEmailId":userEmail}) ;     
@@ -55,7 +55,7 @@ export class ApiService {
   return this.http.post("http://localhost:3000/getIncomesExpence",{"email":email});
  }
 //  tokemcall(){  
-//    return  this.http.get("http://localhost:8080/unrestrictedCall");
+//    return  this.http.get("http://localhost:8080/unrestrictedCall");window.alert("Contact Added Successfully..");
 //   // this.headers.set("Access-Control-Allow-Origin", "*");
 //   // this.headers.append("Accept","application/vnd.hmrc.1.0+json");  
 //   // return this.http.get("https://test-api.service.hmrc.gov.uk/hello/world",{headers: this.headers});
@@ -87,17 +87,18 @@ addCustomerDetils(name:string,email:string,contactno:string,address:string,whose
 addSupplierDetils(name:string,email:string,contactno:string,address:string,whose:string){
   return this.http.post("http://localhost:3000/addSupplierDetils",{"name":name,"email":email,"contactno":contactno,"address":address,"whose":whose});
 }     
-addCustomerInvoice(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string){
-  return this.http.post("http://localhost:3000/addCustomerInvoice",{"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails,"whose":whose,"customerid":customerid});
+addCustomerInvoice(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string,customername:string){
+  window.alert(customername);
+  return this.http.post("http://localhost:3000/addCustomerInvoice",{"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails,"whose":whose,"customerid":customerid,"customername":customername});
 }
-addSupplierInvoice(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string){
-  return this.http.post("http://localhost:3000/addSupplierInvoice",{"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails,"whose":whose,"customerid":customerid});
+addSupplierInvoice(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string,customername:string){
+  return this.http.post("http://localhost:3000/addSupplierInvoice",{"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails,"whose":whose,"customerid":customerid,"customername":customername});
 }
-addCustomerInvoiceDraft(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string){
-  return this.http.post("http://localhost:3000/addCustomerInvoiceDraft",{"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails,"whose":whose,"customerid":customerid});
+addCustomerInvoiceDraft(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string,customername:string){
+  return this.http.post("http://localhost:3000/addCustomerInvoiceDraft",{"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails,"whose":whose,"customerid":customerid,"customername":customername});
 }
-addSupplierInvoiceDraft(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string){
-  return this.http.post("http://localhost:3000/addSupplierInvoiceDraft",{"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails,"whose":whose,"customerid":customerid});
+addSupplierInvoiceDraft(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string,customername:string){
+  return this.http.post("http://localhost:3000/addSupplierInvoiceDraft",{"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails,"whose":whose,"customerid":customerid,"customername":customername});
 }
 createNextCustomerInvoiceNumber(whose:string){
   return this.http.post("http://localhost:3000/createNextCustomerInvoiceNumber",{"whose":whose});

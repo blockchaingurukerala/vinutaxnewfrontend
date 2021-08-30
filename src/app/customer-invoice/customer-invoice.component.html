@@ -49,22 +49,24 @@
                                       <div class="form-group">
                                           <label for="address">Address</label>
                                           <textarea class="form-control" name="address" id="address" row="3"
-                                              [ngClass]="{'is-invalid': invoiceForm.submitted && Address.invalid}"
-                                              [(ngModel)]="invoice.address" #Address="ngModel" required></textarea>
+                                             
+                                              [(ngModel)]="invoice.address" ></textarea>
                                       </div>
                                   </div>
                                   <div class="col-md-4">
                                       <div class="form-group">
                                           <label for="email">Email ID</label>
                                           <input type="email" class="form-control" name="email" id="email"
-                                              [(ngModel)]="invoice.email" required>
+                                              [(ngModel)]="invoice.email" >
                                       </div>
                                       <div class="form-group">
                                           <label for="contactNo">Contact No.</label>
-                                          <input type="number" class="form-control" name="contactNo" id="contactNo"
-                                              [ngClass]="{'is-invalid': invoiceForm.submitted && ContactNo.invalid}"
-                                              [(ngModel)]="invoice.contactNo" #ContactNo="ngModel" required>
+                                          <input type="number" class="form-control" name="contactNo" id="contactNo"                                             
+                                              [(ngModel)]="invoice.contactNo">
                                       </div>
+                                      <div class="form-group" *ngIf="addcontactbtn">                                       
+                                       <button type="button" class="btn btn-primary" (click)="addContact()" style="width: 100%;" [disabled]="btnEnable" >Add Contact</button>
+                                    </div>
                                   </div>
                               </div>
                               <div class="row">
