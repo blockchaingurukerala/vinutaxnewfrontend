@@ -67,7 +67,8 @@
                     <tr *ngFor="let customerinvoice of customerinvoices; let i = index;let last = last;" (click)="editordelete(customerinvoice.id,customerinvoice.status);">
                         <td>{{customerinvoice.invoiceid}}</td>
                         <td>{{customerinvoice.reference}}</td>
-                        <td><a routerLink="/individualcustomer" (click)="customerclicked(customerinvoice.customerid);">{{customerinvoice.customername}}</a></td>
+                        <td *ngIf="customerinvoice.link"><a routerLink="/individualcustomer" (click)="customerclicked(customerinvoice.customerid);">{{customerinvoice.customername}}</a></td>
+                        <td *ngIf="!customerinvoice.link">{{customerinvoice.customername}}</td>
                         <td>{{customerinvoice.date}}</td>
                         <td>{{customerinvoice.duedate}}</td>
                         <td>{{customerinvoice.totalamount}}</td>

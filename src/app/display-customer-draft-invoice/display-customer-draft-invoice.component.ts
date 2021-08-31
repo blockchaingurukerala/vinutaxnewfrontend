@@ -24,9 +24,15 @@ export class DisplayCustomerDraftInvoiceComponent implements OnInit {
       this.api.getAllCustomerDraftInvoioce(this.whose).subscribe((data:any)=>{
         //console.log(data);    
         data.forEach(element => {
-          this.api.getCustomerNameFromId(element.customerid).subscribe((nameobj:any)=>{
-            this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":nameobj.name,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"draft"});
-          });        
+          if(element.customerid==""){
+            this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"draft","link":false});
+          }
+          else{
+            this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"draft","link":true});
+           // this.api.getCustomerNameFromId(element.customerid).subscribe((nameobj:any)=>{
+             // this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved","link":true});
+           // });
+          }        
         });
       }); 
     }
@@ -36,9 +42,15 @@ export class DisplayCustomerDraftInvoiceComponent implements OnInit {
       this.api.getAllSupplierDraftInvoioce(this.whose).subscribe((data:any)=>{
         //console.log(data);    
         data.forEach(element => {
-          this.api.getSupplierNameFromId(element.customerid).subscribe((nameobj:any)=>{
-            this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":nameobj.name,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"draft"});
-          });        
+          if(element.customerid==""){
+            this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"draft","link":false});
+          }
+          else{
+            this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"draft","link":true});
+           // this.api.getCustomerNameFromId(element.customerid).subscribe((nameobj:any)=>{
+             // this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved","link":true});
+           // });
+          }       
         });
       }); 
     }
