@@ -97,7 +97,7 @@
                       <div class="card border-secondary mt-2">
                           <div class="card-body">
                               <h4 class="card-title d-flex justify-content-between">Order Details <button type="button"
-                                      class="btn btn-secondary" (click)="addProduct()">+</button></h4>
+                                      class="btn btn-primary" (click)="addProduct()"><i class="glyphicon glyphicon-plus"></i></button></h4>                                      
                               <div class="row">
                                   <table class="table">
                                       <thead>
@@ -129,6 +129,7 @@
                                               <td>
                                                   {{product.price * product.qty || ''}}
                                               </td>
+                                              <td><button type="button" class="btn btn-danger btn-sm" (click)="removeProduct(i)"><i class="glyphicon glyphicon-trash"></i></button></td>
                                           </tr>
                                       </tbody>
                                   </table>

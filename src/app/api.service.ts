@@ -88,7 +88,7 @@ addSupplierDetils(name:string,email:string,contactno:string,address:string,whose
   return this.http.post("http://localhost:3000/addSupplierDetils",{"name":name,"email":email,"contactno":contactno,"address":address,"whose":whose});
 }     
 addCustomerInvoice(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string,customername:string){
-  window.alert(customername);
+ 
   return this.http.post("http://localhost:3000/addCustomerInvoice",{"date":date,"duedate":duedate,"invoiceid":invoiceid,"reference":reference,"products":products,"totalamount":totalamount,"additionaldetails":additionaldetails,"whose":whose,"customerid":customerid,"customername":customername});
 }
 addSupplierInvoice(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string,customername:string){

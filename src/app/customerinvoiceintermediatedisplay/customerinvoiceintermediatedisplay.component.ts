@@ -35,11 +35,14 @@ class Invoice{
 export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
 
   status="";
+  draftstatus=true;
   invoice = new Invoice(); 
   name="";
   i=0;
   totalmamount=0;
   displaycustomerorsupplier="NONE";
+  customerlink=false;
+  customerid="";
   generatePDF(action = 'open') {
     let docDefinition = {
       content: [
@@ -150,15 +153,24 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
    window.alert("Enter Valid Data");
   }
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
-    var id=this.sharedservice.getidforcustomeredit();
+    var id=this.sharedservice.getidforcustomeredit();    
     var status=this.sharedservice.getcustomerinvoicestatus();
     this.status=status;
+    
     if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
       this.displaycustomerorsupplier="Customer"; 
       if(status=="approved"){
-        this.api.getCustomerInvoioceFromId(id).subscribe((data)=>{     
-          this.api.getCustomerNameFromId(data[0].customerid).subscribe((customername:any)=>{        
-           this.name=customername.name;
+        this.draftstatus=false;
+        this.api.getCustomerInvoioceFromId(id).subscribe((data)=>{   
+          if(data[0].customerid=="") {
+            this.customerlink=false;
+          } 
+          else{
+            this.customerlink=true;
+            this.customerid=data[0].customerid;
+          }
+          //this.api.getCustomerNameFromId(data[0].customerid).subscribe((customername:any)=>{        
+           this.name=data[0].customername;
            this.invoice.date=data[0].date;
            this.invoice.duedate=data[0].duedate;
            this.invoice.invoiceno=data[0].invoiceid;
@@ -166,16 +178,24 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
            this.invoice.additionalDetails=data[0].additionaldetails;  
            this.totalmamount=data[0].totalamount;
            for(var i=0;i<data[0].products.length;i++)  {
-            this.invoice.products.push(new Product());
+              this.invoice.products.push(new Product());
              this.invoice.products[i]=data[0].products[i];
            }  
-          })
+         // })
         });
       }
       else if(status=="draft") {
+        this.draftstatus=true;
         this.api.getDraftCustomerInvoioceFromId(id).subscribe((data)=>{
-          this.api.getCustomerNameFromId(data[0].customerid).subscribe((customername:any)=>{        
-            this.name=customername.name;
+          //this.api.getCustomerNameFromId(data[0].customerid).subscribe((customername:any)=>{        
+            if(data[0].customerid=="") {
+              this.customerlink=false;
+            } 
+            else{
+              this.customerlink=true;
+              this.customerid=data[0].customerid;
+            }
+            this.name=data[0].customername;
             this.invoice.date=data[0].date;
             this.invoice.duedate=data[0].duedate;
             this.invoice.invoiceno=data[0].invoiceid;
@@ -186,16 +206,24 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
              this.invoice.products.push(new Product());
               this.invoice.products[i]=data[0].products[i];
             }  
-           })
+          // })
         });
       }
     }
      else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
       this.displaycustomerorsupplier="Supplier"; 
       if(status=="approved"){
+        this.draftstatus=false;
         this.api.getSupplierInvoioceFromId(id).subscribe((data)=>{     
-          this.api.getSupplierNameFromId(data[0].customerid).subscribe((customername:any)=>{        
-           this.name=customername.name;
+          //this.api.getSupplierNameFromId(data[0].customerid).subscribe((customername:any)=>{        
+            if(data[0].customerid=="") {
+              this.customerlink=false;
+            } 
+            else{
+              this.customerlink=true;
+              this.customerid=data[0].customerid;
+            }
+          this.name=data[0].customername;
            this.invoice.date=data[0].date;
            this.invoice.duedate=data[0].duedate;
            this.invoice.invoiceno=data[0].invoiceid;
@@ -206,13 +234,21 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
             this.invoice.products.push(new Product());
              this.invoice.products[i]=data[0].products[i];
            }  
-          })
+          // })
         });
       }
       else if(status=="draft") {
+        this.draftstatus=true;
         this.api.getDraftSupplierInvoioceFromId(id).subscribe((data)=>{
-          this.api.getSupplierNameFromId(data[0].customerid).subscribe((customername:any)=>{        
-            this.name=customername.name;
+          //this.api.getSupplierNameFromId(data[0].customerid).subscribe((customername:any)=>{        
+            if(data[0].customerid=="") {
+              this.customerlink=false;
+            } 
+            else{
+              this.customerlink=true;
+              this.customerid=data[0].customerid;
+            }
+            this.name=data[0].customername;
             this.invoice.date=data[0].date;
             this.invoice.duedate=data[0].duedate;
             this.invoice.invoiceno=data[0].invoiceid;
@@ -223,7 +259,7 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
              this.invoice.products.push(new Product());
               this.invoice.products[i]=data[0].products[i];
             }  
-           })
+          //  })
         });
       }
     }
@@ -253,6 +289,10 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
   // }
   editInvoice(){   
         this.router.navigate(['/editcustomerinvoice']);  
+  }
+  customerclicked(i){  
+    //window.alert(i) ;
+    this.sharedservice.setSelectedCustomerID(this.customerid);
   }
   deleteInvoice(){  
     var id=this.sharedservice.getidforcustomeredit();
@@ -291,6 +331,26 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
     }
    
    
+  }
+  aprovedraftinvoice(){
+    var id=this.sharedservice.getidforcustomeredit();
+    if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
+      this.api.aprovedraftinvoice(id).subscribe((data:any)=>{
+        window.alert(data.msg);
+        this.router.navigate(['/displaycustomerinvoices']); 
+      });
+    }
+     else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
+      this.api.aprovedraftinvoiceSupplier(id).subscribe((data:any)=>{
+        window.alert(data.msg);
+        this.router.navigate(['/displaycustomerinvoices']); 
+      });
+    }
+    else{   
+          window.alert("ERROR..Please Try again Later.."); 
+          this.displaycustomerorsupplier="NONE"; 
+          this.router.navigate(['/report']);     
+    }
   }
   setasCustomer(){   
     this.sharedservice.setCustomerOrSupplier("Customer");

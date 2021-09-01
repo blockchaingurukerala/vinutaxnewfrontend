@@ -153,6 +153,9 @@ export class CustomerInvoiceComponent implements OnInit {
   addProduct(){
     this.invoice.products.push(new Product());
   }
+  removeProduct(i: number) {
+    this.invoice.products.splice(i, 1);
+  }
   EnterValidData(){
    window.alert("Enter Valid Data");
   }
@@ -313,8 +316,7 @@ export class CustomerInvoiceComponent implements OnInit {
       });
   }
   addContact(){
-    var whose=localStorage.getItem("uEmail");  
-    window.alert("clicked");
+    var whose=localStorage.getItem("uEmail");      
     if(this.sharedapi.getCustomerOrSupplier()=="Customer"){
       this.api.addCustomerDetils(this.invoice.customerName,this.invoice.email,this.invoice.contactNo.toString(),this.invoice.address,whose).subscribe((data:any)=>{
         if(data.msg!="Database Error"){
