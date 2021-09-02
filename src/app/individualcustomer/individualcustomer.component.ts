@@ -119,6 +119,26 @@ export class IndividualcustomerComponent implements OnInit {
     this.editing=true;
     this.noediting=false;
   }
+  deleteCustomer(){
+    if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
+      this.api.deleteCustomer(this.customerid).subscribe((data:any)=>{
+        window.alert(data.msg);      
+        this.isOpen=false;
+        this.router.navigate(['\displaycustomerinvoices']); 
+      }); 
+    }
+     else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
+      this.api.deleteSupplier(this.customerid).subscribe((data:any)=>{
+        window.alert(data.msg);      
+        this.isOpen=false;
+        this.router.navigate(['\displaycustomerinvoices']); 
+      }); 
+    }
+    else{    
+          this.displaycustomerorsupplier="NONE"; 
+          this.router.navigate(['/report']);     
+    }
+  }
   updateCustomer(){
     if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
       this.api.updateCustomer(this.customerid,this.userFullName,this.userEmailId,this.userContactNo,this.userAddress).subscribe((data:any)=>{

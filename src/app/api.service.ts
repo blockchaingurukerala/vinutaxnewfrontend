@@ -196,4 +196,10 @@ updateCustomer(id:string,userFullName:string,userEmailId:string,userContactNo:st
 updateSupplier(id:string,userFullName:string,userEmailId:string,userContactNo:string,userAddress:string){
   return this.http.post("http://localhost:3000/updateSupplier",{"id":id,"userFullName":userFullName,"userEmailId":userEmailId,"userContactNo":userContactNo,"userAddress":userAddress});
 }
+deleteCustomer(id:string){
+  return this.http.post("http://localhost:3000/deleteCustomer",{"id":id});
+}
+deleteSupplier(id:string){
+  return this.http.post("http://localhost:3000/deleteSupplier",{"id":id});
+}
 }
