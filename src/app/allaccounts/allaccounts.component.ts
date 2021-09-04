@@ -29,10 +29,13 @@ export class AllaccountsComponent implements OnInit {
  
   consolidatedincomes = new Map<string, number>();
   consolidatedexpences= new Map<string, number>();
+  isReadonly=[];
+
   constructor(private router:Router,private api:ApiService,private sharedapi:SharedService) { 
     if(localStorage.getItem("loggedIn")!="true"){
       this.router.navigate(['']);
     }
+    
     if((this.today.getTime()> new Date('2020-04-06').getTime())&&(this.today.getTime()< new Date('2021-04-05').getTime())){
       this.selectedYear="20";
     }
@@ -96,11 +99,12 @@ export class AllaccountsComponent implements OnInit {
     this.expenceclick=false;
     this.displayincomes=[];
     this.originalincomes=[];
-     
+     this.isReadonly=[];
     for(var i=0;i<this.incomes.length;i++){
       var category=this.incomes[i].category;     
         if(category==data){
           this.displayincomes.push(this.incomes[i]);
+          this.isReadonly.push(true);
           this.originalincomes.push(this.incomes[i]);
         }  
     }
@@ -121,7 +125,12 @@ export class AllaccountsComponent implements OnInit {
   removeIncomeField(i: number) {
     this.displayincomes.splice(i, 1);
   }
-
+  enableIncomeEditing(i:number){
+    for(var k=0;k<this.isReadonly.length;k++){
+      this.isReadonly[k]=true;
+    }
+    this.isReadonly[i]=false;
+  }
   onExpenceClick (event, data){ 
     this.incomeclick=false;
     this.expenceclick=true;

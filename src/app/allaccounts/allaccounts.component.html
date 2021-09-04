@@ -49,23 +49,29 @@
      <!-- year selction and Quarter selection ends -->
      <div class="row">
         <div class="col col-sm-3 col-md-3 col-lg-3" style="border-style: groove;" >
-                <table class="table ">
+                <table  class="table table-hover">
                     <tr>
                         <th  colspan="2">Incomes</th>                        
-                    </tr>                   
-                    <tr *ngFor="let income of consolidatedincomes | keyvalue; let i = index;" (click)="onIncomeClick($event, income.key)">
-                      <td><a>{{income.key}}</a></td>
-                      <td>{{income.value}}</td>
-                      <!-- <td>{{income.category}}</td>
-                      <td>{{income.amount}}</td> -->
-                    </tr>
+                    </tr> 
+                    <tbody>
+                      <tr *ngFor="let income of consolidatedincomes | keyvalue; let i = index;" (click)="onIncomeClick($event, income.key)">
+                        <td><a>{{income.key}}</a></td>
+                        <td>{{income.value}}</td>
+                        <!-- <td>{{income.category}}</td>
+                        <td>{{income.amount}}</td> -->
+                      </tr>
+                    </tbody>                  
+                   
                     <tr>
                         <th colspan="2">Expences</th>                        
                     </tr>
-                    <tr *ngFor="let expence of consolidatedexpences | keyvalue; let i = index;" (click)="onExpenceClick($event, expence.key)">
-                      <td><a >{{expence.key}}</a></td>
-                      <td>{{expence.value}}</td>
-                    </tr>
+                    <tbody>
+                      <tr *ngFor="let expence of consolidatedexpences | keyvalue; let i = index;" (click)="onExpenceClick($event, expence.key)">
+                        <td><a >{{expence.key}}</a></td>
+                        <td>{{expence.value}}</td>
+                      </tr>
+                    </tbody>
+                   
                 </table>
         </div>
         <div class="col col-sm-9 col-md-9 col-lg-9" style="border-style: groove;">
@@ -87,13 +93,22 @@
                       <!-- <td> {{displayincome.category}}</td>                                                    -->
                       <td><input name="cat_{{i}}" class="form-control"  [(ngModel)]="displayincome.category" readonly></td> 
                       <!-- <td>{{displayincome.category}}</td> -->
-                      <td><input name="date_{{i}}" type="date" class="form-control"  [(ngModel)]="displayincome.date" required></td> 
-                      <td><input  name="desc_{{i}}" class="form-control"  [(ngModel)]="displayincome.description" required></td> 
-                      <td><input name="amt_{{i}}" class="form-control"  [(ngModel)]="displayincome.amount" required></td> 
-                      <td>
-                        <button type="button" class="btn btn-danger btn-sm" (click)="removeIncomeField(i)"><i class="glyphicon glyphicon-remove"></i></button>
-                     </td>
-                     
+                      <td><input name="date_{{i}}" type="date" class="form-control"  [(ngModel)]="displayincome.date" required [readonly]="isReadonly[i]"></td> 
+                      <td><input  name="desc_{{i}}" class="form-control"  [(ngModel)]="displayincome.description" required [readonly]="isReadonly[i]"></td> 
+                      <td><input name="amt_{{i}}" class="form-control"  [(ngModel)]="displayincome.amount" required [readonly]="isReadonly[i]"></td> 
+                      <td>  
+                        <div class="dropdown" *ngIf="isReadonly[i]">
+                          <button class="glyphicon glyphicon-option-vertical dropdown-toggle" type="button" data-toggle="dropdown"></button>
+                          <ul class="dropdown-menu">
+                            <li><a style="cursor: pointer;" (click)="enableIncomeEditing(i)" >Edit</a></li>
+                            <li><a style="cursor: pointer;" (click)="removeIncomeField(i)">Delete</a></li>                            
+                          </ul>
+                        </div> 
+                        <div *ngIf="!isReadonly[i]">
+                          <button type="button" class="glyphicon glyphicon-save-file" title="SAVE" ></button>                          
+                        </div>
+
+                     </td>                     
                  </tr>
                  <tr><td colspan="4" align="center"><button type="submit" class="btn btn-primary">Update Income</button></td></tr>
             </table>
