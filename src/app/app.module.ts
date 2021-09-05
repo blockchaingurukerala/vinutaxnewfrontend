@@ -28,6 +28,7 @@ import { CustomerinvoiceintermediatedisplayComponent } from './customerinvoicein
 import { IndividualcustomerComponent } from './individualcustomer/individualcustomer.component';
 import { DisplayallcustomersComponent } from './displayallcustomers/displayallcustomers.component';
 import { DisplayallsuppliersComponent } from './displayallsuppliers/displayallsuppliers.component';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { DisplayallsuppliersComponent } from './displayallsuppliers/displayallsu
     SocialLoginModule,
     HttpClientModule,
     FormsModule,
-    ChartsModule
+    ChartsModule,
+    Ng2SearchPipeModule
   ],
   providers: [
     {

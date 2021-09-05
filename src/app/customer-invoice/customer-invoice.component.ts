@@ -45,6 +45,8 @@ export class CustomerInvoiceComponent implements OnInit {
   addcontactbtn=false;
   selectedcustomerid="";
   btnEnable=false;
+  displaynames=false;
+  addnewenable=false;
   generatePDF(action = 'open') {
     let docDefinition = {
       content: [
@@ -208,18 +210,41 @@ export class CustomerInvoiceComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  onCustomerSelection(e){
-    let userFullName = e.target.value;
-   
+  onSearchChange(searchValue: string){
+    this.displaynames=true;
+    this.addnewenable=false;
+    var flag=false;
+    var i=0;
+    for(i=0;i<this.names.length;i++){
+      console.log(this.names[i].userFullName);
+      console.log(searchValue)
+      if(this.names[i].userFullName.indexOf(searchValue)!=-1){
+        flag=true;break;
+      }
+    }
+    if(flag==false){
+      this.invoice.address="";
+      this.invoice.contactNo=Number("");
+      this.invoice.email="";
+      this.addcontactbtn=true;
+      this.btnEnable=false;
+      this.selectedcustomerid="";
+      this.addnewenable=true;
+    }
+  }
+  selectedUser(name){
+     let userFullName = name;   
     let customer = this.names.filter(x => x.userFullName === userFullName)[0];
    //console.log(customer);
     if(customer){
+      this.invoice.customerName=name;
       this.invoice.address=customer.userAddress;
       this.invoice.contactNo=customer.userContactNo;
       this.invoice.email=customer.userEmailId;
       this.addcontactbtn=false;
       this.selectedcustomerid=customer._id;
       //window.alert(customer._id);
+      this.displaynames=false;
     }
     else{
       window.alert("New Contact Found. You can add This Contact..");
@@ -231,6 +256,29 @@ export class CustomerInvoiceComponent implements OnInit {
       this.selectedcustomerid="";
     }  
   }
+  // onCustomerSelection(e){
+  //   let userFullName = e.target.value;
+   
+  //   let customer = this.names.filter(x => x.userFullName === userFullName)[0];
+  //  //console.log(customer);
+  //   if(customer){
+  //     this.invoice.address=customer.userAddress;
+  //     this.invoice.contactNo=customer.userContactNo;
+  //     this.invoice.email=customer.userEmailId;
+  //     this.addcontactbtn=false;
+  //     this.selectedcustomerid=customer._id;
+  //     //window.alert(customer._id);
+  //   }
+  //   else{
+  //     window.alert("New Contact Found. You can add This Contact..");
+  //     this.invoice.address="";
+  //     this.invoice.contactNo=Number("");
+  //     this.invoice.email="";
+  //     this.addcontactbtn=true;
+  //     this.btnEnable=false;
+  //     this.selectedcustomerid="";
+  //   }  
+  // }
   approveInvoice(){
     var whose=localStorage.getItem("uEmail");  
     var i: number,sum=0;   

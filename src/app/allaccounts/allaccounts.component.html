@@ -78,7 +78,7 @@
           <form #addressForm="ngForm" ngNativeValidate  (ngSubmit)="updateIncome()">  
             <table class="table" *ngIf="incomeclick">
                   <tr>
-                    <th  colspan="4">Update Incomes</th>                        
+                    <th  colspan="4" align="center">Update Incomes</th>                        
                   </tr>  
                 
                     <tr>
@@ -105,18 +105,18 @@
                           </ul>
                         </div> 
                         <div *ngIf="!isReadonly[i]">
-                          <button type="button" class="glyphicon glyphicon-save-file" title="SAVE" ></button>                          
+                          <button type="submit" class="glyphicon glyphicon-save-file" title="SAVE" ></button>                          
                         </div>
 
                      </td>                     
                  </tr>
-                 <tr><td colspan="4" align="center"><button type="submit" class="btn btn-primary">Update Income</button></td></tr>
+                 <!-- <tr><td colspan="4" align="center"><button type="submit" class="btn btn-primary">Update Income</button></td></tr> -->
             </table>
           </form>
           <form  #addressForm="ngForm" ngNativeValidate  (ngSubmit)="updateExpence()">
             <table class="table" *ngIf="expenceclick">
               <tr>
-                <th  colspan="4">Update Expences</th>                        
+                <th align="center" colspan="4">Update Expences</th>                        
               </tr> 
               <tr>
                 <!-- <th style="text-align: center;">No</th> -->
@@ -130,15 +130,24 @@
                 <!-- <td> {{displayincome.category}}</td>                                                    -->
                 <td><input  name="cat_{{i}}" class="form-control"  [(ngModel)]="displayexpence.category" readonly></td> 
                 <!-- <td>{{displayincome.category}}</td> -->
-                <td><input name="date_{{i}}" type="date" class="form-control"  [(ngModel)]="displayexpence.date" required></td> 
-                <td><input name="desc_{{i}}" class="form-control"  [(ngModel)]="displayexpence.description" required></td> 
-                <td><input name="amt_{{i}}" class="form-control"  [(ngModel)]="displayexpence.amount" required></td> 
+                <td><input name="date_{{i}}" type="date" class="form-control"  [(ngModel)]="displayexpence.date" required [readonly]="isReadonly[i]"></td> 
+                <td><input name="desc_{{i}}" class="form-control"  [(ngModel)]="displayexpence.description" required [readonly]="isReadonly[i]"></td> 
+                <td><input name="amt_{{i}}" class="form-control"  [(ngModel)]="displayexpence.amount" required [readonly]="isReadonly[i]"></td> 
                 <td>
-                  <button type="button" class="btn btn-danger btn-sm" (click)="removeExpenceField(i)"><i class="glyphicon glyphicon-remove"></i></button>
+                  <div class="dropdown" *ngIf="isReadonly[i]">
+                    <button class="glyphicon glyphicon-option-vertical dropdown-toggle" type="button" data-toggle="dropdown"></button>
+                    <ul class="dropdown-menu">
+                      <li><a style="cursor: pointer;" (click)="enableExpenceEditing(i)" >Edit</a></li>
+                      <li><a style="cursor: pointer;" (click)="removeExpenceField(i)">Delete</a></li>                            
+                    </ul>
+                  </div> 
+                  <div *ngIf="!isReadonly[i]">
+                    <button type="submit" class="glyphicon glyphicon-save-file" title="SAVE" ></button>                          
+                  </div>
                </td>
            </tr>             
            
-             <tr><td colspan="4" align="center"><button type="submit" class="btn btn-primary">Update Expence</button></td></tr>
+             <!-- <tr><td colspan="4" align="center"><button type="submit" class="btn btn-primary">Update Expence</button></td></tr> -->
         </table>
       </form>  
         </div>

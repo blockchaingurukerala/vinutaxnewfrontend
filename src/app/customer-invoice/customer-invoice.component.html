@@ -36,24 +36,44 @@
                           <div class="card-body">
                               <h4 class="card-title">{{heading}}</h4>
                               <div class="row">
-                                  <div class="col-md-8">
+                                  <div class="col-md-12">
                                       <div class="form-group ">
                                           <label for="name">Name</label>
                                           <input type="text" class="form-control" name="name" id="name"   
                                                 [ngClass]="{'is-invalid': invoiceForm.submitted && CustName.invalid}"                                          
-                                              [(ngModel)]="invoice.customerName"  #CustName="ngModel"  list="names" (change)="onCustomerSelection($event)"  required>
-                                            <datalist id="names" >                                               
-                                                    <option *ngFor="let c of names;let i = index" [value]="c.userFullName">{{c.userFullName}}</option>                                               
-                                            </datalist>                                              
+                                              [(ngModel)]="invoice.customerName"  #CustName="ngModel"  (input)="onSearchChange($event.target.value)" required>
+                                              <!-- (change)="onCustomerSelection($event)" -->
+                                            
+                                            <div *ngIf="displaynames">
+                                                <table class="table table-hover">
+                                                    <tbody>
+                                                        <tr *ngFor="let c of names | filter:invoice.customerName" (click)="selectedUser(c.userFullName)">
+                                                            <td> {{c.userFullName}}</td>
+                                                        </tr>                                                       
+                                                    </tbody>
+                                                    <tr *ngIf="addnewenable">
+                                                        <td align="center">
+                                                         <button type="button" class="btn btn-info" (click)="addContact()">  <i class="glyphicon glyphicon-user">ADD NEW CONTACT</i></button>
+                                                        </td>                                                        
+                                                     </tr>
+                                                </table>
+                                                <!-- <div *ngFor="let c of names | filter:invoice.customerName" >
+                                                    <p>
+                                                        {{c.userFullName}}
+                                                    </p>
+                                                 </div>  -->
+                                            </div>
+                                                                                       
+                                                                                        
                                       </div>
-                                      <div class="form-group">
+                                      <div class="form-group" hidden>
                                           <label for="address">Address</label>
                                           <textarea class="form-control" name="address" id="address" row="3"
                                              
                                               [(ngModel)]="invoice.address" ></textarea>
                                       </div>
                                   </div>
-                                  <div class="col-md-4">
+                                  <div class="col-md-4" hidden>
                                       <div class="form-group">
                                           <label for="email">Email ID</label>
                                           <input type="email" class="form-control" name="email" id="email"
@@ -64,9 +84,9 @@
                                           <input type="number" class="form-control" name="contactNo" id="contactNo"                                             
                                               [(ngModel)]="invoice.contactNo">
                                       </div>
-                                      <div class="form-group" *ngIf="addcontactbtn">                                       
+                                      <!-- <div class="form-group" *ngIf="addcontactbtn">                                       
                                        <button type="button" class="btn btn-primary" (click)="addContact()" style="width: 100%;" [disabled]="btnEnable" >Add Contact</button>
-                                    </div>
+                                    </div> -->
                                   </div>
                               </div>
                               <div class="row">
