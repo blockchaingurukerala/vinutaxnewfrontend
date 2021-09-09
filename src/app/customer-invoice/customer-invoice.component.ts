@@ -10,6 +10,7 @@ class Product{
   name: string;
   price: number;
   qty: number;
+  category:string;
 }
 class Invoice{
   customerName: string;
@@ -37,6 +38,7 @@ class Invoice{
 export class CustomerInvoiceComponent implements OnInit {
   invoice = new Invoice(); 
   names=[];
+  categorynames=[];
   i=0;
   displaycustomerorsupplier="NONE";
   heading="";
@@ -47,6 +49,8 @@ export class CustomerInvoiceComponent implements OnInit {
   btnEnable=false;
   displaynames=false;
   addnewenable=false;
+  displaycategorynames=[]
+  addnewcategoryenable=[]
   generatePDF(action = 'open') {
     let docDefinition = {
       content: [
@@ -154,9 +158,13 @@ export class CustomerInvoiceComponent implements OnInit {
 
   addProduct(){
     this.invoice.products.push(new Product());
+    this.displaycategorynames.push(false);
+    this.addnewcategoryenable.push(false);
   }
   removeProduct(i: number) {
     this.invoice.products.splice(i, 1);
+    this.displaycategorynames.splice(i, 1);
+    this.addnewcategoryenable.splice(i, 1);
   }
   EnterValidData(){
    window.alert("Enter Valid Data");
@@ -164,8 +172,11 @@ export class CustomerInvoiceComponent implements OnInit {
   constructor(private api:ApiService,private router:Router,private sharedapi:SharedService) {
     this.addcontactbtn=false;
     this.btnEnable=false;
+    this.displaycategorynames[0]=false;
+    this.addnewcategoryenable[0]=false;
     if(this.sharedapi.getCustomerOrSupplier()=="Customer"){
       this.heading="Customer Details";
+      this.categorynames=[];
       this.displaycustomerorsupplier="New Customer Invoice";
       this.showreadonly=true;
       this.show=false;
@@ -185,9 +196,15 @@ export class CustomerInvoiceComponent implements OnInit {
           this.names.push(element);
         });
       });
+      this.api.getCategories().subscribe((data:any)=>{        
+        data.forEach(element => {
+          this.categorynames.push(element);
+        });  
+      }); 
     }
     else if(this.sharedapi.getCustomerOrSupplier()=="Supplier"){
       this.heading="Supplier Details";
+      this.categorynames=[];
       this.displaycustomerorsupplier="New Supplier Invoice";
       var whose=localStorage.getItem("uEmail"); 
       this.showreadonly=false;
@@ -197,9 +214,15 @@ export class CustomerInvoiceComponent implements OnInit {
           this.names.push(element);
         });
       });
+      this.api.getExpenceCategories().subscribe((data:any)=>{        
+        data.forEach(element => {
+          this.categorynames.push(element);
+        });  
+      }); 
     }
     else{
       this.heading="NONE";
+      this.categorynames=[];
       this.displaycustomerorsupplier="NONE";
       this.showreadonly=true;
       this.show=false;
@@ -216,9 +239,9 @@ export class CustomerInvoiceComponent implements OnInit {
     var flag=false;
     var i=0;
     for(i=0;i<this.names.length;i++){
-      console.log(this.names[i].userFullName);
-      console.log(searchValue)
-      if(this.names[i].userFullName.indexOf(searchValue)!=-1){
+      // console.log(this.names[i].userFullName);
+      // console.log(searchValue)
+      if(this.names[i].userFullName.toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
         flag=true;break;
       }
     }
@@ -232,9 +255,23 @@ export class CustomerInvoiceComponent implements OnInit {
       this.addnewenable=true;
     }
   }
+  onPressKeyboardCategory(searchValue: string,j:number){   
+    this.displaycategorynames[j]=true;    
+    this.addnewcategoryenable[j]=false;
+    var flag=false;
+    var i=0;    
+    for(i=0;i<this.categorynames.length;i++){      
+      if(this.categorynames[i].category.toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
+        flag=true;break;
+      }
+    }
+    if(flag==false){       
+      this.addnewcategoryenable[j]=true;      
+    }   
+  }
   selectedUser(name){
      let userFullName = name;   
-    let customer = this.names.filter(x => x.userFullName === userFullName)[0];
+    let customer = this.names.filter(x => x.userFullName.toUpperCase() === userFullName.toUpperCase())[0];
    //console.log(customer);
     if(customer){
       this.invoice.customerName=name;
@@ -256,29 +293,11 @@ export class CustomerInvoiceComponent implements OnInit {
       this.selectedcustomerid="";
     }  
   }
-  // onCustomerSelection(e){
-  //   let userFullName = e.target.value;
-   
-  //   let customer = this.names.filter(x => x.userFullName === userFullName)[0];
-  //  //console.log(customer);
-  //   if(customer){
-  //     this.invoice.address=customer.userAddress;
-  //     this.invoice.contactNo=customer.userContactNo;
-  //     this.invoice.email=customer.userEmailId;
-  //     this.addcontactbtn=false;
-  //     this.selectedcustomerid=customer._id;
-  //     //window.alert(customer._id);
-  //   }
-  //   else{
-  //     window.alert("New Contact Found. You can add This Contact..");
-  //     this.invoice.address="";
-  //     this.invoice.contactNo=Number("");
-  //     this.invoice.email="";
-  //     this.addcontactbtn=true;
-  //     this.btnEnable=false;
-  //     this.selectedcustomerid="";
-  //   }  
-  // }
+  selectedProductCategory(c,i:number){
+    this.invoice.products[i].category=c;    
+    this.displaycategorynames[i]=false;     
+  }
+  
   approveInvoice(){
     var whose=localStorage.getItem("uEmail");  
     var i: number,sum=0;   
@@ -364,7 +383,11 @@ export class CustomerInvoiceComponent implements OnInit {
       });
   }
   addContact(){
-    var whose=localStorage.getItem("uEmail");      
+    var whose=localStorage.getItem("uEmail");  
+    if(this.invoice.customerName=="")   {
+      window.alert("Enter Customer Name");
+      return;
+    } 
     if(this.sharedapi.getCustomerOrSupplier()=="Customer"){
       this.api.addCustomerDetils(this.invoice.customerName,this.invoice.email,this.invoice.contactNo.toString(),this.invoice.address,whose).subscribe((data:any)=>{
         if(data.msg!="Database Error"){
@@ -395,5 +418,24 @@ export class CustomerInvoiceComponent implements OnInit {
     window.alert("Error try again later..");
     this.router.navigate(['/report']); 
   }
+  }
+  addNewCategory(i:number){
+    if(this.sharedapi.getCustomerOrSupplier()=="Customer"){
+      this.api.insertNewCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
+        window.alert(data.msg);   
+        this.addnewcategoryenable[i]=false;       
+       });
+    }
+    else if(this.sharedapi.getCustomerOrSupplier()=="Supplier"){
+      this.api.insertNewExpenceCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
+        window.alert(data.msg);   
+        this.addnewcategoryenable[i]=false;        
+       });
+    }
+    else{
+      window.alert("Error try again later..");
+      this.router.navigate(['/report']); 
+    }
+    
   }
 }

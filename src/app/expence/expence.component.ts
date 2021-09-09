@@ -26,7 +26,7 @@ export class ExpenceComponent implements OnInit {
       this.router.navigate(['']);
     }
     this.api.getExpenceCategories().subscribe((data:any)=>{
-      console.log(data);
+      //console.log(data);
       // data.forEach(myFunction);
       // function myFunction(value) {
       //  this.options.push(value.category);
