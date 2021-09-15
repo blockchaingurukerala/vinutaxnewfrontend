@@ -78,10 +78,11 @@
                                   <table class="table">
                                       <thead>
                                           <tr>
-                                              <th width="25%">Product</th>
-                                              <th width="25%">Price</th>
-                                              <th width="25%">Quantity</th>
-                                              <th width="25%">Amount</th>
+                                              <th width="20%">Product</th>
+                                              <th width="20%">Price</th>
+                                              <th width="20%">Quantity</th>
+                                              <th width="20%">Category</th>
+                                              <th width="20%">Amount</th>
                                           </tr>
                                       </thead>
                                       <tbody>
@@ -102,6 +103,29 @@
                                                       [ngClass]="{'is-invalid': invoiceForm.submitted && ProductQty.invalid}"
                                                       [(ngModel)]="product.qty" #ProductQty="ngModel" required>
                                               </td>
+                                              <td>
+                                                <input type="text" class="form-control" name="category{{i}}"   id="category"
+                                                [ngClass]="{'is-invalid': invoiceForm.submitted && ProductCategory.invalid}" 
+                                                #ProductCategory="ngModel"                                               
+                                                    [(ngModel)]="product.category"  (input)="onPressKeyboardCategory($event.target.value,i)" required>   
+                                                    
+                                                    <div *ngIf="displaycategorynames[i]">
+                                                        <table class="table table-hover">
+                                                            <tbody>
+                                                                <tr *ngFor="let c of categorynames | filter : product.category" (click)="selectedProductCategory(c.category,i)">
+                                                                    <td> {{c.category}}</td>                                                                                                                                       
+                                                                </tr>                                                       
+                                                            </tbody>
+
+                                                            <tr *ngIf="addnewcategoryenable[i]">
+                                                                <td align="center">
+                                                                 <button type="button" class="btn btn-info" (click)="addNewCategory(i)">  <i class="glyphicon glyphicon-user">ADD THIS CATEGORY</i></button>
+                                                                </td>                                                        
+                                                             </tr>
+                                                        </table>                                              
+                                                    </div> 
+                                                    
+                                               </td>
                                               <td>
                                                   {{product.price * product.qty || ''}}
                                               </td>

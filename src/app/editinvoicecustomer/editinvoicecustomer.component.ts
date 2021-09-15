@@ -10,6 +10,7 @@ class Product{
   name: string;
   price: number;
   qty: number;
+  category:string;
 }
 class Invoice{
   customerName: string;
@@ -42,6 +43,9 @@ export class EditinvoicecustomerComponent implements OnInit {
   aprove=true;
   draft=false;
   displaycustomerorsupplier="NONE";
+  displaycategorynames=[];
+  addnewcategoryenable=[];
+  categorynames=[];
   generatePDF(action = 'open') {
     let docDefinition = {
       content: [
@@ -148,9 +152,13 @@ export class EditinvoicecustomerComponent implements OnInit {
   }
   addProduct(){
     this.invoice.products.push(new Product());
+    this.displaycategorynames.push(false);
+    this.addnewcategoryenable.push(false);
   }
   removeProduct(i: number) {
     this.invoice.products.splice(i, 1);
+    this.displaycategorynames.splice(i, 1);
+    this.addnewcategoryenable.splice(i, 1);
   }
   EnterValidData(){
    window.alert("Enter Valid Data");
@@ -159,8 +167,16 @@ export class EditinvoicecustomerComponent implements OnInit {
     var id=this.sharedservice.getidforcustomeredit();
     var status=this.sharedservice.getcustomerinvoicestatus();
     this.status=status;
+    this.displaycategorynames[0]=false;
+    this.addnewcategoryenable[0]=false;
     if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
       this.displaycustomerorsupplier="Customer"; 
+      this.categorynames=[];
+      this.api.getCategories().subscribe((data:any)=>{        
+        data.forEach(element => {
+          this.categorynames.push(element);
+        });  
+      });
       if(status=="approved"){
         this.aprove=true;
         this.draft=false;
@@ -200,6 +216,12 @@ export class EditinvoicecustomerComponent implements OnInit {
     }
      else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
       this.displaycustomerorsupplier="Supplier"; 
+      this.categorynames=[];
+      this.api.getExpenceCategories().subscribe((data:any)=>{        
+        data.forEach(element => {
+          this.categorynames.push(element);
+        });  
+      });
       if(status=="approved"){
         this.aprove=true;
         this.draft=false;
@@ -239,7 +261,8 @@ export class EditinvoicecustomerComponent implements OnInit {
     }
     else{    
           this.displaycustomerorsupplier="NONE"; 
-          this.router.navigate(['/report']);     
+          this.router.navigate(['/report']); 
+          this.categorynames=[];    
     }
 
     
@@ -247,21 +270,24 @@ export class EditinvoicecustomerComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  // onCustomerSelection(e){
-  //   let userFullName = e.target.value;
-  //   let customer = this.names.filter(x => x.userFullName === userFullName)[0];
-  //   console.log(customer);
-  //   if(customer){
-  //     this.invoice.address=customer.userAddress;
-  //     this.invoice.contactNo=customer.userContactNo;
-  //     this.invoice.email=customer.userEmailId;
-  //   }
-  //   else{
-  //     this.invoice.address="";
-  //     this.invoice.contactNo=Number("");
-  //     this.invoice.email="";
-  //   }
-  // }
+  onPressKeyboardCategory(searchValue: string,j:number){   
+    this.displaycategorynames[j]=true;    
+    this.addnewcategoryenable[j]=false;
+    var flag=false;
+    var i=0;    
+    for(i=0;i<this.categorynames.length;i++){      
+      if(this.categorynames[i].category.toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
+        flag=true;break;
+      }
+    }
+    if(flag==false){       
+      this.addnewcategoryenable[j]=true;      
+    }   
+  }
+  selectedProductCategory(c,i:number){
+    this.invoice.products[i].category=c;    
+    this.displaycategorynames[i]=false;     
+  }
   updateInvoice(){
     var whose=localStorage.getItem("uEmail");  
     var id=this.sharedservice.getidforcustomeredit();
@@ -359,6 +385,25 @@ export class EditinvoicecustomerComponent implements OnInit {
           this.displaycustomerorsupplier="NONE"; 
           this.router.navigate(['/report']);     
     }
+  }
+  addNewCategory(i:number){
+    if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
+      this.api.insertNewCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
+        window.alert(data.msg);   
+        this.addnewcategoryenable[i]=false;       
+       });
+    }
+    else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
+      this.api.insertNewExpenceCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
+        window.alert(data.msg);   
+        this.addnewcategoryenable[i]=false;        
+       });
+    }
+    else{
+      window.alert("Error try again later..");
+      this.router.navigate(['/report']); 
+    }
+    
   }
   setasCustomer(){   
     this.sharedservice.setCustomerOrSupplier("Customer");

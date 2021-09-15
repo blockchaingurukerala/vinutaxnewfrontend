@@ -60,17 +60,8 @@
                     </div>
                     
                       <div class="card border-secondary">
-                          <div class="card-body">                              
-                              <!-- <div class="row">
-                                  <div class="col-md-12">
-                                      <div class="form-group ">
-                                          <label for="name">Name</label>
-                                          <input type="text" class="form-control" name="name" id="name"   
-                                                [ngClass]="{'is-invalid': invoiceForm.submitted && CustName.invalid}"                                          
-                                              [(ngModel)]="name"  #CustName="ngModel"    readonly>                                                                                       
-                                      </div>                                      
-                                  </div>                                
-                              </div> -->
+                          <div class="card-body">                             
+                             
                               <div class="row">
                                 <div class="col col-12 col-lg-2 col-md-2">
                                     <label for="namecust">Name</label>                                       
@@ -116,10 +107,11 @@
                                   <table class="table table-bordered ">
                                       <thead >
                                           <tr>
-                                              <th width="25%">Product</th>
-                                              <th width="25%">Price</th>
-                                              <th width="25%">Quantity</th>
-                                              <th width="25%">Amount</th>
+                                              <th width="20%">Product</th>
+                                              <th width="20%">Price</th>
+                                              <th width="20%">Quantity</th>
+                                              <th width="20%">Category</th>
+                                              <th width="20%">Amount</th>
                                           </tr>
                                       </thead>
                                       <tbody>
@@ -144,9 +136,13 @@
                                                       {{product.qty}}
                                               </td>
                                               <td>
+                                                {{product.category}}
+                                              </td>
+                                              <td>
                                                   {{product.price * product.qty || ''}}
                                               </td>
                                           </tr>
+                                          
                                           <!-- <tr>                                             
                                               <td colspan="4" align="right"><h3>Total  {{totalmamount}}  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</h3> </td>                                                                                            
                                           </tr> -->
