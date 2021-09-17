@@ -45,10 +45,10 @@ export class ApiService {
   getExpenceCategories(){
     return this.http.get("http://localhost:3000/getExpenceCategories");
   }
-  updateIncomes(email:string,incomes:any[]){
+  updateIncomes(email:string,incomes:any){
      return this.http.post("http://localhost:3000/updateIncomes",{"email":email,"incomes":incomes});
   }
-  updateExpences(email:string,expences:any[]){
+  updateExpences(email:string,expences:any){
     return this.http.post("http://localhost:3000/updateExpences",{"email":email,"expences":expences});
  }
  getAllIncomeAndExpences(email:string){

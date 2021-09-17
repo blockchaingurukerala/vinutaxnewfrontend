@@ -56,15 +56,15 @@
         </div>
         <div class="col col-12 col-lg-2 col-md-2 col-sm-2">
           <label for="paidin">Paid In#</label>
-          <input type="number" class="form-control"  name="paidin" id="paidin" >
+          <input type="number" class="form-control" (input)="onPressKeyboardPaidIn($event.target.value,i)" [(ngModel)]="payment.paidin" name="paidin" id="paidin" >
       </div>
       <div class="col col-12 col-lg-2 col-md-2 col-sm-2" >
           <label for="paidout">Paid Out#</label>
-          <input type="number" class="form-control" name="paidout" id="paidout"  >
+          <input type="number" class="form-control"  (input)="onPressKeyboardPaidOut($event.target.value,i)" [(ngModel)]="payment.paidout" name="paidout" id="paidout"  >
       </div>
       <div class="col col-12 col-lg-2 col-md-2 col-sm-2">                                    
           <label for="desc">Description#</label>
-          <input type="text" class="form-control" name="desc" id="desc"  >
+          <input type="text" class="form-control"  [(ngModel)]="payment.description" name="desc" id="desc"  >
       </div>
       <div class="col col-12 col-lg-1 col-md-1 col-sm-1">                                    
        
@@ -85,21 +85,40 @@
                         </tr>
                         <tr>
                           <td>
-                              <input type="text" class="form-control" name="allocate" id="allocate" placeholder="Category">    
+                              <input type="text" class="form-control" name="allocate" id="allocate" [(ngModel)]="payment.category"
+                              (input)="onPressKeyboardCategory($event.target.value,i)" required placeholder="Category"> 
+                              <div *ngIf="displaycategorynames[i]">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr *ngFor="let c of categorynames | filter : payment.category" (click)="selectedProductCategory(c.category,i)">
+                                            <td> {{c.category}}</td>                                                                                                                                       
+                                        </tr>                                                       
+                                    </tbody>
+
+                                    <tr *ngIf="addnewcategoryenable[i]">
+                                        <td align="center">
+                                         <button type="button" class="btn btn-info" (click)="addNewCategory(i)">  <i class="glyphicon glyphicon-user">ADD THIS CATEGORY</i></button>
+                                        </td>                                                        
+                                     </tr>
+                                </table>                                              
+                            </div>    
                           </td>
                         </tr>
                     </table> 
                   </td>
                   <td>
-                    <div class="dropdown " >
+                      <button type="button"  (click)="savePayment(i)" class="btn btn-primary">SAVE</button>
+                      
+                    <!-- <div class="dropdown " >
                         <button class="glyphicon glyphicon-option-vertical dropdown-toggle" type="button" data-toggle="dropdown"></button>
                         <ul class="dropdown-menu">
                           <li><a style="cursor: pointer;" (click)="removePayment(i)" >SAVE</a></li>
                           <li><a style="cursor: pointer;" (click)="removePayment(i)" >EDIT</a></li>
                           <li><a style="cursor: pointer;" (click)="removePayment(i)">Delete</a></li>                            
                         </ul>
-                      </div>
+                      </div> -->
                   </td>
+                  <td><button type="button"  (click)="removePayment(i)" class="btn btn-danger">X</button></td>
               </tr>
           </table>  
           </div>
