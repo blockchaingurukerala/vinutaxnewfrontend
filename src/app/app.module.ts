@@ -30,7 +30,7 @@ import { DisplayallcustomersComponent } from './displayallcustomers/displayallcu
 import { DisplayallsuppliersComponent } from './displayallsuppliers/displayallsuppliers.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { TransactionComponent } from './transaction/transaction.component';
-import { UnallocatedMatchingComponent } from './unallocated-matching/unallocated-matching.component';
+
 
 @NgModule({
   declarations: [
@@ -56,9 +56,7 @@ import { UnallocatedMatchingComponent } from './unallocated-matching/unallocated
     IndividualcustomerComponent,
     DisplayallcustomersComponent,
     DisplayallsuppliersComponent,
-    TransactionComponent,
-    UnallocatedMatchingComponent
-   
+    TransactionComponent 
   ],
   imports: [
     BrowserModule,

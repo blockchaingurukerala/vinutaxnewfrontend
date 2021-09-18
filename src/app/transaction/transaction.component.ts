@@ -25,6 +25,8 @@ export class TransactionComponent implements OnInit {
   addnewcategoryenable=[];
   payments: Payment[] = [];
   email=localStorage.getItem("uEmail");
+  matchactive=false;
+  customerinvoices = []; 
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     // var id=this.sharedservice.getidforcustomeredit();
     this.categorynames=[];
@@ -197,10 +199,26 @@ export class TransactionComponent implements OnInit {
             }  
           });
         });
-      }
+      }     
+    }   
+   }
+   matchSelected(){
      
-    }
-   
+     this.matchactive=true;
+     this.api.getAllCustomerInvoioce(this.email).subscribe((data:any)=>{        
+      data.forEach(element => {
+        if(element.customerid==""){
+          this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":false});
+        }
+        else{
+          this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":true});         
+        }        
+      });
+    }); 
+   }
+   createSelected(){
+      
+    this.matchactive=false;
    }
   setasCustomer(){   
     this.sharedservice.setCustomerOrSupplier("Customer");
@@ -208,5 +226,14 @@ export class TransactionComponent implements OnInit {
   setasSupplier(){   
     this.sharedservice.setCustomerOrSupplier("Supplier");
   }
+  editordelete(i,status){
+    // window.alert(status)
+     this.sharedservice.setidforcustomeredit(i,status);
+     //this.router.navigate(['\editcustomerinvoice']);
+      this.router.navigate(['\intermediatedisplay']);    
+   }
+   customerclicked(i){   
+     this.sharedservice.setSelectedCustomerID(i);
+   }
 
 }

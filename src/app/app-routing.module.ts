@@ -22,7 +22,6 @@ import { IndividualcustomerComponent } from './individualcustomer/individualcust
 import { DisplayallcustomersComponent } from './displayallcustomers/displayallcustomers.component';
 import { DisplayallsuppliersComponent } from './displayallsuppliers/displayallsuppliers.component';
 import { TransactionComponent } from './transaction/transaction.component';
-import { UnallocatedMatchingComponent } from './unallocated-matching/unallocated-matching.component';
 const routes: Routes = [{path:'login',component:LoginComponent},
                         {path:'home',component:HomeComponent},
                         {path:'signup',component:SignupComponent},
@@ -45,8 +44,8 @@ const routes: Routes = [{path:'login',component:LoginComponent},
                         {path:'individualcustomer',component:IndividualcustomerComponent}, 
                         {path:'allcustomers',component:DisplayallcustomersComponent},     
                         {path:'allsuppliers',component:DisplayallsuppliersComponent},  
-                        {path:'transactions',component:TransactionComponent}, 
-                        {path:'match',component:UnallocatedMatchingComponent}, 
+                        {path:'transactions',component:TransactionComponent} 
+                       
                       ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

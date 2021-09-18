@@ -63,8 +63,8 @@
           <input type="number" class="form-control"  (input)="onPressKeyboardPaidOut($event.target.value,i)" [(ngModel)]="payment.paidout" name="paidout" id="paidout"  >
       </div>
       <div class="col col-12 col-lg-2 col-md-2 col-sm-2">                                    
-          <label for="desc">Description#</label>
-          <input type="text" class="form-control"  [(ngModel)]="payment.description" name="desc" id="desc"  >
+          <label for="desc" *ngIf="!matchactive">Description#</label>
+          <input type="text" class="form-control"  [(ngModel)]="payment.description" name="desc" id="desc"  *ngIf="!matchactive" >
       </div>
       <div class="col col-12 col-lg-1 col-md-1 col-sm-1">                                    
        
@@ -77,13 +77,19 @@
                         <tr>
                             <td align="center"> <b>Allocate</b> </td>
                         </tr>
-                        <tr>
+                        <tr *ngIf="!matchactive">
                           <ul class="nav nav-tabs">
-                              <li class="active" ><a routerLink="/transactions">Create</a></li>
-                              <li ><a routerLink="/match">Match</a></li> 
+                              <li class="active" ><a routerLink="/transactions" (click)="createSelected();">Create</a></li>
+                              <li ><a routerLink="/match" (click)="matchSelected();">Match</a></li> 
                           </ul>  
                         </tr>
-                        <tr>
+                        <tr *ngIf="matchactive">
+                            <ul class="nav nav-tabs">
+                                <li  ><a routerLink="/transactions" (click)="createSelected();">Create</a></li>
+                                <li class="active" ><a routerLink="/match" (click)="matchSelected();">Match</a></li> 
+                            </ul>  
+                          </tr>
+                        <tr *ngIf="!matchactive">                            
                           <td>
                               <input type="text" class="form-control" name="allocate" id="allocate" [(ngModel)]="payment.category"
                               (input)="onPressKeyboardCategory($event.target.value,i)" required placeholder="Category"> 
@@ -106,7 +112,7 @@
                         </tr>
                     </table> 
                   </td>
-                  <td>
+                  <td *ngIf="!matchactive">
                       <button type="button"  (click)="savePayment(i)" class="btn btn-primary">SAVE</button>
                       
                     <!-- <div class="dropdown " >
@@ -121,6 +127,34 @@
                   <td><button type="button"  (click)="removePayment(i)" class="btn btn-danger">X</button></td>
               </tr>
           </table>  
+          </div>
+          <!-- display matching invoices -->
+          <div class="row" *ngIf="matchactive">
+              <div class="col col-12 col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <table class="table">
+                    <thead>
+                        <th>#</th>
+                        <th>Invoice No</th>
+                        <th>Reference No</th>
+                        <th>To</th>
+                        <th>Due Date</th>
+                        <th>Total Amount</th>
+                        <th>To be Paid</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let customerinvoice of customerinvoices; let i = index;let last = last;" >
+                            <td> </td>
+                            <td>{{customerinvoice.invoiceid}}</td>
+                            <td>{{customerinvoice.reference}}</td>
+                            <td *ngIf="customerinvoice.link"><a routerLink="/individualcustomer" (click)="customerclicked(customerinvoice.customerid);">{{customerinvoice.customername}}</a></td>
+                            <td *ngIf="!customerinvoice.link">{{customerinvoice.customername}}</td>                            
+                            <td>{{customerinvoice.duedate}}</td>
+                            <td>{{customerinvoice.totalamount}}</td>
+                            <td>{{customerinvoice.allocatedAmount}}</td>                           
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
           </div>
       </div>      
 </div>
