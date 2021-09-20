@@ -112,6 +112,9 @@ getAllSuppliers(whose:string){
 getAllCustomerInvoioce(whose:string){
   return this.http.post("http://localhost:3000/getAllCustomerInvoioce",{"whose":whose});
 }
+getAllSupplierNegativeInvoioce(whose:string){
+  return this.http.post("http://localhost:3000/getAllSupplierNegativeInvoioce",{"whose":whose});
+}
 getAllSupplierInvoioce(whose:string){
   return this.http.post("http://localhost:3000/getAllSupplierInvoioce",{"whose":whose});
 }

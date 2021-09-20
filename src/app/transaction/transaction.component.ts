@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import {Router} from '@angular/router';
 import {SharedService} from '../shared.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 class Payment{
   id: number;
   date: string;
@@ -27,6 +28,7 @@ export class TransactionComponent implements OnInit {
   email=localStorage.getItem("uEmail");
   matchactive=false;
   customerinvoices = []; 
+  suppliernegativeinvoices=[];
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     // var id=this.sharedservice.getidforcustomeredit();
     this.categorynames=[];
@@ -205,6 +207,8 @@ export class TransactionComponent implements OnInit {
    matchSelected(){
      
      this.matchactive=true;
+     this.customerinvoices=[];
+      this.suppliernegativeinvoices=[];
      this.api.getAllCustomerInvoioce(this.email).subscribe((data:any)=>{        
       data.forEach(element => {
         if(element.customerid==""){
@@ -215,9 +219,18 @@ export class TransactionComponent implements OnInit {
         }        
       });
     }); 
+    this.api.getAllSupplierNegativeInvoioce(this.email).subscribe((data:any)=>{        
+      data.forEach(element => {
+        if(element.customerid==""){
+          this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":false});
+        }
+        else{
+          this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":true});         
+        }        
+      });
+    }); 
    }
-   createSelected(){
-      
+   createSelected(){      
     this.matchactive=false;
    }
   setasCustomer(){   
@@ -233,6 +246,11 @@ export class TransactionComponent implements OnInit {
       this.router.navigate(['\intermediatedisplay']);    
    }
    customerclicked(i){   
+    this.sharedservice.setCustomerOrSupplier("Customer");
+     this.sharedservice.setSelectedCustomerID(i);
+   }
+   supplierclicked(i){   
+    this.sharedservice.setCustomerOrSupplier("Supplier");
      this.sharedservice.setSelectedCustomerID(i);
    }
 

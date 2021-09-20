@@ -152,6 +152,16 @@
                             <td>{{customerinvoice.totalamount}}</td>
                             <td>{{customerinvoice.allocatedAmount}}</td>                           
                         </tr>
+                        <tr *ngFor="let suppliernegativeinvoice of suppliernegativeinvoices; let i = index;let last = last;" >
+                            <td> </td>
+                            <td>{{suppliernegativeinvoice.invoiceid}}</td>
+                            <td>{{suppliernegativeinvoice.reference}}</td>
+                            <td *ngIf="suppliernegativeinvoice.link"><a routerLink="/individualcustomer" (click)="supplierclicked(suppliernegativeinvoice.customerid);">{{suppliernegativeinvoice.customername}}</a></td>
+                            <td *ngIf="!suppliernegativeinvoice.link">{{suppliernegativeinvoice.customername}}</td>                            
+                            <td>{{suppliernegativeinvoice.duedate}}</td>
+                            <td>{{suppliernegativeinvoice.totalamount}}</td>
+                            <td>{{suppliernegativeinvoice.allocatedAmount}}</td>                           
+                        </tr>
                     </tbody>
                 </table>
               </div>
