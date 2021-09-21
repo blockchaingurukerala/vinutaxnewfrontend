@@ -25,8 +25,9 @@ export class TransactionComponent implements OnInit {
   displaycategorynames=[];
   addnewcategoryenable=[];
   payments: Payment[] = [];
+  matchactive=[];
   email=localStorage.getItem("uEmail");
-  matchactive=false;
+  //matchactive=false;
   customerinvoices = []; 
   suppliernegativeinvoices=[];
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
@@ -50,16 +51,19 @@ export class TransactionComponent implements OnInit {
     this.payments.push(new Payment());
     this.displaycategorynames[0]=false;
     this.addnewcategoryenable[0]=false;
+    this.matchactive[0]=false;
   }
   addPayment(){
     this.payments.push(new Payment());
     this.displaycategorynames.push(false);
     this.addnewcategoryenable.push(false);
+    this.matchactive.push(false);
   }
   removePayment(i: number) {
     this.payments.splice(i, 1);
     this.displaycategorynames.splice(i, 1);
     this.addnewcategoryenable.splice(i, 1);
+    this.matchactive.splice(i,1);
   }
   ngOnInit(): void {
   }
@@ -78,8 +82,6 @@ export class TransactionComponent implements OnInit {
         window.alert("This is Customer REFUND");
       } 
     } 
-
-
   }
   addNewCategory(i:number){
     if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
@@ -98,7 +100,6 @@ export class TransactionComponent implements OnInit {
       window.alert("Error try again later..");
       this.router.navigate(['/report']); 
     }
-    
   }
   onPressKeyboardCategory(searchValue: string,j:number){   
     this.displaycategorynames[j]=true;    
@@ -204,34 +205,65 @@ export class TransactionComponent implements OnInit {
       }     
     }   
    }
-   matchSelected(){
-     
-     this.matchactive=true;
-     this.customerinvoices=[];
-      this.suppliernegativeinvoices=[];
-     this.api.getAllCustomerInvoioce(this.email).subscribe((data:any)=>{        
-      data.forEach(element => {
-        if(element.customerid==""){
-          this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":false});
-        }
-        else{
-          this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":true});         
-        }        
-      });
-    }); 
-    this.api.getAllSupplierNegativeInvoioce(this.email).subscribe((data:any)=>{        
-      data.forEach(element => {
-        if(element.customerid==""){
-          this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":false});
-        }
-        else{
-          this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":true});         
-        }        
-      });
-    }); 
+   matchSelected(i){
+    if(this.payments[i].paidin){
+      //customer invoice and Supplier negative inoice;
+      this.matchactive[i]=true;
+      this.customerinvoices=[];
+       this.suppliernegativeinvoices=[];
+      this.api.getAllCustomerInvoioceUnallocated(this.email).subscribe((data:any)=>{        
+       data.forEach(element => {
+         if(element.customerid==""){
+           this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":false,"checked":false});
+         }
+         else{
+           this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":true,"checked":false});         
+         }        
+       });
+     }); 
+     this.api.getAllSupplierNegativeInvoioceUnallocated(this.email).subscribe((data:any)=>{        
+       data.forEach(element => {
+         if(element.customerid==""){
+           this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":false,"checked":false});
+         }
+         else{
+           this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":true,"checked":false});         
+         }        
+       });
+     }); 
+    }
+    else if(this.payments[i].paidout){
+      //Supplier invoice and Customer negative invoice
+      this.matchactive[i]=true;
+      this.customerinvoices=[];
+       this.suppliernegativeinvoices=[];
+      this.api.getAllSupplierInvoioceUnallocated(this.email).subscribe((data:any)=>{        
+       data.forEach(element => {
+         if(element.customerid==""){
+           this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":false,"checked":false});
+         }
+         else{
+           this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":true,"checked":false});         
+         }        
+       });
+     }); 
+     this.api.getAllCustomerNegativeInvoioceUnallocated(this.email).subscribe((data:any)=>{        
+       data.forEach(element => {
+         if(element.customerid==""){
+           this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":false,"checked":false});
+         }
+         else{
+           this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":true,"checked":false});         
+         }        
+       });
+     }); 
+    }
+    else{
+      window.alert("Enter Amount");
+    }
    }
-   createSelected(){      
-    this.matchactive=false;
+   createSelected(i){      
+    this.matchactive[i]=false;
    }
   setasCustomer(){   
     this.sharedservice.setCustomerOrSupplier("Customer");

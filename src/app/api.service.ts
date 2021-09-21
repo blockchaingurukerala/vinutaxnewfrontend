@@ -112,8 +112,17 @@ getAllSuppliers(whose:string){
 getAllCustomerInvoioce(whose:string){
   return this.http.post("http://localhost:3000/getAllCustomerInvoioce",{"whose":whose});
 }
-getAllSupplierNegativeInvoioce(whose:string){
-  return this.http.post("http://localhost:3000/getAllSupplierNegativeInvoioce",{"whose":whose});
+getAllCustomerInvoioceUnallocated(whose:string){
+  return this.http.post("http://localhost:3000/getAllCustomerInvoioceUnallocated",{"whose":whose});
+}
+getAllSupplierNegativeInvoioceUnallocated(whose:string){
+  return this.http.post("http://localhost:3000/getAllSupplierNegativeInvoioceUnallocated",{"whose":whose});
+}
+getAllSupplierInvoioceUnallocated(whose:string){
+  return this.http.post("http://localhost:3000/getAllSupplierInvoioceUnallocated",{"whose":whose});
+}
+getAllCustomerNegativeInvoioceUnallocated(whose:string){
+  return this.http.post("http://localhost:3000/getAllCustomerNegativeInvoioceUnallocated",{"whose":whose});
 }
 getAllSupplierInvoioce(whose:string){
   return this.http.post("http://localhost:3000/getAllSupplierInvoioce",{"whose":whose});
