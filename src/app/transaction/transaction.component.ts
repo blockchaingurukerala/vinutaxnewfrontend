@@ -30,6 +30,8 @@ export class TransactionComponent implements OnInit {
   //matchactive=false;
   customerinvoices = []; 
   suppliernegativeinvoices=[];
+  outby=[];
+  savebtndisabled=[];
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     // var id=this.sharedservice.getidforcustomeredit();
     this.categorynames=[];
@@ -52,18 +54,24 @@ export class TransactionComponent implements OnInit {
     this.displaycategorynames[0]=false;
     this.addnewcategoryenable[0]=false;
     this.matchactive[0]=false;
+    this.outby[0]=0;
+    this.savebtndisabled[0]=true;
   }
   addPayment(){
     this.payments.push(new Payment());
     this.displaycategorynames.push(false);
     this.addnewcategoryenable.push(false);
     this.matchactive.push(false);
+    this.outby.push(0);
+    this.savebtndisabled.push(true);
   }
   removePayment(i: number) {
     this.payments.splice(i, 1);
     this.displaycategorynames.splice(i, 1);
     this.addnewcategoryenable.splice(i, 1);
     this.matchactive.splice(i,1);
+    this.outby.splice(i,1);
+    this.savebtndisabled.splice(i,1);
   }
   ngOnInit(): void {
   }
@@ -120,12 +128,16 @@ export class TransactionComponent implements OnInit {
      window.alert("This Payment is Changed to PayOut");
      this.payments[j].paidin=null;     
    } 
+   this.outby[j]=parseFloat(paidOut)
+   
   }
   onPressKeyboardPaidIn(paidOut: string,j:number){   
     if(this.payments[j].paidout) {
       window.alert("This Payment is Changed to PayIn");
+      
       this.payments[j].paidout=null;     
     } 
+    this.outby[j]=parseFloat(paidOut)
    }
    savePayment(i:number){
     this.email=localStorage.getItem("uEmail");
@@ -209,6 +221,7 @@ export class TransactionComponent implements OnInit {
     if(this.payments[i].paidin){
       //customer invoice and Supplier negative inoice;
       this.matchactive[i]=true;
+      this.outby[i]=this.payments[i].paidin;
       this.customerinvoices=[];
        this.suppliernegativeinvoices=[];
       this.api.getAllCustomerInvoioceUnallocated(this.email).subscribe((data:any)=>{        
@@ -237,6 +250,7 @@ export class TransactionComponent implements OnInit {
       this.matchactive[i]=true;
       this.customerinvoices=[];
        this.suppliernegativeinvoices=[];
+       this.outby[i]=this.payments[i].paidout;
       this.api.getAllSupplierInvoioceUnallocated(this.email).subscribe((data:any)=>{        
        data.forEach(element => {
          if(element.customerid==""){
@@ -246,6 +260,7 @@ export class TransactionComponent implements OnInit {
            this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":true,"checked":false});         
          }        
        });
+        
      }); 
      this.api.getAllCustomerNegativeInvoioceUnallocated(this.email).subscribe((data:any)=>{        
        data.forEach(element => {
@@ -261,6 +276,93 @@ export class TransactionComponent implements OnInit {
     else{
       window.alert("Enter Amount");
     }
+   }
+
+   checkValuePositive(k,i){
+    // if(this.payments[i].paidin){
+      
+    //   if(this.customerinvoices[k].checked){      
+    //     this.outby[i]=this.outby[i]-this.customerinvoices[k].totalamount;
+    //   }
+    //   else{
+    //     this.outby[i]=this.outby[i]+this.customerinvoices[k].totalamount;
+    //   }
+    // }
+    // else if(this.payments[i].paidout){
+    //   if(this.customerinvoices[k].checked){      
+    //     this.outby[i]=this.outby[i]-this.customerinvoices[k].totalamount;
+    //   }
+    //   else{
+    //     this.outby[i]=this.outby[i]+this.customerinvoices[k].totalamount;
+    //   }      
+    // }
+       if(this.customerinvoices[k].checked){      
+       
+        if(this.outby[i]<0){
+          this.customerinvoices[k].checked=false;
+            return;    
+        }
+        else if(this.customerinvoices[k].totalamount<=this.outby[i]){
+          this.customerinvoices[k].allocatedAmount=this.customerinvoices[k].totalamount;          
+        }   
+        else{
+          this.customerinvoices[k].allocatedAmount=this.outby[i];
+        }  
+        this.outby[i]=this.outby[i]-this.customerinvoices[k].totalamount;   
+      }
+      else{
+        this.customerinvoices[k].allocatedAmount=0;
+        this.outby[i]=this.outby[i]+this.customerinvoices[k].totalamount;
+      }   
+    if(this.outby[i]==0){
+      this.savebtndisabled[i]=false;
+    }
+    else{
+      this.savebtndisabled[i]=true;
+    }
+   }
+   checkValueNegative(k,i){     
+    // if(this.payments[i].paidin){     
+    //   if(this.suppliernegativeinvoices[k].checked){ 
+    //     this.outby[i]=this.outby[i]+this.suppliernegativeinvoices[k].totalamount;                
+    //   }
+    //   else{
+    //     this.outby[i]=this.outby[i]-this.suppliernegativeinvoices[k].totalamount;
+    //   }
+    // }
+    // else if(this.payments[i].paidout){
+    //   if(this.suppliernegativeinvoices[k].checked){ 
+    //     this.outby[i]=this.outby[i]+this.suppliernegativeinvoices[k].totalamount;                
+    //   }
+    //   else{
+    //     this.outby[i]=this.outby[i]-this.suppliernegativeinvoices[k].totalamount;
+    //   }
+    // }
+       if(this.suppliernegativeinvoices[k].checked){ 
+        if(this.outby[i]<0){
+          window.alert(this.outby[i]);
+          this.suppliernegativeinvoices[k].checked=false;
+               return;       
+        }
+        else if(-1*this.suppliernegativeinvoices[k].totalamount<=this.outby[i]){
+          this.suppliernegativeinvoices[k].allocatedAmount=-1*this.suppliernegativeinvoices[k].totalamount;          
+        }   
+        else{
+          this.suppliernegativeinvoices[k].allocatedAmount=this.outby[i];
+        }  
+        this.outby[i]=this.outby[i]+this.suppliernegativeinvoices[k].totalamount;                
+      }
+      else{
+        this.suppliernegativeinvoices[k].allocatedAmount=0;
+        this.outby[i]=this.outby[i]-this.suppliernegativeinvoices[k].totalamount;
+      }
+    if(this.outby[i]==0){
+     
+      this.savebtndisabled[i]=false;
+    }
+    else{
+      this.savebtndisabled[i]=true;
+    }    
    }
    createSelected(i){      
     this.matchactive[i]=false;

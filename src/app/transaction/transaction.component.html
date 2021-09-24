@@ -86,7 +86,7 @@
                         <tr *ngIf="matchactive[i]">
                             <ul class="nav nav-tabs">
                                 <li  ><a routerLink="/transactions" (click)="createSelected(i);">Create</a></li>
-                                <li class="active" ><a routerLink="/match" (click)="matchSelected(i);">Match</a></li> 
+                                <li class="active" ><a  (click)="matchSelected(i);">Match</a></li>                                 
                             </ul>  
                           </tr>
                         <tr *ngIf="!matchactive[i]">                            
@@ -139,28 +139,41 @@
                         <th>To</th>
                         <th>Due Date</th>
                         <th>Total Amount</th>
-                        <th>To be Paid</th>
+                        <th>Paid</th>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let customerinvoice of customerinvoices; let i = index;let last = last;" >
-                            <td><input type="checkbox" value="{{customerinvoice.value}}" [(ngModel)]="customerinvoice.checked"/> </td>
+                        <tr *ngFor="let customerinvoice of customerinvoices; let k = index;let last = last;" >
+                            <td><input type="checkbox" value="{{customerinvoice.value}}" [(ngModel)]="customerinvoice.checked"  (change)="checkValuePositive(k,i)"/> </td>
                             <td>{{customerinvoice.invoiceid}}</td>
                             <td>{{customerinvoice.reference}}</td>
                             <td *ngIf="customerinvoice.link"><a routerLink="/individualcustomer" (click)="customerclicked(customerinvoice.customerid);">{{customerinvoice.customername}}</a></td>
                             <td *ngIf="!customerinvoice.link">{{customerinvoice.customername}}</td>                            
                             <td>{{customerinvoice.duedate}}</td>
                             <td>{{customerinvoice.totalamount}}</td>
-                            <td>{{customerinvoice.allocatedAmount}}</td>                           
+                            <td>{{customerinvoice.allocatedAmount}}</td>                                                       
                         </tr>
-                        <tr *ngFor="let suppliernegativeinvoice of suppliernegativeinvoices; let i = index;let last = last;" >
-                            <td><input type="checkbox" value="{{suppliernegativeinvoice.value}}" [(ngModel)]="suppliernegativeinvoice.checked"/> </td>
+                        <tr *ngFor="let suppliernegativeinvoice of suppliernegativeinvoices; let k = index;let last = last;" >
+                            <td><input type="checkbox" value="{{suppliernegativeinvoice.value}}" [(ngModel)]="suppliernegativeinvoice.checked"  (change)="checkValueNegative(k,i)"/> </td>
                             <td>{{suppliernegativeinvoice.invoiceid}}</td>
                             <td>{{suppliernegativeinvoice.reference}}</td>
                             <td *ngIf="suppliernegativeinvoice.link"><a routerLink="/individualcustomer" (click)="supplierclicked(suppliernegativeinvoice.customerid);">{{suppliernegativeinvoice.customername}}</a></td>
                             <td *ngIf="!suppliernegativeinvoice.link">{{suppliernegativeinvoice.customername}}</td>                            
                             <td>{{suppliernegativeinvoice.duedate}}</td>
-                            <td>{{suppliernegativeinvoice.totalamount}}</td>
+                            <td>{{suppliernegativeinvoice.totalamount}}(REFUND)</td>
                             <td>{{suppliernegativeinvoice.allocatedAmount}}</td>                           
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+
+                            </td>
+                            <td colspan="3">
+                                Total is out by {{outby[i]}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" align="center" >
+                                <button type="button" class="btn btn-primary" [disabled]="savebtndisabled[i]">SAVE</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
