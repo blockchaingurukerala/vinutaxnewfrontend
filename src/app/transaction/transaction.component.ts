@@ -218,6 +218,12 @@ export class TransactionComponent implements OnInit {
     }   
    }
    matchSelected(i){
+     var p=0;
+     for(p=0;p<this.matchactive.length;p++){
+       if(p!=i){
+         this.matchactive[p]=false;
+       }
+     }
     if(this.payments[i].paidin){
       //customer invoice and Supplier negative inoice;
       this.matchactive[i]=true;
@@ -278,71 +284,55 @@ export class TransactionComponent implements OnInit {
     }
    }
 
-   checkValuePositive(k,i){
-    // if(this.payments[i].paidin){
-      
-    //   if(this.customerinvoices[k].checked){      
-    //     this.outby[i]=this.outby[i]-this.customerinvoices[k].totalamount;
-    //   }
-    //   else{
-    //     this.outby[i]=this.outby[i]+this.customerinvoices[k].totalamount;
-    //   }
-    // }
-    // else if(this.payments[i].paidout){
-    //   if(this.customerinvoices[k].checked){      
-    //     this.outby[i]=this.outby[i]-this.customerinvoices[k].totalamount;
-    //   }
-    //   else{
-    //     this.outby[i]=this.outby[i]+this.customerinvoices[k].totalamount;
-    //   }      
-    // }
-       if(this.customerinvoices[k].checked){      
-       
-        if(this.outby[i]<0){
-          this.customerinvoices[k].checked=false;
-            return;    
+   checkValuePositive(k,i){   
+       if(this.customerinvoices[k].checked){         
+        if(this.outby[i]<0){         
+          this.customerinvoices[k].checked=true;  
+          return;
         }
-        else if(this.customerinvoices[k].totalamount<=this.outby[i]){
-          this.customerinvoices[k].allocatedAmount=this.customerinvoices[k].totalamount;          
+        else if(this.customerinvoices[k].totalamount<=this.outby[i]){         
+          this.customerinvoices[k].allocatedAmount=this.customerinvoices[k].totalamount;         
         }   
         else{
-          this.customerinvoices[k].allocatedAmount=this.outby[i];
+          this.customerinvoices[k].allocatedAmount=this.outby[i];         
         }  
-        this.outby[i]=this.outby[i]-this.customerinvoices[k].totalamount;   
+        this.outby[i]=this.outby[i]-this.customerinvoices[k].totalamount; 
       }
       else{
         this.customerinvoices[k].allocatedAmount=0;
         this.outby[i]=this.outby[i]+this.customerinvoices[k].totalamount;
       }   
-    if(this.outby[i]==0){
+    if(this.outby[i]<=0){
+      for(var z=0;z<this.customerinvoices.length;z++){
+        if((this.customerinvoices[z].allocatedAmount<=0)){        
+          this.customerinvoices[z].checked=true;
+        }
+        if(z==k){
+          this.customerinvoices[z].checked=false;
+        }
+      }    
+      for(var z=0;z<this.suppliernegativeinvoices.length;z++){        
+        if((this.suppliernegativeinvoices[z].allocatedAmount<=0)){        
+          this.suppliernegativeinvoices[z].checked=true;
+        }        
+      }   
       this.savebtndisabled[i]=false;
     }
     else{
+      for(var z=0;z<this.customerinvoices.length;z++){       
+          this.customerinvoices[z].checked=false;      
+      } 
+      for(var z=0;z<this.suppliernegativeinvoices.length;z++){
+        this.suppliernegativeinvoices[z].checked=false;
+      }
       this.savebtndisabled[i]=true;
     }
    }
-   checkValueNegative(k,i){     
-    // if(this.payments[i].paidin){     
-    //   if(this.suppliernegativeinvoices[k].checked){ 
-    //     this.outby[i]=this.outby[i]+this.suppliernegativeinvoices[k].totalamount;                
-    //   }
-    //   else{
-    //     this.outby[i]=this.outby[i]-this.suppliernegativeinvoices[k].totalamount;
-    //   }
-    // }
-    // else if(this.payments[i].paidout){
-    //   if(this.suppliernegativeinvoices[k].checked){ 
-    //     this.outby[i]=this.outby[i]+this.suppliernegativeinvoices[k].totalamount;                
-    //   }
-    //   else{
-    //     this.outby[i]=this.outby[i]-this.suppliernegativeinvoices[k].totalamount;
-    //   }
-    // }
+   checkValueNegative(k,i){   
        if(this.suppliernegativeinvoices[k].checked){ 
-        if(this.outby[i]<0){
-          window.alert(this.outby[i]);
-          this.suppliernegativeinvoices[k].checked=false;
-               return;       
+        if(this.outby[i]<0){         
+          this.suppliernegativeinvoices[k].checked=true;   
+          return         
         }
         else if(-1*this.suppliernegativeinvoices[k].totalamount<=this.outby[i]){
           this.suppliernegativeinvoices[k].allocatedAmount=-1*this.suppliernegativeinvoices[k].totalamount;          
@@ -356,12 +346,30 @@ export class TransactionComponent implements OnInit {
         this.suppliernegativeinvoices[k].allocatedAmount=0;
         this.outby[i]=this.outby[i]-this.suppliernegativeinvoices[k].totalamount;
       }
-    if(this.outby[i]==0){
-     
-      this.savebtndisabled[i]=false;
-    }
+      if(this.outby[i]<=0){
+        for(var z=0;z<this.suppliernegativeinvoices.length;z++){
+          if((this.suppliernegativeinvoices[z].allocatedAmount<=0)){        
+            this.suppliernegativeinvoices[z].checked=true;
+          }
+          if(z==k){
+            this.suppliernegativeinvoices[z].checked=false;
+          }
+        }    
+        for(var z=0;z<this.customerinvoices.length;z++){        
+          if((this.customerinvoices[z].allocatedAmount<=0)){        
+            this.customerinvoices[z].checked=true;
+          }        
+        }   
+        this.savebtndisabled[i]=false;
+      }
     else{
-      this.savebtndisabled[i]=true;
+          for(var z=0;z<this.customerinvoices.length;z++){       
+            this.customerinvoices[z].checked=false;  
+          } 
+        for(var z=0;z<this.suppliernegativeinvoices.length;z++){
+          this.suppliernegativeinvoices[z].checked=false;
+        }
+        this.savebtndisabled[i]=true;
     }    
    }
    createSelected(i){      
