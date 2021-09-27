@@ -285,6 +285,14 @@ export class TransactionComponent implements OnInit {
    }
 
    checkValuePositive(k,i){   
+     var recievedamount=0;
+     var totalallocated=0;
+     if(this.payments[i].paidin){
+      recievedamount=this.payments[i].paidin;
+     }
+     else if(this.payments[i].paidout){
+      recievedamount=this.payments[i].paidout;
+     }
        if(this.customerinvoices[k].checked){         
         if(this.outby[i]<0){         
           this.customerinvoices[k].checked=true;  
@@ -304,6 +312,8 @@ export class TransactionComponent implements OnInit {
       }   
     if(this.outby[i]<=0){
       for(var z=0;z<this.customerinvoices.length;z++){
+        totalallocated=totalallocated+this.customerinvoices[z].allocatedAmount;
+        
         if((this.customerinvoices[z].allocatedAmount<=0)){        
           this.customerinvoices[z].checked=true;
         }
@@ -311,12 +321,21 @@ export class TransactionComponent implements OnInit {
           this.customerinvoices[z].checked=false;
         }
       }    
-      for(var z=0;z<this.suppliernegativeinvoices.length;z++){        
+      for(var z=0;z<this.suppliernegativeinvoices.length;z++){   
+        totalallocated=totalallocated+this.suppliernegativeinvoices[z].allocatedAmount; 
+      
         if((this.suppliernegativeinvoices[z].allocatedAmount<=0)){        
           this.suppliernegativeinvoices[z].checked=true;
         }        
-      }   
-      this.savebtndisabled[i]=false;
+      }  
+           
+      if(totalallocated==recievedamount){
+        this.savebtndisabled[i]=false;
+      }
+      else{
+        this.savebtndisabled[i]=true;
+      }
+      
     }
     else{
       for(var z=0;z<this.customerinvoices.length;z++){       
@@ -329,6 +348,16 @@ export class TransactionComponent implements OnInit {
     }
    }
    checkValueNegative(k,i){   
+      var recievedamount=0;
+      var totalallocated=0;
+
+      if(this.payments[i].paidin){
+        recievedamount=this.payments[i].paidin;
+       }
+       else if(this.payments[i].paidout){
+        recievedamount=this.payments[i].paidout;
+       }
+
        if(this.suppliernegativeinvoices[k].checked){ 
         if(this.outby[i]<0){         
           this.suppliernegativeinvoices[k].checked=true;   
@@ -348,6 +377,7 @@ export class TransactionComponent implements OnInit {
       }
       if(this.outby[i]<=0){
         for(var z=0;z<this.suppliernegativeinvoices.length;z++){
+          totalallocated=totalallocated+this.suppliernegativeinvoices[z].allocatedAmount;
           if((this.suppliernegativeinvoices[z].allocatedAmount<=0)){        
             this.suppliernegativeinvoices[z].checked=true;
           }
@@ -355,12 +385,18 @@ export class TransactionComponent implements OnInit {
             this.suppliernegativeinvoices[z].checked=false;
           }
         }    
-        for(var z=0;z<this.customerinvoices.length;z++){        
+        for(var z=0;z<this.customerinvoices.length;z++){   
+          totalallocated=totalallocated+this.customerinvoices[z].allocatedAmount;     
           if((this.customerinvoices[z].allocatedAmount<=0)){        
             this.customerinvoices[z].checked=true;
           }        
         }   
-        this.savebtndisabled[i]=false;
+        if(totalallocated==recievedamount){
+          this.savebtndisabled[i]=false;
+        }
+        else{
+          this.savebtndisabled[i]=true;
+        }
       }
     else{
           for(var z=0;z<this.customerinvoices.length;z++){       
@@ -371,6 +407,19 @@ export class TransactionComponent implements OnInit {
         }
         this.savebtndisabled[i]=true;
     }    
+   }
+   allocateAmount(date){
+     window.alert("Allocate to be done");
+     for(var i=0;i<this.customerinvoices.length;i++){
+       if(this.customerinvoices[i].allocatedAmount>0){
+         console.log("Display");
+        console.log(this.customerinvoices[i].id);
+        console.log(this.customerinvoices[i].totalamount);
+        console.log(this.customerinvoices[i].allocatedAmount);
+        console.log(date);
+       }
+     }
+     
    }
    createSelected(i){      
     this.matchactive[i]=false;

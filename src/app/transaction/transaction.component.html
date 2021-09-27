@@ -172,7 +172,7 @@
                         </tr>
                         <tr>
                             <td colspan="8" align="center" >
-                                <button type="button" class="btn btn-primary" [disabled]="savebtndisabled[i]">SAVE</button>
+                                <button type="button" class="btn btn-primary" [disabled]="savebtndisabled[i]" (click)="allocateAmount(payment.date)">SAVE</button>
                             </td>
                         </tr>
                     </tbody>

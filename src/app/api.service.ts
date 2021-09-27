@@ -214,4 +214,7 @@ deleteCustomer(id:string){
 deleteSupplier(id:string){
   return this.http.post("http://localhost:3000/deleteSupplier",{"id":id});
 }
+allocateAmount(id:string){
+  return this.http.post("http://localhost:3000/allocateAmount",{"id":id});
+}
 }
