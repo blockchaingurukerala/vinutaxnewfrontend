@@ -214,7 +214,10 @@ deleteCustomer(id:string){
 deleteSupplier(id:string){
   return this.http.post("http://localhost:3000/deleteSupplier",{"id":id});
 }
-allocateAmount(id:string){
-  return this.http.post("http://localhost:3000/allocateAmount",{"id":id});
+allocateToCustomerInvoice(whose:string,id:string,date:string,totalamount:number,allocatedAmount:number){
+  return this.http.post("http://localhost:3000/allocateToCustomerInvoice",{"whose":whose,"id":id,"date":date,"totalamount":totalamount,"allocatedAmount":allocatedAmount});
+}
+allocateToSupplierInvoice(whose:string,id:string,date:string,totalamount:number,allocatedAmount:number){
+  return this.http.post("http://localhost:3000/allocateToSupplierInvoice",{"whose":whose,"id":id,"date":date,"totalamount":totalamount,"allocatedAmount":allocatedAmount});
 }
 }

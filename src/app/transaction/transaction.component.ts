@@ -408,18 +408,57 @@ export class TransactionComponent implements OnInit {
         this.savebtndisabled[i]=true;
     }    
    }
-   allocateAmount(date){
+   allocateAmount(date,i){
      window.alert("Allocate to be done");
-     for(var i=0;i<this.customerinvoices.length;i++){
+     var whose=localStorage.getItem("uEmail"); 
+     if(this.payments[i].paidin){
+       //customer invoice
+      for(var p=0;i<this.customerinvoices.length;p++){
+        if(this.customerinvoices[i].allocatedAmount>0){
+          
+          this.api.allocateToCustomerInvoice(whose,this.customerinvoices[p].id,date,this.customerinvoices[p].totalamount,this.customerinvoices[p].allocatedAmount).subscribe((data:any)=>{
+
+          });
+        //  console.log(this.customerinvoices[p].id);
+        //  console.log(this.customerinvoices[p].totalamount);
+        //  console.log(this.customerinvoices[p].allocatedAmount);
+        //  console.log(date);
+        }
+      }
+      //supplier invoice
+      for(var p=0;i<this.suppliernegativeinvoices.length;p++){
+        if(this.suppliernegativeinvoices[i].allocatedAmount>0){
+          this.api.allocateToCustomerInvoice(whose,this.customerinvoices[p].id,date,this.customerinvoices[p].totalamount,this.customerinvoices[p].allocatedAmount).subscribe((data:any)=>{
+
+          });         
+        }
+      }
+     }
+     if(this.payments[i].paidout){
+      //Supplier invoice
+     for(var p=0;i<this.customerinvoices.length;p++){
        if(this.customerinvoices[i].allocatedAmount>0){
-         console.log("Display");
-        console.log(this.customerinvoices[i].id);
-        console.log(this.customerinvoices[i].totalamount);
-        console.log(this.customerinvoices[i].allocatedAmount);
+       
+        console.log(this.customerinvoices[p].id);
+        console.log(this.customerinvoices[p].totalamount);
+        console.log(this.customerinvoices[p].allocatedAmount);
         console.log(date);
        }
      }
-     
+     //Customer invoice
+     for(var p=0;i<this.suppliernegativeinvoices.length;p++){
+       if(this.suppliernegativeinvoices[i].allocatedAmount>0){
+        
+        console.log(this.suppliernegativeinvoices[p].id);
+        console.log(this.suppliernegativeinvoices[p].totalamount);
+        console.log(this.suppliernegativeinvoices[p].allocatedAmount);
+        console.log(date);
+       }
+     }
+    }
+
+
+
    }
    createSelected(i){      
     this.matchactive[i]=false;
