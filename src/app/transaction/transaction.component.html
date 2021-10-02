@@ -138,8 +138,9 @@
                         <th>Reference No</th>
                         <th>To</th>
                         <th>Due Date</th>
-                        <th>Total Amount</th>
-                        <th>Paid</th>
+                        <th>Invoice Amount</th>
+                        <th>Balance Amount</th>
+                        <th>Allocated</th>
                     </thead>
                     <tbody>
                         <tr *ngFor="let customerinvoice of customerinvoices; let k = index;let last = last;" >
@@ -150,6 +151,7 @@
                             <td *ngIf="!customerinvoice.link">{{customerinvoice.customername}}</td>                            
                             <td>{{customerinvoice.duedate}}</td>
                             <td>{{customerinvoice.totalamount}}</td>
+                            <td>{{customerinvoice.balanceamount}}</td>
                             <td>{{customerinvoice.allocatedAmount}}</td>                                                       
                         </tr>
                         <tr *ngFor="let suppliernegativeinvoice of suppliernegativeinvoices; let k = index;let last = last;" >
@@ -160,7 +162,8 @@
                             <td *ngIf="!suppliernegativeinvoice.link">{{suppliernegativeinvoice.customername}}</td>                            
                             <td>{{suppliernegativeinvoice.duedate}}</td>
                             <td>{{suppliernegativeinvoice.totalamount}}(REFUND)</td>
-                            <td>{{suppliernegativeinvoice.allocatedAmount}}</td>                           
+                            <td>{{suppliernegativeinvoice.balanceamount}}</td> 
+                            <td>{{suppliernegativeinvoice.allocatedAmount}}</td>                     
                         </tr>
                         <tr>
                             <td colspan="5">

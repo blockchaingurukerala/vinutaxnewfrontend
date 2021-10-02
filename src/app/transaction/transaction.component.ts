@@ -11,6 +11,9 @@ class Payment{
   description: string;  
   category:string;
   amount :number; 
+  constructor(){
+    this.date=new Date().toISOString().split('T')[0];
+  }
 };
 @Component({
   selector: 'app-transaction',
@@ -32,6 +35,7 @@ export class TransactionComponent implements OnInit {
   suppliernegativeinvoices=[];
   outby=[];
   savebtndisabled=[];
+   today = new Date().toISOString().split('T')[0];
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     // var id=this.sharedservice.getidforcustomeredit();
     this.categorynames=[];
@@ -51,6 +55,8 @@ export class TransactionComponent implements OnInit {
       });  
     }); 
     this.payments.push(new Payment());
+    this.payments[0].date=this.today;
+    
     this.displaycategorynames[0]=false;
     this.addnewcategoryenable[0]=false;
     this.matchactive[0]=false;
@@ -232,21 +238,23 @@ export class TransactionComponent implements OnInit {
        this.suppliernegativeinvoices=[];
       this.api.getAllCustomerInvoioceUnallocated(this.email).subscribe((data:any)=>{        
        data.forEach(element => {
+         var balanceamount=element.totalamount-element.allocatedAmount;
          if(element.customerid==""){
-           this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":false,"checked":false});
+           this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":false,"checked":false,"balanceamount":balanceamount});
          }
          else{
-           this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":true,"checked":false});         
+           this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":true,"checked":false,"balanceamount":balanceamount});         
          }        
        });
      }); 
      this.api.getAllSupplierNegativeInvoioceUnallocated(this.email).subscribe((data:any)=>{        
        data.forEach(element => {
+        var balanceamount=-1*element.totalamount-element.allocatedAmount;
          if(element.customerid==""){
-           this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":false,"checked":false});
+           this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":false,"checked":false,"balanceamount":balanceamount});           
          }
          else{
-           this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":true,"checked":false});         
+           this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":true,"checked":false,"balanceamount":balanceamount});         
          }        
        });
      }); 
@@ -259,22 +267,24 @@ export class TransactionComponent implements OnInit {
        this.outby[i]=this.payments[i].paidout;
       this.api.getAllSupplierInvoioceUnallocated(this.email).subscribe((data:any)=>{        
        data.forEach(element => {
+        var balanceamount=element.totalamount-element.allocatedAmount;
          if(element.customerid==""){
-           this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":false,"checked":false});
+           this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":false,"checked":false,"balanceamount":balanceamount});
          }
          else{
-           this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":true,"checked":false});         
+           this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":true,"checked":false,"balanceamount":balanceamount});         
          }        
        });
         
      }); 
      this.api.getAllCustomerNegativeInvoioceUnallocated(this.email).subscribe((data:any)=>{        
        data.forEach(element => {
+        var balanceamount=-1*element.totalamount-element.allocatedAmount;
          if(element.customerid==""){
-           this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":false,"checked":false});
+           this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":false,"checked":false,"balanceamount":balanceamount});
          }
          else{
-           this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":element.allocatedAmount,"status":"approved","link":true,"checked":false});         
+           this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":true,"checked":false,"balanceamount":balanceamount});         
          }        
        });
      }); 
@@ -298,17 +308,17 @@ export class TransactionComponent implements OnInit {
           this.customerinvoices[k].checked=true;  
           return;
         }
-        else if(this.customerinvoices[k].totalamount<=this.outby[i]){         
-          this.customerinvoices[k].allocatedAmount=this.customerinvoices[k].totalamount;         
+        else if(this.customerinvoices[k].balanceamount<=this.outby[i]){         
+          this.customerinvoices[k].allocatedAmount=this.customerinvoices[k].balanceamount;         
         }   
         else{
           this.customerinvoices[k].allocatedAmount=this.outby[i];         
         }  
-        this.outby[i]=this.outby[i]-this.customerinvoices[k].totalamount; 
+        this.outby[i]=this.outby[i]-this.customerinvoices[k].balanceamount; 
       }
       else{
         this.customerinvoices[k].allocatedAmount=0;
-        this.outby[i]=this.outby[i]+this.customerinvoices[k].totalamount;
+        this.outby[i]=this.outby[i]+this.customerinvoices[k].balanceamount;
       }   
     if(this.outby[i]<=0){
       for(var z=0;z<this.customerinvoices.length;z++){
@@ -363,17 +373,17 @@ export class TransactionComponent implements OnInit {
           this.suppliernegativeinvoices[k].checked=true;   
           return         
         }
-        else if(-1*this.suppliernegativeinvoices[k].totalamount<=this.outby[i]){
-          this.suppliernegativeinvoices[k].allocatedAmount=-1*this.suppliernegativeinvoices[k].totalamount;          
+        else if(this.suppliernegativeinvoices[k].balanceamount<=this.outby[i]){
+          this.suppliernegativeinvoices[k].allocatedAmount=this.suppliernegativeinvoices[k].balanceamount;          
         }   
         else{
           this.suppliernegativeinvoices[k].allocatedAmount=this.outby[i];
         }  
-        this.outby[i]=this.outby[i]+this.suppliernegativeinvoices[k].totalamount;                
+        this.outby[i]=this.outby[i]-this.suppliernegativeinvoices[k].balanceamount;                
       }
       else{
         this.suppliernegativeinvoices[k].allocatedAmount=0;
-        this.outby[i]=this.outby[i]-this.suppliernegativeinvoices[k].totalamount;
+        this.outby[i]=this.outby[i]+this.suppliernegativeinvoices[k].balanceamount;
       }
       if(this.outby[i]<=0){
         for(var z=0;z<this.suppliernegativeinvoices.length;z++){
@@ -408,57 +418,44 @@ export class TransactionComponent implements OnInit {
         this.savebtndisabled[i]=true;
     }    
    }
-   allocateAmount(date,i){
-     window.alert("Allocate to be done");
+   allocateAmount(date,i){    
      var whose=localStorage.getItem("uEmail"); 
-     if(this.payments[i].paidin){
-       //customer invoice
-      for(var p=0;i<this.customerinvoices.length;p++){
-        if(this.customerinvoices[i].allocatedAmount>0){
-          
-          this.api.allocateToCustomerInvoice(whose,this.customerinvoices[p].id,date,this.customerinvoices[p].totalamount,this.customerinvoices[p].allocatedAmount).subscribe((data:any)=>{
-
-          });
-        //  console.log(this.customerinvoices[p].id);
-        //  console.log(this.customerinvoices[p].totalamount);
-        //  console.log(this.customerinvoices[p].allocatedAmount);
-        //  console.log(date);
+     if(this.payments[i].paidin){    
+       this.customerinvoices.forEach(element => {
+         console.log(element.allocatedAmount)
+        if(element.allocatedAmount>0){          
+          this.api.allocateToCustomerInvoice(whose,element.id,date,element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
+              console.log(data)
+          });       
         }
-      }
-      //supplier invoice
-      for(var p=0;i<this.suppliernegativeinvoices.length;p++){
-        if(this.suppliernegativeinvoices[i].allocatedAmount>0){
-          this.api.allocateToCustomerInvoice(whose,this.customerinvoices[p].id,date,this.customerinvoices[p].totalamount,this.customerinvoices[p].allocatedAmount).subscribe((data:any)=>{
-
-          });         
-        }
-      }
-     }
-     if(this.payments[i].paidout){
-      //Supplier invoice
-     for(var p=0;i<this.customerinvoices.length;p++){
-       if(this.customerinvoices[i].allocatedAmount>0){
-       
-        console.log(this.customerinvoices[p].id);
-        console.log(this.customerinvoices[p].totalamount);
-        console.log(this.customerinvoices[p].allocatedAmount);
-        console.log(date);
+       });
+       this.suppliernegativeinvoices.forEach(element => {       
+       if(element.allocatedAmount>0){          
+         this.api.allocateToSupplierInvoice(whose,element.id,date,-1*element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
+             console.log(data)
+         });       
        }
+      });
      }
-     //Customer invoice
-     for(var p=0;i<this.suppliernegativeinvoices.length;p++){
-       if(this.suppliernegativeinvoices[i].allocatedAmount>0){
-        
-        console.log(this.suppliernegativeinvoices[p].id);
-        console.log(this.suppliernegativeinvoices[p].totalamount);
-        console.log(this.suppliernegativeinvoices[p].allocatedAmount);
-        console.log(date);
+     else if(this.payments[i].paidout){
+      this.customerinvoices.forEach(element => {
+        console.log(element.allocatedAmount)
+       if(element.allocatedAmount>0){          
+         this.api.allocateToSupplierInvoice(whose,element.id,date,element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
+             console.log(data)
+         });       
        }
-     }
+      });
+      this.suppliernegativeinvoices.forEach(element => {       
+      if(element.allocatedAmount>0){          
+        this.api.allocateToCustomerInvoice(whose,element.id,date,-1*element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
+            console.log(data)
+        });       
+      }
+     });    
     }
-
-
-
+    window.alert("Saved Successfully");
+   this.removePayment(i);
    }
    createSelected(i){      
     this.matchactive[i]=false;

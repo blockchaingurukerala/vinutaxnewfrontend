@@ -25,15 +25,18 @@ export class CustomerawaitingpaymentComponent implements OnInit {
       this.api.getAllCustomerInvoioce(this.whose).subscribe((data:any)=>{
         //console.log(data);    
         data.forEach(element => {
-          if(element.customerid==""){
-            this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved","link":false});
+          if(element.allocated!=true){
+            if(element.customerid==""){
+              this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved","link":false,"allocatedAmount":element.allocatedAmount});
+            }
+            else{
+              this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved","link":true,"allocatedAmount":element.allocatedAmount});
+             // this.api.getCustomerNameFromId(element.customerid).subscribe((nameobj:any)=>{
+               // this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved","link":true});
+             // });
+            }  
           }
-          else{
-            this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved","link":true});
-           // this.api.getCustomerNameFromId(element.customerid).subscribe((nameobj:any)=>{
-             // this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved","link":true});
-           // });
-          }        
+                
         });
       }); 
     }
@@ -43,15 +46,18 @@ export class CustomerawaitingpaymentComponent implements OnInit {
       this.api.getAllSupplierInvoioce(this.whose).subscribe((data:any)=>{
         //console.log(data);    
         data.forEach(element => {
-          if(element.customerid==""){
-            this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved","link":false});
+          if(element.allocated!=true){
+            if(element.customerid==""){
+              this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved","link":false,"allocatedAmount":element.allocatedAmount});
+            }
+            else{
+              this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved","link":true,"allocatedAmount":element.allocatedAmount});
+             // this.api.getCustomerNameFromId(element.customerid).subscribe((nameobj:any)=>{
+               // this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved","link":true});
+             // });
+            }  
           }
-          else{
-            this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved","link":true});
-           // this.api.getCustomerNameFromId(element.customerid).subscribe((nameobj:any)=>{
-             // this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"status":"approved","link":true});
-           // });
-          }       
+              
         });
       }); 
     }
