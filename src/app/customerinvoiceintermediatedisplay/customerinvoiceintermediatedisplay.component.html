@@ -141,28 +141,38 @@
                                               <td>
                                                   {{product.price * product.qty || ''}}
                                               </td>
-                                          </tr>
-                                          
-                                          <!-- <tr>                                             
-                                              <td colspan="4" align="right"><h3>Total  {{totalmamount}}  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</h3> </td>                                                                                            
-                                          </tr> -->
+                                          </tr>  
                                       </tbody>
-                                     
                                   </table>
-                                  <!-- <table class="table">
-                                      <tr>
-                                          <td>&nbsp;</td><td>&nbsp;</td>
-                                          <td><h3>Total  {{totalmamount}}</h3></td>
-                                      </tr>
-                                  </table> -->
+                                
                                   <div class="row ">
                                       <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
                                       <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
-                                      <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4" style="border-top: 1px double #333;border-bottom: 2px double #333;">
-                                          <h3>Total  {{totalmamount}}</h3>                                         
-                                         
+                                      <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4" style="border-top: 1px double #333;border-bottom: 1px double #333;">
+                                          <h3>Total  {{totalmamount}}</h3>   
                                     </div>
                                   </div>
+                                  <div class="row " *ngIf="!draftstatus">
+                                    <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+                                    <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+                                    <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4" style="border-top: 1px double #333;border-bottom: 3px double #333;">
+                                       <table class="table">
+                                        <tr *ngFor="let allocation of invoice.allocatedDetails; let i=index">
+                                            <td>Less Payment <p> {{allocation.date}}</p></td>
+                                            <td> {{allocation.allocatedAmount}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: left;">
+                                                <h3 style="font-weight: 900; ">AMOUNT DUE</h3> 
+                                            </td>
+                                            <td style="text-align: left;">
+                                                <h3 style="font-weight: 900; "> {{totalmamount-invoice.allocatedAmount}}</h3> 
+                                            </td>
+                                        </tr>
+                                       </table>   
+                                  </div>
+                                </div>
+
                               </div>
                           </div>
                       </div>

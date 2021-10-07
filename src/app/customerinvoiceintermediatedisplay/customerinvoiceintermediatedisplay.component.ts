@@ -11,6 +11,10 @@ class Product{
   price: number;
   qty: number;
 }
+class Allocation{
+  date: string;
+  allocatedAmount: number;  
+}
 class Invoice{
   customerName: string;
   address: string;
@@ -22,6 +26,8 @@ class Invoice{
   referenceno:string;
   products: Product[] = [];
   additionalDetails: string;  
+  allocatedDetails:Allocation[]=[];
+  allocatedAmount:number;
   constructor(){
     // Initially one empty product row we will show 
    
@@ -177,10 +183,19 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
            this.invoice.referenceno=data[0].reference;
            this.invoice.additionalDetails=data[0].additionaldetails;  
            this.totalmamount=data[0].totalamount;
+           this.invoice.allocatedAmount=data[0].allocatedAmount;
+           if(this.totalmamount<0){
+            this.invoice.allocatedAmount=-1*data[0].allocatedAmount;
+           }
            for(var i=0;i<data[0].products.length;i++)  {
               this.invoice.products.push(new Product());
              this.invoice.products[i]=data[0].products[i];
            }  
+           for(var i=0;i<data[0].allocatedDetails.length;i++)  {
+            this.invoice.allocatedDetails.push(new Allocation());
+            this.invoice.allocatedDetails[i]=data[0].allocatedDetails[i];
+         }  
+
          // })
         });
       }
@@ -230,10 +245,19 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
            this.invoice.referenceno=data[0].reference;
            this.invoice.additionalDetails=data[0].additionaldetails;  
            this.totalmamount=data[0].totalamount;
+           this.invoice.allocatedAmount=data[0].allocatedAmount;
+           if(this.totalmamount<0){
+            this.invoice.allocatedAmount=-1*data[0].allocatedAmount;
+           }
            for(var i=0;i<data[0].products.length;i++)  {
             this.invoice.products.push(new Product());
              this.invoice.products[i]=data[0].products[i];
            }  
+           for(var i=0;i<data[0].allocatedDetails.length;i++)  {
+            this.invoice.allocatedDetails.push(new Allocation());
+            this.invoice.allocatedDetails[i]=data[0].allocatedDetails[i];
+         }  
+
           // })
         });
       }
@@ -272,21 +296,7 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  // onCustomerSelection(e){
-  //   let userFullName = e.target.value;
-  //   let customer = this.names.filter(x => x.userFullName === userFullName)[0];
-  //   console.log(customer);
-  //   if(customer){
-  //     this.invoice.address=customer.userAddress;
-  //     this.invoice.contactNo=customer.userContactNo;
-  //     this.invoice.email=customer.userEmailId;
-  //   }
-  //   else{
-  //     this.invoice.address="";
-  //     this.invoice.contactNo=Number("");
-  //     this.invoice.email="";
-  //   }
-  // }
+ 
   editInvoice(){   
         this.router.navigate(['/editcustomerinvoice']);  
   }
