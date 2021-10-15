@@ -147,21 +147,34 @@ export class AllaccountsComponent implements OnInit {
     }
     this.isReadonly[i]=false;
   }
-  onExpenceClick (event, data){ 
+  onBankClick (event){ 
     this.incomeclick=false;
     this.expenceclick=true;
     this.displayexpences=[];
     this.originalexpences=[];
     this.isReadonly=[]; 
     for(var i=0;i<this.expences.length;i++){
-      var category=this.expences[i].category;     
-        if(category==data){
+      var category=this.expences[i].category; 
           this.displayexpences.push(this.expences[i]);
           this.isReadonly.push(true);
           this.originalexpences.push(this.expences[i]);
-        }  
     }
   }
+  // onExpenceClick (event, data){ 
+  //   this.incomeclick=false;
+  //   this.expenceclick=true;
+  //   this.displayexpences=[];
+  //   this.originalexpences=[];
+  //   this.isReadonly=[]; 
+  //   for(var i=0;i<this.expences.length;i++){
+  //     var category=this.expences[i].category;     
+  //       if(category==data){
+  //         this.displayexpences.push(this.expences[i]);
+  //         this.isReadonly.push(true);
+  //         this.originalexpences.push(this.expences[i]);
+  //       }  
+  //   }
+  // }
   onIncomeClick (event, data){ 
     this.incomeclick=true;
     this.expenceclick=false;
@@ -177,7 +190,6 @@ export class AllaccountsComponent implements OnInit {
         }  
     }
   }
-   
   getIncomesAndExpences(){ 
     this.incomes=[]   ;
     this.expences=[];
@@ -189,26 +201,18 @@ export class AllaccountsComponent implements OnInit {
     this.totalexpence=0;
     this.netincome=0;
     this.email=localStorage.getItem("uEmail");   
-    this.api.getAllIncomeAndExpences(this.email).subscribe(async (data:any)=>{     
-      this.incomes=data[0].incomes;
-      this.expences=data[0].expences; 
+    this.api.getAllCashAccounts(this.email).subscribe(async (data:any)=>{   
+      console.log(data);
+      this.incomes=data;
+      this.expences=data;
       for(var i=0;i<this.incomes.length;i++){
         var dateString=this.incomes[i].date;
         let incomeDate = new Date(dateString); 
           if((incomeDate.getTime()< new Date(this.lowerdate).getTime())||(incomeDate.getTime()> new Date(this.higherdate).getTime())){
             this.incomes.splice(i,1);
-            i--;
-          }  
-      }
-      
-      //yearwise expence fetching
-      for(var i=0;i<this.expences.length;i++){
-        var dateString=this.expences[i].date;
-        let expenceDate = new Date(dateString); 
-            if((expenceDate.getTime()< new Date(this.lowerdate).getTime())||(expenceDate.getTime()> new Date(this.higherdate).getTime())){
             this.expences.splice(i,1);
             i--;
-          }
+          }  
       }
       this.incomes.forEach(element => {        
         this.totalincome=this.totalincome+element.amount;
@@ -219,17 +223,61 @@ export class AllaccountsComponent implements OnInit {
                   this.consolidatedincomes.set(category, (Number(this.consolidatedincomes.get(category)) || 0) + Number(amount));                  
                   resolve();                
             }); 
-      }      
-      //cumiative expence category wise
-      for(const {category, amount} of this.expences) {
-            await new Promise<void>(resolve => {                
-                this.consolidatedexpences.set(category, (Number(this.consolidatedexpences.get(category)) || 0) + Number(amount));                  
-                resolve();                
-             }); 
-      }    
-    
+      }  
     }); 
   }
+  // getIncomesAndExpencesOld(){ 
+  //   this.incomes=[]   ;
+  //   this.expences=[];
+  //   this.displayincomes=[];
+  //   this.displayexpences=[];
+  //   this.consolidatedincomes.clear();
+  //   this.consolidatedexpences.clear();
+  //   this.totalincome=0;
+  //   this.totalexpence=0;
+  //   this.netincome=0;
+  //   this.email=localStorage.getItem("uEmail");   
+  //   this.api.getAllIncomeAndExpences(this.email).subscribe(async (data:any)=>{     
+  //     this.incomes=data[0].incomes;
+  //     this.expences=data[0].expences; 
+  //     for(var i=0;i<this.incomes.length;i++){
+  //       var dateString=this.incomes[i].date;
+  //       let incomeDate = new Date(dateString); 
+  //         if((incomeDate.getTime()< new Date(this.lowerdate).getTime())||(incomeDate.getTime()> new Date(this.higherdate).getTime())){
+  //           this.incomes.splice(i,1);
+  //           i--;
+  //         }  
+  //     }
+      
+  //     //yearwise expence fetching
+  //     for(var i=0;i<this.expences.length;i++){
+  //       var dateString=this.expences[i].date;
+  //       let expenceDate = new Date(dateString); 
+  //           if((expenceDate.getTime()< new Date(this.lowerdate).getTime())||(expenceDate.getTime()> new Date(this.higherdate).getTime())){
+  //           this.expences.splice(i,1);
+  //           i--;
+  //         }
+  //     }
+  //     this.incomes.forEach(element => {        
+  //       this.totalincome=this.totalincome+element.amount;
+  //     });
+  //     //for display categorywise in front end
+  //     for(const {category, amount} of this.incomes) {       
+  //             await new Promise<void>(resolve => {                
+  //                 this.consolidatedincomes.set(category, (Number(this.consolidatedincomes.get(category)) || 0) + Number(amount));                  
+  //                 resolve();                
+  //           }); 
+  //     }      
+  //     //cumiative expence category wise
+  //     for(const {category, amount} of this.expences) {
+  //           await new Promise<void>(resolve => {                
+  //               this.consolidatedexpences.set(category, (Number(this.consolidatedexpences.get(category)) || 0) + Number(amount));                  
+  //               resolve();                
+  //            }); 
+  //     }    
+    
+  //   }); 
+  // }
   setasCustomer(){   
     this.sharedapi.setCustomerOrSupplier("Customer");
   }

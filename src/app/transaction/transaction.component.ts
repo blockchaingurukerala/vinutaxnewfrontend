@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import {Router} from '@angular/router';
 import {SharedService} from '../shared.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 class Payment{
-  id: number;
+  id: string;
   date: string;
   paidin: number;
   paidout: number;
@@ -48,12 +47,12 @@ export class TransactionComponent implements OnInit {
         this.incomecategories.push(element);
       });  
     }); 
-    this.api.getExpenceCategories().subscribe((data:any)=>{        
-      data.forEach(element => {
-        this.categorynames.push(element);
-        this.expencecategories.push(element);
-      });  
-    }); 
+    // this.api.getExpenceCategories().subscribe((data:any)=>{        
+    //   data.forEach(element => {
+    //     this.categorynames.push(element);
+    //     this.expencecategories.push(element);
+    //   });  
+    // }); 
     this.payments.push(new Payment());
     this.payments[0].date=this.today;
     
@@ -81,39 +80,31 @@ export class TransactionComponent implements OnInit {
   }
   ngOnInit(): void {
   }
-  selectedProductCategory(c,i:number){
+  selectedProductCategory(c,i:number){    
     this.payments[i].category=c;    
-    this.displaycategorynames[i]=false;  
-    if(this.payments[i].paidin) {
-      let refund = this.expencecategories.filter(x => x.category.toUpperCase() === c.toUpperCase())[0];
-      if(refund){
-        window.alert("This is Supplier REFUND");
-      }
-    } 
-    else if(this.payments[i].paidout) {
-      let refund = this.incomecategories.filter(x => x.category.toUpperCase() === c.toUpperCase())[0];
-      if(refund){
-        window.alert("This is Customer REFUND");
-      } 
-    } 
+    this.displaycategorynames[i]=false; 
   }
   addNewCategory(i:number){
-    if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
-      this.api.insertNewCategory(this.payments[i].category).subscribe((data:any)=>{       
-        window.alert(data.msg);   
-        this.addnewcategoryenable[i]=false;       
-       });
-    }
-    else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
-      this.api.insertNewExpenceCategory(this.payments[i].category).subscribe((data:any)=>{       
-        window.alert(data.msg);   
-        this.addnewcategoryenable[i]=false;        
-       });
-    }
-    else{
-      window.alert("Error try again later..");
-      this.router.navigate(['/report']); 
-    }
+    // if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
+    //   this.api.insertNewCategory(this.payments[i].category).subscribe((data:any)=>{       
+    //     window.alert(data.msg);   
+    //     this.addnewcategoryenable[i]=false;       
+    //    });
+    // }
+    // else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
+    //   this.api.insertNewExpenceCategory(this.payments[i].category).subscribe((data:any)=>{       
+    //     window.alert(data.msg);   
+    //     this.addnewcategoryenable[i]=false;        
+    //    });
+    // }
+    // else{
+    //   window.alert("Error try again later..");
+    //   this.router.navigate(['/report']); 
+    // }
+    this.api.insertNewCategory(this.payments[i].category).subscribe((data:any)=>{       
+      window.alert(data.msg);   
+      this.addnewcategoryenable[i]=false;       
+     });
   }
   onPressKeyboardCategory(searchValue: string,j:number){   
     this.displaycategorynames[j]=true;    
@@ -147,82 +138,128 @@ export class TransactionComponent implements OnInit {
    }
    savePayment(i:number){
     this.email=localStorage.getItem("uEmail");
+    if((!this.payments[i].paidin)&&(!this.payments[i].paidout)) {
+      window.alert("Enter Amount");
+      return;
+    }
+    if(!this.payments[i].category){
+      window.alert("Enter Category");
+      return;
+    }
      //update in income table
-    if(this.payments[i].paidin){
-      this.payments[i].amount=this.payments[i].paidin;
-      let refund = this.expencecategories.filter(x => x.category.toUpperCase() === this.payments[i].category.toUpperCase())[0];
-      if(refund){
-        window.alert("This is Supplier REFUND");
-        this.payments[i].amount=-1*this.payments[i].paidout;
-        this.api.getExpenceID(this.email).subscribe((data:any)=>{
-          var expenceid=parseInt(data.len); 
-          this.payments[i].id=expenceid;
-          this.api.updateExpences(this.email,this.payments[i]).subscribe((data:any)=>{
-            if(data.msg=="Updated"){
-              window.alert("Saved Successfully");
-              this.router.navigate(['/report']);
-            }
-            else{
-              window.alert("Please Try after some time");
-            }  
-          });
-        });
-      } 
-      else{
-        this.api.getIncomeID(this.email).subscribe((data:any)=>{
-          var incomeid=parseInt(data.len); 
-          this.payments[i].id=incomeid;
-          this.api.updateIncomes(this.email,this.payments[i]).subscribe((data:any)=>{
-            if(data.msg=="Updated"){
-              window.alert("Saved Successfully");
-              this.router.navigate(['/report']);
-            }
-            else{
-              window.alert("Please Try after some time");
-            }  
-          });
+     this.api.createNextCashAccountNumber(this.email).subscribe((data:any)=>{
+      this.payments[i].id=data.msg;
+
+      if(this.payments[i].paidin){
+        this.payments[i].amount=-1*this.payments[i].paidin;
+        this.api.addCashAccount(this.email,this.payments[i]).subscribe((data:any)=>{
+          if(data.msg=="Successfully Saved"){
+            window.alert("Saved Successfully");
+            this.router.navigate(['/report']);
+          }
+          else{
+            window.alert("Please Try after some time");
+          }  
         });
       }
-
+      else if(this.payments[i].paidout){
+        this.payments[i].amount=this.payments[i].paidout;
+        this.api.addCashAccount(this.email,this.payments[i]).subscribe((data:any)=>{
+          if(data.msg=="Successfully Saved"){
+            window.alert("Saved Successfully");
+            this.router.navigate(['/report']);
+          }
+          else{
+            window.alert("Please Try after some time");
+          }  
+        });
+      }
+      
+     });
     }
-    //update in expence table
-    if(this.payments[i].paidout){
-      this.payments[i].amount=this.payments[i].paidout;
-      let refund = this.incomecategories.filter(x => x.category.toUpperCase() === this.payments[i].category.toUpperCase())[0];
-      if(refund){
-        //window.alert("This is Customer REFUND");
-        this.payments[i].amount=-1*this.payments[i].paidout;
-        this.api.getIncomeID(this.email).subscribe((data:any)=>{
-          var incomeid=parseInt(data.len); 
-          this.payments[i].id=incomeid;
-          this.api.updateIncomes(this.email,this.payments[i]).subscribe((data:any)=>{
-            if(data.msg=="Updated"){
-              window.alert("Saved Successfully");
-              this.router.navigate(['/report']);
-            }
-            else{
-              window.alert("Please Try after some time");
-            }  
-          });
-        });
-      } 
-      else{
-        this.api.getExpenceID(this.email).subscribe((data:any)=>{
-          var expenceid=parseInt(data.len); 
-          this.payments[i].id=expenceid;
-          this.api.updateExpences(this.email,this.payments[i]).subscribe((data:any)=>{
-            if(data.msg=="Updated"){
-              window.alert("Saved Successfully");
-              this.router.navigate(['/report']);
-            }
-            else{
-              window.alert("Please Try after some time");
-            }  
-          });
-        });
-      }     
-    }   
-   }
+   
+   
+
+  //  savePaymentOld(i:number){
+  //   this.email=localStorage.getItem("uEmail");
+  //    //update in income table
+  //   if(this.payments[i].paidin){
+  //     this.payments[i].amount=this.payments[i].paidin;
+  //     let refund = this.expencecategories.filter(x => x.category.toUpperCase() === this.payments[i].category.toUpperCase())[0];
+  //     if(refund){
+  //       window.alert("This is Supplier REFUND");
+  //       this.payments[i].amount=-1*this.payments[i].paidout;
+  //       this.api.getExpenceID(this.email).subscribe((data:any)=>{
+  //         var expenceid=parseInt(data.len); 
+  //         this.payments[i].id=expenceid;
+  //         this.api.updateExpences(this.email,this.payments[i]).subscribe((data:any)=>{
+  //           if(data.msg=="Updated"){
+  //             window.alert("Saved Successfully");
+  //             this.router.navigate(['/report']);
+  //           }
+  //           else{
+  //             window.alert("Please Try after some time");
+  //           }  
+  //         });
+  //       });
+  //     } 
+  //     else{
+  //       this.api.getIncomeID(this.email).subscribe((data:any)=>{
+  //         var incomeid=parseInt(data.len); 
+  //         this.payments[i].id=incomeid;
+  //         this.api.updateIncomes(this.email,this.payments[i]).subscribe((data:any)=>{
+  //           if(data.msg=="Updated"){
+  //             window.alert("Saved Successfully");
+  //             this.router.navigate(['/report']);
+  //           }
+  //           else{
+  //             window.alert("Please Try after some time");
+  //           }  
+  //         });
+  //       });
+  //     }
+
+  //   }
+  //   //update in expence table
+  //   if(this.payments[i].paidout){
+  //     this.payments[i].amount=this.payments[i].paidout;
+  //     let refund = this.incomecategories.filter(x => x.category.toUpperCase() === this.payments[i].category.toUpperCase())[0];
+  //     if(refund){
+  //       //window.alert("This is Customer REFUND");
+  //       this.payments[i].amount=-1*this.payments[i].paidout;
+  //       this.api.getIncomeID(this.email).subscribe((data:any)=>{
+  //         var incomeid=parseInt(data.len); 
+  //         this.payments[i].id=incomeid;
+  //         this.api.updateIncomes(this.email,this.payments[i]).subscribe((data:any)=>{
+  //           if(data.msg=="Updated"){
+  //             window.alert("Saved Successfully");
+  //             this.router.navigate(['/report']);
+  //           }
+  //           else{
+  //             window.alert("Please Try after some time");
+  //           }  
+  //         });
+  //       });
+  //     } 
+  //     else{
+  //       this.api.getExpenceID(this.email).subscribe((data:any)=>{
+  //         var expenceid=parseInt(data.len); 
+  //         this.payments[i].id=expenceid;
+  //         this.api.updateExpences(this.email,this.payments[i]).subscribe((data:any)=>{
+  //           if(data.msg=="Updated"){
+  //             window.alert("Saved Successfully");
+  //             this.router.navigate(['/report']);
+  //           }
+  //           else{
+  //             window.alert("Please Try after some time");
+  //           }  
+  //         });
+  //       });
+  //     }     
+  //   }   
+  //  }
+
+
    matchSelected(i){
      var p=0;
      for(p=0;p<this.matchactive.length;p++){

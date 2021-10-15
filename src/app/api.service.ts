@@ -220,4 +220,14 @@ allocateToCustomerInvoice(whose:string,id:string,date:string,totalamount:number,
 allocateToSupplierInvoice(whose:string,id:string,date:string,totalamount:number,allocatedAmount:number){
   return this.http.post("http://localhost:3000/allocateToSupplierInvoice",{"whose":whose,"id":id,"date":date,"totalamount":totalamount,"allocatedAmount":allocatedAmount});
 }
+createNextCashAccountNumber(whose:string){
+  return this.http.post("http://localhost:3000/createNextCashAccountNumber",{"whose":whose});
+}
+addCashAccount(whose:string,payment:any){
+  return this.http.post("http://localhost:3000/addCashAccount",{"whose":whose,"payment":payment});
+}
+getAllCashAccounts(email:string){
+  return this.http.post("http://localhost:3000/getAllCashAccounts",{"email":email});
+ }
+
 }
