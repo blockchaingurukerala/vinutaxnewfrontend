@@ -53,10 +53,10 @@ export class DashboardComponent implements OnInit {
         this.api.checkCategoryAvailable(this.incomes[0].category).subscribe((data:any)=>{
           if(data.msg=="Available"){
             window.alert("New Category Found");   
-          this.api.insertNewCategory(this.incomes[0].category).subscribe((data:any)=>{
-             console.log(data.msg);
-             window.alert(data.msg);          
-            });
+          // this.api.insertNewCategory(this.incomes[0].category).subscribe((data:any)=>{
+          //    console.log(data.msg);
+          //    window.alert(data.msg);          
+          //   });
             this.options.push(this.incomes[0].category);
           }
           else{       
@@ -100,10 +100,10 @@ export class DashboardComponent implements OnInit {
       this.api.checkCategoryAvailable(this.incomes[i].category).subscribe((data:any)=>{
         if(data.msg=="Available"){
           window.alert("New Category Found");   
-        this.api.insertNewCategory(this.incomes[i].category).subscribe((data:any)=>{
-           console.log(data.msg);
-           window.alert(data.msg);          
-          });
+        // this.api.insertNewCategory(this.incomes[i].category).subscribe((data:any)=>{
+        //    console.log(data.msg);
+        //    window.alert(data.msg);          
+        //   });
           this.options.push(this.incomes[i].category);
         }
         else{       

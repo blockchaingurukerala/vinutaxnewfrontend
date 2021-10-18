@@ -21,7 +21,11 @@ class Payment{
 })
 
 export class TransactionComponent implements OnInit {
+  categorytitle="";
+  // categorytitles=[];
+  categorynamesoriginal=[];
   categorynames=[];
+  categorynamefront=[];
   incomecategories=[];
   expencecategories=[];
   displaycategorynames=[];
@@ -38,13 +42,18 @@ export class TransactionComponent implements OnInit {
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     // var id=this.sharedservice.getidforcustomeredit();
     this.categorynames=[];
+    //this.categorynamesoriginal=[];
     if(localStorage.getItem("loggedIn")!="true"){
       this.router.navigate(['']);
     }
     this.api.getCategories().subscribe((data:any)=>{        
       data.forEach(element => {
         this.categorynames.push(element);
+        this.categorynamesoriginal.push(element)
         this.incomecategories.push(element);
+        // if(this.categorytitles.indexOf(element.titlecategory)==-1){
+        //   this.categorytitles.push(element.titlecategory);
+        // }        
       });  
     }); 
     // this.api.getExpenceCategories().subscribe((data:any)=>{        
@@ -85,36 +94,61 @@ export class TransactionComponent implements OnInit {
     this.displaycategorynames[i]=false; 
   }
   addNewCategory(i:number){
-    // if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
-    //   this.api.insertNewCategory(this.payments[i].category).subscribe((data:any)=>{       
-    //     window.alert(data.msg);   
-    //     this.addnewcategoryenable[i]=false;       
-    //    });
-    // }
-    // else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
-    //   this.api.insertNewExpenceCategory(this.payments[i].category).subscribe((data:any)=>{       
-    //     window.alert(data.msg);   
-    //     this.addnewcategoryenable[i]=false;        
-    //    });
-    // }
-    // else{
-    //   window.alert("Error try again later..");
-    //   this.router.navigate(['/report']); 
-    // }
-    this.api.insertNewCategory(this.payments[i].category).subscribe((data:any)=>{       
+    if(!this.categorytitle){
+      window.alert("Select Category Title");
+      return;
+    }
+    if(!this.payments[i].category){
+      window.alert("Category should not be empty");
+      return;
+    }    
+    this.api.insertNewCategory(this.categorytitle,this.payments[i].category).subscribe((data:any)=>{       
       window.alert(data.msg);   
       this.addnewcategoryenable[i]=false;       
      });
   }
-  onPressKeyboardCategory(searchValue: string,j:number){   
+  onPressKeyboardCategory(searchValue: string,j:number){  
+  
+    this.categorynamefront=this.categorynames ;
+    console.log("original")
+    console.log(this.categorynamesoriginal);
+    // console.log("temp")
+    // console.log(this.categorynamefront[1].category.length);
+
+    // console.log("checking beg"+this.categorynames.length);
+    // for(p=0;p<this.categorynames.length;p++){
+    //   console.log("chec");
+    //   this.categorynamefront.push(this.categorynames[p]);
+    //   for(r=0;r<this.categorynames[p].category.length;r++){
+    //     this.categorynamefront[p].category.push(this.categorynames[p].category[r]);
+    //   }     
+    // }
+    
+    // console.log("reinitialized length"+ this.categorynamefront.length);
+    // console.log("reinitialized category sales length"+ this.categorynamefront[0].category.length);
     this.displaycategorynames[j]=true;    
     this.addnewcategoryenable[j]=false;
     var flag=false;
-    var i=0;    
-    for(i=0;i<this.categorynames.length;i++){      
-      if(this.categorynames[i].category.toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
-        flag=true;break;
-      }
+    var i=0;
+    var q=0;   
+   
+    // console.log("displaying all headings"+this.categorynames.length) ;
+    for(i=0;i<this.categorynamefront.length;i++){  
+      //console.log("displaying all categories"+this.categorynames[i].category.length) ;
+      for(q=0;q<this.categorynamefront[i].category.length;q++) {
+         //console.log("i="+i+",j="+q+",value="+this.categorynames[i].category[q])
+        if(this.categorynamefront[i].category[q].toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
+          flag=true;
+          break;
+        }
+        else{
+          //var temp=this.categorynamefront[i].category[q];
+          this.categorynamefront[i].category.splice(q,1);
+         // this.categorynamesoriginal[i].category.push(temp);
+          q--;
+          //console.log("length="+this.categorynamefront[i].category.length)          
+        }
+      }        
     }
     if(flag==false){       
       this.addnewcategoryenable[j]=true;      
@@ -459,34 +493,34 @@ export class TransactionComponent implements OnInit {
      var whose=localStorage.getItem("uEmail"); 
      if(this.payments[i].paidin){    
        this.customerinvoices.forEach(element => {
-         console.log(element.allocatedAmount)
+         
         if(element.allocatedAmount>0){          
           this.api.allocateToCustomerInvoice(whose,element.id,date,element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
-              console.log(data)
+             // console.log(data)
           });       
         }
        });
        this.suppliernegativeinvoices.forEach(element => {       
        if(element.allocatedAmount>0){          
          this.api.allocateToSupplierInvoice(whose,element.id,date,-1*element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
-             console.log(data)
+            // console.log(data)
          });       
        }
       });
      }
      else if(this.payments[i].paidout){
       this.customerinvoices.forEach(element => {
-        console.log(element.allocatedAmount)
+       // console.log(element.allocatedAmount)
        if(element.allocatedAmount>0){          
          this.api.allocateToSupplierInvoice(whose,element.id,date,element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
-             console.log(data)
+             //console.log(data)
          });       
        }
       });
       this.suppliernegativeinvoices.forEach(element => {       
       if(element.allocatedAmount>0){          
         this.api.allocateToCustomerInvoice(whose,element.id,date,-1*element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
-            console.log(data)
+           // console.log(data)
         });       
       }
      });    

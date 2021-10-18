@@ -388,16 +388,16 @@ export class EditinvoicecustomerComponent implements OnInit {
   }
   addNewCategory(i:number){
     if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
-      this.api.insertNewCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
-        window.alert(data.msg);   
-        this.addnewcategoryenable[i]=false;       
-       });
+      // this.api.insertNewCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
+      //   window.alert(data.msg);   
+      //   this.addnewcategoryenable[i]=false;       
+      //  });
     }
     else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
-      this.api.insertNewExpenceCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
-        window.alert(data.msg);   
-        this.addnewcategoryenable[i]=false;        
-       });
+      // this.api.insertNewExpenceCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
+      //   window.alert(data.msg);   
+      //   this.addnewcategoryenable[i]=false;        
+      //  });
     }
     else{
       window.alert("Error try again later..");

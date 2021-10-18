@@ -421,16 +421,16 @@ export class CustomerInvoiceComponent implements OnInit {
   }
   addNewCategory(i:number){
     if(this.sharedapi.getCustomerOrSupplier()=="Customer"){
-      this.api.insertNewCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
-        window.alert(data.msg);   
-        this.addnewcategoryenable[i]=false;       
-       });
+      // this.api.insertNewCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
+      //   window.alert(data.msg);   
+      //   this.addnewcategoryenable[i]=false;       
+      //  });
     }
     else if(this.sharedapi.getCustomerOrSupplier()=="Supplier"){
-      this.api.insertNewExpenceCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
-        window.alert(data.msg);   
-        this.addnewcategoryenable[i]=false;        
-       });
+      // this.api.insertNewExpenceCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
+      //   window.alert(data.msg);   
+      //   this.addnewcategoryenable[i]=false;        
+      //  });
     }
     else{
       window.alert("Error try again later..");
