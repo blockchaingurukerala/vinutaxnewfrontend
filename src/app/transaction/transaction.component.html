@@ -97,13 +97,13 @@
                                 <table class="table ">
                                     <tbody>
 
-                                         <tr *ngFor="let title of categorynamefront| filter : payment.category" >
+                                         <tr *ngFor="let title of categorynamefront" >
                                             <td> <b>{{title.titlecategory}}</b></td>
                                             <td>
                                                 <table class="table table-hover">
                                                     <tbody>
                                                         <tr *ngFor="let c of title.category " (click)="selectedProductCategory(c,i)">
-                                                            <!-- <td> <b>{{title.titlecategory}}</b></td> -->
+                                                            
                                                             <td> {{c}}</td>         
                                                         </tr>
                                                     </tbody>

@@ -107,52 +107,33 @@ export class TransactionComponent implements OnInit {
       this.addnewcategoryenable[i]=false;       
      });
   }
-  onPressKeyboardCategory(searchValue: string,j:number){  
-  
-    this.categorynamefront=this.categorynames ;
-    console.log("original")
-    console.log(this.categorynamesoriginal);
-    // console.log("temp")
-    // console.log(this.categorynamefront[1].category.length);
-
-    // console.log("checking beg"+this.categorynames.length);
-    // for(p=0;p<this.categorynames.length;p++){
-    //   console.log("chec");
-    //   this.categorynamefront.push(this.categorynames[p]);
-    //   for(r=0;r<this.categorynames[p].category.length;r++){
-    //     this.categorynamefront[p].category.push(this.categorynames[p].category[r]);
-    //   }     
-    // }
-    
-    // console.log("reinitialized length"+ this.categorynamefront.length);
-    // console.log("reinitialized category sales length"+ this.categorynamefront[0].category.length);
+  onPressKeyboardCategory(searchValue: string,j:number){     
+    this.categorynamefront=[];
+    var flag=false;
     this.displaycategorynames[j]=true;    
     this.addnewcategoryenable[j]=false;
-    var flag=false;
-    var i=0;
-    var q=0;   
-   
-    // console.log("displaying all headings"+this.categorynames.length) ;
-    for(i=0;i<this.categorynamefront.length;i++){  
-      //console.log("displaying all categories"+this.categorynames[i].category.length) ;
-      for(q=0;q<this.categorynamefront[i].category.length;q++) {
-         //console.log("i="+i+",j="+q+",value="+this.categorynames[i].category[q])
-        if(this.categorynamefront[i].category[q].toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
-          flag=true;
-          break;
+    this.api.getCategories().subscribe( (data:any)=>{  
+      var len=data.length; 
+      var op=0;
+      for(var o=0;o<len;o++){  
+        this.categorynamefront.push({"titlecategory":data[op].titlecategory,"category":[]});
+        for(var q=0;q<data[op].category.length;q++) {
+          if(data[op].category[q].toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
+            this.categorynamefront[o].category.push(data[op].category[q]);           
+            flag=true;           
+          }
         }
-        else{
-          //var temp=this.categorynamefront[i].category[q];
-          this.categorynamefront[i].category.splice(q,1);
-         // this.categorynamesoriginal[i].category.push(temp);
-          q--;
-          //console.log("length="+this.categorynamefront[i].category.length)          
+        if(this.categorynamefront[o].category.length<=0){
+            this.categorynamefront.splice(o,1);
+              len--;  
+              o--;
         }
-      }        
-    }
-    if(flag==false){       
-      this.addnewcategoryenable[j]=true;      
-    }   
+        op++;
+      }   
+      if(flag==false){       
+          this.addnewcategoryenable[j]=true;      
+      } 
+    });    
   }
   onPressKeyboardPaidOut(paidOut: string,j:number){   
    if(this.payments[j].paidin) {

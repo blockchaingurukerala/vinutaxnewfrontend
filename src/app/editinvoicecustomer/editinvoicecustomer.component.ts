@@ -35,8 +35,9 @@ class Invoice{
   styleUrls: ['./editinvoicecustomer.component.css']
 })
 export class EditinvoicecustomerComponent implements OnInit {
-
+  categorytitle="";
   invoice = new Invoice(); 
+  categorynamefront=[];
   name="";
   i=0;
   status="";
@@ -271,18 +272,44 @@ export class EditinvoicecustomerComponent implements OnInit {
   ngOnInit(): void {
   }
   onPressKeyboardCategory(searchValue: string,j:number){   
+    // this.displaycategorynames[j]=true;    
+    // this.addnewcategoryenable[j]=false;
+    // var flag=false;
+    // var i=0;    
+    // for(i=0;i<this.categorynames.length;i++){      
+    //   if(this.categorynames[i].category.toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
+    //     flag=true;break;
+    //   }
+    // }
+    // if(flag==false){       
+    //   this.addnewcategoryenable[j]=true;      
+    // }   
+    this.categorynamefront=[];
+    var flag=false;
     this.displaycategorynames[j]=true;    
     this.addnewcategoryenable[j]=false;
-    var flag=false;
-    var i=0;    
-    for(i=0;i<this.categorynames.length;i++){      
-      if(this.categorynames[i].category.toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
-        flag=true;break;
-      }
-    }
-    if(flag==false){       
-      this.addnewcategoryenable[j]=true;      
-    }   
+    this.api.getCategories().subscribe( (data:any)=>{  
+      var len=data.length; 
+      var op=0;
+      for(var o=0;o<len;o++){  
+        this.categorynamefront.push({"titlecategory":data[op].titlecategory,"category":[]});
+        for(var q=0;q<data[op].category.length;q++) {
+          if(data[op].category[q].toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
+            this.categorynamefront[o].category.push(data[op].category[q]);           
+            flag=true;           
+          }
+        }
+        if(this.categorynamefront[o].category.length<=0){
+            this.categorynamefront.splice(o,1);
+              len--;  
+              o--;
+        }
+        op++;
+      }   
+      if(flag==false){       
+          this.addnewcategoryenable[j]=true;      
+      } 
+    });    
   }
   selectedProductCategory(c,i:number){
     this.invoice.products[i].category=c;    
@@ -387,22 +414,34 @@ export class EditinvoicecustomerComponent implements OnInit {
     }
   }
   addNewCategory(i:number){
-    if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
-      // this.api.insertNewCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
-      //   window.alert(data.msg);   
-      //   this.addnewcategoryenable[i]=false;       
-      //  });
+    // if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
+    //   // this.api.insertNewCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
+    //   //   window.alert(data.msg);   
+    //   //   this.addnewcategoryenable[i]=false;       
+    //   //  });
+    // }
+    // else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
+    //   // this.api.insertNewExpenceCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
+    //   //   window.alert(data.msg);   
+    //   //   this.addnewcategoryenable[i]=false;        
+    //   //  });
+    // }
+    // else{
+    //   window.alert("Error try again later..");
+    //   this.router.navigate(['/report']); 
+    // }
+    if(!this.categorytitle){
+      window.alert("Select Category Title");
+      return;
     }
-    else if(this.sharedservice.getCustomerOrSupplier()=="Supplier"){
-      // this.api.insertNewExpenceCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
-      //   window.alert(data.msg);   
-      //   this.addnewcategoryenable[i]=false;        
-      //  });
-    }
-    else{
-      window.alert("Error try again later..");
-      this.router.navigate(['/report']); 
-    }
+    if(!this.invoice.products[i].category){
+      window.alert("Category should not be empty");
+      return;
+    }    
+    this.api.insertNewCategory(this.categorytitle,this.invoice.products[i].category).subscribe((data:any)=>{       
+      window.alert(data.msg);   
+      this.addnewcategoryenable[i]=false;       
+     });
     
   }
   setasCustomer(){   

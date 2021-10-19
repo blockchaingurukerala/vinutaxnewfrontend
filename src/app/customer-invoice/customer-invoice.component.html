@@ -151,7 +151,7 @@
                                                     [(ngModel)]="product.category"  (input)="onPressKeyboardCategory($event.target.value,i)" required>   
                                                     
                                                     <div *ngIf="displaycategorynames[i]">
-                                                        <table class="table table-hover">
+                                                        <!-- <table class="table table-hover">
                                                             <tbody>
                                                                 <tr *ngFor="let c of categorynames | filter : product.category" (click)="selectedProductCategory(c.category,i)">
                                                                     <td> {{c.category}}</td>                                                                                                                                       
@@ -163,7 +163,50 @@
                                                                  <button type="button" class="btn btn-info" (click)="addNewCategory(i)">  <i class="glyphicon glyphicon-user">ADD THIS CATEGORY</i></button>
                                                                 </td>                                                        
                                                              </tr>
-                                                        </table>                                              
+                                                        </table>   
+                                                                                                -->
+                                                        <table class="table ">
+                                                            <tbody>                        
+                                                                    <tr *ngFor="let title of categorynamefront" >
+                                                                    <td> <b>{{title.titlecategory}}</b></td>
+                                                                    <td>
+                                                                        <table class="table table-hover">
+                                                                            <tbody>
+                                                                                <tr *ngFor="let c of title.category " (click)="selectedProductCategory(c,i)">
+                                                                                    
+                                                                                    <td> {{c}}</td>         
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>           
+                                                            </tbody>
+                        
+                                                            <tr *ngIf="addnewcategoryenable[i]">
+                                                                <td>
+                                                                    <select class="form-control" name="selectcategorytt" id="" [(ngModel)]="categorytitle">                                                <option value="Sales">Sales</option>                                                
+                                                                        <option value="Cost of sales">Cost of sales </option>
+                                                                        <option value="Other business income">Other business income </option>
+                                                                        <option value="Expenses">Expenses</option>
+                                                                        <option value="Plant & machinery">Plant & machinery </option>
+                                                                        <option value="Computer equipment">Computer equipment </option>
+                                                                        <option value="Motor vehicles">Motor vehicles </option>
+                                                                        <option value="Fixtures & fittings">Fixtures & fittings </option>
+                                                                        <option value="Land & buildings">Land & buildings </option>
+                                                                        <option value="Intangible Fixed Assets">Intangible Fixed Assets </option>
+                                                                        <option value="Customers">Customers</option>
+                                                                        <option value="Current Assets">Current Assets </option>
+                                                                        <option value="Suppliers">Suppliers</option>
+                                                                        <option value="Bank">Bank</option>
+                                                                        <option value="Liabilities">Liabilities </option>
+                                                                        <option value="Capital account">Capital account</option>                                             
+                                                                    </select>
+                                                                </td>
+                                                                <td align="center">
+                                                                    <button type="button" class="btn btn-info" (click)="addNewCategory(i)">ADD </button>
+                                                                </td>                                                        
+                                                                </tr>
+                                                        </table>  
                                                     </div> 
                                                     
                                                </td>
