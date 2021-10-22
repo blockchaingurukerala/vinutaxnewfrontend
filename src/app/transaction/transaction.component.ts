@@ -151,6 +151,8 @@ export class TransactionComponent implements OnInit {
     } 
     this.outby[j]=parseFloat(paidOut)
    }
+
+
    savePayment(i:number){
     this.email=localStorage.getItem("uEmail");
     if((!this.payments[i].paidin)&&(!this.payments[i].paidout)) {
@@ -470,11 +472,12 @@ export class TransactionComponent implements OnInit {
         this.savebtndisabled[i]=true;
     }    
    }
+
+
    allocateAmount(date,i){    
      var whose=localStorage.getItem("uEmail"); 
      if(this.payments[i].paidin){    
-       this.customerinvoices.forEach(element => {
-         
+       this.customerinvoices.forEach(element => {         
         if(element.allocatedAmount>0){          
           this.api.allocateToCustomerInvoice(whose,element.id,date,element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
              // console.log(data)
@@ -509,6 +512,7 @@ export class TransactionComponent implements OnInit {
     window.alert("Saved Successfully");
    this.removePayment(i);
    }
+
    createSelected(i){      
     this.matchactive[i]=false;
    }
