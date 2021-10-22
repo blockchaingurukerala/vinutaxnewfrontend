@@ -292,7 +292,7 @@ export class TransactionComponent implements OnInit {
        this.suppliernegativeinvoices=[];
       this.api.getAllCustomerInvoioceUnallocated(this.email).subscribe((data:any)=>{        
        data.forEach(element => {
-         var balanceamount=element.totalamount-element.allocatedAmount;
+         var balanceamount=-1*element.totalamount-element.allocatedAmount;
          if(element.customerid==""){
            this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":false,"checked":false,"balanceamount":balanceamount});
          }
@@ -333,7 +333,7 @@ export class TransactionComponent implements OnInit {
      }); 
      this.api.getAllCustomerNegativeInvoioceUnallocated(this.email).subscribe((data:any)=>{        
        data.forEach(element => {
-        var balanceamount=-1*element.totalamount-element.allocatedAmount;
+        var balanceamount=element.totalamount-element.allocatedAmount;
          if(element.customerid==""){
            this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":false,"checked":false,"balanceamount":balanceamount});
          }
@@ -349,6 +349,7 @@ export class TransactionComponent implements OnInit {
    }
 
    checkValuePositive(k,i){   
+    
      var recievedamount=0;
      var totalallocated=0;
      if(this.payments[i].paidin){
@@ -412,6 +413,7 @@ export class TransactionComponent implements OnInit {
     }
    }
    checkValueNegative(k,i){   
+    
       var recievedamount=0;
       var totalallocated=0;
 
@@ -472,8 +474,7 @@ export class TransactionComponent implements OnInit {
         this.savebtndisabled[i]=true;
     }    
    }
-
-
+   
    allocateAmount(date,i){    
      var whose=localStorage.getItem("uEmail"); 
      if(this.payments[i].paidin){    
@@ -496,14 +497,14 @@ export class TransactionComponent implements OnInit {
       this.customerinvoices.forEach(element => {
        // console.log(element.allocatedAmount)
        if(element.allocatedAmount>0){          
-         this.api.allocateToSupplierInvoice(whose,element.id,date,element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
+         this.api.allocateToSupplierInvoice(whose,element.id,date,element.totalamount,-1*element.allocatedAmount).subscribe((data:any)=>{
              //console.log(data)
          });       
        }
       });
       this.suppliernegativeinvoices.forEach(element => {       
       if(element.allocatedAmount>0){          
-        this.api.allocateToCustomerInvoice(whose,element.id,date,-1*element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
+        this.api.allocateToCustomerInvoice(whose,element.id,date,-1*element.totalamount,-1*element.allocatedAmount).subscribe((data:any)=>{
            // console.log(data)
         });       
       }

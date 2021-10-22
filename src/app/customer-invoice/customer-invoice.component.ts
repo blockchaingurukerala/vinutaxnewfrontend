@@ -331,6 +331,7 @@ export class CustomerInvoiceComponent implements OnInit {
     var i: number,sum=0;   
     if(this.sharedapi.getCustomerOrSupplier()=="Customer"){     
         for(i=0;i<this.invoice.products.length;i++){
+          this.invoice.products[i].price=-1*this.invoice.products[i].price;
           sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
         } 
         this.api.addCustomerInvoice(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose,this.selectedcustomerid,this.invoice.customerName).subscribe((data:any)=>{
@@ -357,6 +358,7 @@ export class CustomerInvoiceComponent implements OnInit {
     var i: number,sum=0;
     if(this.sharedapi.getCustomerOrSupplier()=="Customer"){
         for(i=0;i<this.invoice.products.length;i++){
+          this.invoice.products[i].price=-1*this.invoice.products[i].price;
           sum+=this.invoice.products[i].price*this.invoice.products[i].qty;
         }  
         this.api.addCustomerInvoiceDraft(this.invoice.date,this.invoice.duedate,this.invoice.invoiceno,this.invoice.referenceno,this.invoice.products,sum,this.invoice.additionalDetails,whose,this.selectedcustomerid,this.invoice.customerName).subscribe((data:any)=>{
