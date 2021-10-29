@@ -182,7 +182,7 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
            this.invoice.invoiceno=data[0].invoiceid;
            this.invoice.referenceno=data[0].reference;
            this.invoice.additionalDetails=data[0].additionaldetails;  
-           this.totalmamount=data[0].totalamount;
+           this.totalmamount=data[0].autototalamount;
            this.invoice.allocatedAmount=data[0].allocatedAmount;
            if(this.totalmamount<0){
             this.invoice.allocatedAmount=-1*data[0].allocatedAmount;
@@ -216,7 +216,7 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
             this.invoice.invoiceno=data[0].invoiceid;
             this.invoice.referenceno=data[0].reference;
             this.invoice.additionalDetails=data[0].additionaldetails;  
-            this.totalmamount=data[0].totalamount;  
+            this.totalmamount=data[0].autototalamount;  
             for(var i=0;i<data[0].products.length;i++)  {
              this.invoice.products.push(new Product());
               this.invoice.products[i]=data[0].products[i];
@@ -244,7 +244,7 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
            this.invoice.invoiceno=data[0].invoiceid;
            this.invoice.referenceno=data[0].reference;
            this.invoice.additionalDetails=data[0].additionaldetails;  
-           this.totalmamount=data[0].totalamount;
+           this.totalmamount=data[0].autototalamount;
            this.invoice.allocatedAmount=data[0].allocatedAmount;
            if(this.totalmamount<0){
             this.invoice.allocatedAmount=-1*data[0].allocatedAmount;
@@ -278,7 +278,7 @@ export class CustomerinvoiceintermediatedisplayComponent implements OnInit {
             this.invoice.invoiceno=data[0].invoiceid;
             this.invoice.referenceno=data[0].reference;
             this.invoice.additionalDetails=data[0].additionaldetails;  
-            this.totalmamount=data[0].totalamount;  
+            this.totalmamount=data[0].autototalamount;  
             for(var i=0;i<data[0].products.length;i++)  {
              this.invoice.products.push(new Product());
               this.invoice.products[i]=data[0].products[i];
