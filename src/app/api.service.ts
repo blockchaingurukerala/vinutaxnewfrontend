@@ -229,5 +229,11 @@ addCashAccount(whose:string,payment:any){
 getAllCashAccounts(email:string){
   return this.http.post("http://localhost:3000/getAllCashAccounts",{"email":email});
  }
+ addbankstatement(date:string,amount:number,description:string,whose:string){
+  return this.http.post("http://localhost:3000/addbankstatement",{"date":date,"amount":amount,"description":description,"whose":whose});
+ }
+ getAllBankStatements(email:string){
+  return this.http.post("http://localhost:3000/getAllBankStatements",{"email":email});
+ }
 
 }

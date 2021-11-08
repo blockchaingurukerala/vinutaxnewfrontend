@@ -115,11 +115,11 @@
           <form  #addressForm="ngForm" ngNativeValidate  (ngSubmit)="updateExpence()">
             <table class="table" *ngIf="expenceclick">
               <tr>
-                <th align="center" colspan="4">CashAccount</th>                        
+                <th align="center" colspan="3">Bank Statement</th>                        
               </tr> 
               <tr>
                 <!-- <th style="text-align: center;">No</th> -->
-                <th style="text-align: center;">Category</th>
+                <!-- <th style="text-align: center;">Category</th> -->
                 <th style="text-align: center;">Date</th>
                 <th style="text-align: center;">Description</th>
                 <th style="text-align: center;">Amount</th>
@@ -127,11 +127,11 @@
                      
             <tr *ngFor="let displayexpence of displayexpences ; let i = index;">  
                 <!-- <td> {{displayincome.category}}</td>                                                    -->
-                <td><input  name="cat_{{i}}" class="form-control"  [(ngModel)]="displayexpence.category" readonly></td> 
+                <!-- <td><input  name="cat_{{i}}" class="form-control"  [(ngModel)]="displayexpence.category" readonly></td>  -->
                 <!-- <td>{{displayincome.category}}</td> -->
                 <td><input name="date_{{i}}" type="date" class="form-control"  [(ngModel)]="displayexpence.date" required [readonly]="isReadonly[i]"></td> 
                 <td><input name="desc_{{i}}" class="form-control"  [(ngModel)]="displayexpence.description" required [readonly]="isReadonly[i]"></td> 
-                <td><input name="amt_{{i}}" class="form-control"  [(ngModel)]="displayexpence.autoamount" required [readonly]="isReadonly[i]"></td> 
+                <td><input name="amt_{{i}}" class="form-control"  [(ngModel)]="displayexpence.amount" required [readonly]="isReadonly[i]"></td> 
                 <td>
                   <div class="dropdown" *ngIf="isReadonly[i]">
                     <button class="glyphicon glyphicon-option-vertical dropdown-toggle" type="button" data-toggle="dropdown"></button>

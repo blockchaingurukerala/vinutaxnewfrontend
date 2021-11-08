@@ -153,28 +153,18 @@ export class AllaccountsComponent implements OnInit {
     this.displayexpences=[];
     this.originalexpences=[];
     this.isReadonly=[]; 
-    for(var i=0;i<this.expences.length;i++){
-      var category=this.expences[i].category; 
-          this.displayexpences.push(this.expences[i]);
-          this.isReadonly.push(true);
-          this.originalexpences.push(this.expences[i]);
-    }
+    this.api.getAllBankStatements(this.email).subscribe(async (data:any)=>{   
+      console.log(data);     
+      this.expences=data;
+      for(var i=0;i<this.expences.length;i++){        
+        this.displayexpences.push(this.expences[i]);
+        this.isReadonly.push(true);
+        this.originalexpences.push(this.expences[i]);
+      }
+    });
+    
   }
-  // onExpenceClick (event, data){ 
-  //   this.incomeclick=false;
-  //   this.expenceclick=true;
-  //   this.displayexpences=[];
-  //   this.originalexpences=[];
-  //   this.isReadonly=[]; 
-  //   for(var i=0;i<this.expences.length;i++){
-  //     var category=this.expences[i].category;     
-  //       if(category==data){
-  //         this.displayexpences.push(this.expences[i]);
-  //         this.isReadonly.push(true);
-  //         this.originalexpences.push(this.expences[i]);
-  //       }  
-  //   }
-  // }
+
   onIncomeClick (event, data){ 
     this.incomeclick=true;
     this.expenceclick=false;

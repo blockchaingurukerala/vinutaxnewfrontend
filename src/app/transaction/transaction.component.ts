@@ -155,6 +155,7 @@ export class TransactionComponent implements OnInit {
 
    savePayment(i:number){
     this.email=localStorage.getItem("uEmail");
+    var amount=0;
     if((!this.payments[i].paidin)&&(!this.payments[i].paidout)) {
       window.alert("Enter Amount");
       return;
@@ -168,6 +169,7 @@ export class TransactionComponent implements OnInit {
       this.payments[i].id=data.msg;
 
       if(this.payments[i].paidin){
+        amount=this.payments[i].paidin;
         this.payments[i].amount=-1*this.payments[i].paidin;
         this.api.addCashAccount(this.email,this.payments[i]).subscribe((data:any)=>{
           if(data.msg=="Successfully Saved"){
@@ -180,6 +182,7 @@ export class TransactionComponent implements OnInit {
         });
       }
       else if(this.payments[i].paidout){
+        amount=-1*this.payments[i].paidout;
         this.payments[i].amount=this.payments[i].paidout;
         this.api.addCashAccount(this.email,this.payments[i]).subscribe((data:any)=>{
           if(data.msg=="Successfully Saved"){
@@ -191,6 +194,12 @@ export class TransactionComponent implements OnInit {
           }  
         });
       }
+
+        //adding to bankStatement
+        this.api.addbankstatement(this.payments[i].date,amount,this.payments[i].description,this.email).subscribe((data:any)=>{
+          window.alert("Saved Successfully");
+          this.removePayment(i);
+        });
       
      });
     }
@@ -296,7 +305,8 @@ export class TransactionComponent implements OnInit {
        this.suppliernegativeinvoices=[];
       this.api.getAllCustomerInvoioceUnallocated(this.email).subscribe((data:any)=>{        
        data.forEach(element => {
-         var balanceamount=element.autototalamount-element.allocatedAmount;
+         var balanceamount=element.autototalamount+element.allocatedAmount;
+        // window.alert(element.autototalamount+","+element.allocatedAmount)
          if(element.customerid==""){
            this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":false,"checked":false,"balanceamount":balanceamount,"balanceamount1":balanceamount});
          }
@@ -358,7 +368,7 @@ export class TransactionComponent implements OnInit {
 
 
    checkValuePositive(k,i){   
-    window.alert("clicked chkpositive"+this.customerinvoices[k].balanceamount)
+    //window.alert("clicked chkpositive"+this.customerinvoices[k].balanceamount)
      var recievedamount=0;
      var totalallocated=0;
      if(this.payments[i].paidin){
@@ -423,7 +433,7 @@ export class TransactionComponent implements OnInit {
    }
 
    checkValueNegative(k,i){   
-    window.alert("clicked chknegative"+this.suppliernegativeinvoices[k].balanceamount1)
+    //window.alert("clicked chknegative"+this.suppliernegativeinvoices[k].balanceamount1)
       var recievedamount=0;
       var totalallocated=0;
 
@@ -485,49 +495,113 @@ export class TransactionComponent implements OnInit {
     }    
    }
    
-   allocateAmount(date,i){    
+   async allocateAmount(date,desc,i){    
      var whose=localStorage.getItem("uEmail"); 
-
-     if(this.payments[i].paidin){    
-       this.customerinvoices.forEach(element => {         
-        if(element.allocatedAmount>0){          
-          this.api.allocateToCustomerInvoice(whose,element.id,date,element.totalamount,-1*element.allocatedAmount).subscribe((data:any)=>{
-             // console.log(data)
-          });       
-        }
-       });
-       this.suppliernegativeinvoices.forEach(element => {       
-       if(element.allocatedAmount>0){          
-         this.api.allocateToSupplierInvoice(whose,element.id,date,-1*element.totalamount,-1*element.allocatedAmount).subscribe((data:any)=>{
-            // console.log(data)
-         });       
-       }
-      });
+      var amount=0;
+     if(this.payments[i].paidin){ 
+       amount=this.payments[i].paidin;
+       for(var j=0;j<this.customerinvoices.length;j++) {
+          await new Promise<void> (resolve1 => {
+            if(this.customerinvoices[j].allocatedAmount>0){ 
+             
+            // window.alert("allocating"+element.allocatedAmount)  ;       
+              this.api.allocateToCustomerInvoice(whose,this.customerinvoices[j].id,date,this.customerinvoices[j].totalamount,-1*this.customerinvoices[j].allocatedAmount).subscribe((data:any)=>{
+                // console.log(data)
+               
+                resolve1();
+              });       
+            }
+            else{
+              resolve1();
+            }
+          });
+       } 
+       for(var k=0;k<this.suppliernegativeinvoices.length;k++) {
+        await new Promise<void> (resolve1 => {
+          if(this.suppliernegativeinvoices[k].allocatedAmount>0){            
+          // window.alert("allocating"+element.allocatedAmount)  ;       
+            this.api.allocateToSupplierInvoice(whose,this.suppliernegativeinvoices[k].id,date,-1*this.suppliernegativeinvoices[k].totalamount,-1*this.suppliernegativeinvoices[k].allocatedAmount).subscribe((data:any)=>{
+              // console.log(data)
+             
+              resolve1();
+            });       
+          }
+          else{
+            resolve1();
+          }
+        });
+       }             
+      //  this.suppliernegativeinvoices.forEach(element => {       
+      //  if(element.allocatedAmount>0){          
+      //    this.api.allocateToSupplierInvoice(whose,element.id,date,-1*element.totalamount,-1*element.allocatedAmount).subscribe((data:any)=>{
+      //       // console.log(data)
+      //    });       
+      //  }
+      // });
      }
 
      else if(this.payments[i].paidout){
-      this.customerinvoices.forEach(element => {
-        // console.log("Allocated amount")
-        // console.log(element.allocatedAmount)
-       if(element.allocatedAmount>0){          
-         this.api.allocateToSupplierInvoice(whose,element.id,date,element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
-             //console.log(data)
-         });       
-       }
+      amount=this.payments[i].paidout;
+      for(var j=0;j<this.customerinvoices.length;j++) {
+        await new Promise<void> (resolve1 => {
+          if(this.customerinvoices[j].allocatedAmount>0){ 
+           
+          // window.alert("allocating"+element.allocatedAmount)  ;       
+            this.api.allocateToSupplierInvoice(whose,this.customerinvoices[j].id,date,this.customerinvoices[j].totalamount,this.customerinvoices[j].allocatedAmount).subscribe((data:any)=>{
+              // console.log(data)
+             
+              resolve1();
+            });       
+          }
+          else{
+            resolve1();
+          }
+        });
+     } 
+     for(var k=0;k<this.suppliernegativeinvoices.length;k++) {
+      await new Promise<void> (resolve1 => {
+        if(this.suppliernegativeinvoices[k].allocatedAmount>0){            
+        // window.alert("allocating"+element.allocatedAmount)  ;       
+          this.api.allocateToCustomerInvoice(whose,this.suppliernegativeinvoices[k].id,date,-1*this.suppliernegativeinvoices[k].totalamount,this.suppliernegativeinvoices[k].allocatedAmount).subscribe((data:any)=>{
+            // console.log(data)
+           
+            resolve1();
+          });       
+        }
+        else{
+          resolve1();
+        }
       });
-      this.suppliernegativeinvoices.forEach(element => {   
+     }    
 
-      if(element.allocatedAmount>0){          
-        this.api.allocateToCustomerInvoice(whose,element.id,date,-1*element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
-           // console.log(data)
-        });       
-      }
-     });    
+
+
+    //   this.customerinvoices.forEach(element => {
+    //     // console.log("Allocated amount")
+    //     // console.log(element.allocatedAmount)
+    //    if(element.allocatedAmount>0){          
+    //      this.api.allocateToSupplierInvoice(whose,element.id,date,element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
+    //          //console.log(data)
+    //      });       
+    //    }
+    //   });
+    //   this.suppliernegativeinvoices.forEach(element => {   
+
+    //   if(element.allocatedAmount>0){          
+    //     this.api.allocateToCustomerInvoice(whose,element.id,date,-1*element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
+    //        // console.log(data)
+    //     });       
+    //   }
+    //  });   
+     
+     
     }
 
-
-    window.alert("Saved Successfully");
-   this.removePayment(i);
+    //adding to bankStatement
+    this.api.addbankstatement(date,amount,desc,whose).subscribe((data:any)=>{
+      window.alert("Saved Successfully");
+      this.removePayment(i);
+    });
    }
 
    createSelected(i){      

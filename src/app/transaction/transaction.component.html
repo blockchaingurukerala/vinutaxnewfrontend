@@ -63,8 +63,8 @@
           <input type="number" class="form-control"  (input)="onPressKeyboardPaidOut($event.target.value,i)" [(ngModel)]="payment.paidout" name="paidout" id="paidout"  >
       </div>
       <div class="col col-12 col-lg-2 col-md-2 col-sm-2">                                    
-          <label for="desc" *ngIf="!matchactive[i]">Description#</label>
-          <input type="text" class="form-control"  [(ngModel)]="payment.description" name="desc" id="desc"  *ngIf="!matchactive[i]" >
+          <label for="desc" >Description#</label>
+          <input type="text" class="form-control"  [(ngModel)]="payment.description" name="desc" id="desc"   >
       </div>
       <div class="col col-12 col-lg-1 col-md-1 col-sm-1">                                    
        
@@ -80,7 +80,7 @@
                         <tr *ngIf="!matchactive[i]">
                           <ul class="nav nav-tabs">
                               <li class="active" ><a routerLink="/transactions" (click)="createSelected(i);">Create</a></li>
-                              <li ><a routerLink="/match" (click)="matchSelected(i);">Match</a></li> 
+                              <li ><a  (click)="matchSelected(i);">Match</a></li> 
                           </ul>  
                         </tr>
                         <tr *ngIf="matchactive[i]">
@@ -205,7 +205,7 @@
                         </tr>
                         <tr>
                             <td colspan="8" align="center" >
-                                <button type="button" class="btn btn-primary" [disabled]="savebtndisabled[i]" (click)="allocateAmount(payment.date,i)">SAVE</button>
+                                <button type="button" class="btn btn-primary" [disabled]="savebtndisabled[i]" (click)="allocateAmount(payment.date,payment.description,i)">SAVE</button>
                             </td>
                         </tr>
                     </tbody>
