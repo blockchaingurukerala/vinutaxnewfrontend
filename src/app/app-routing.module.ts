@@ -22,6 +22,7 @@ import { IndividualcustomerComponent } from './individualcustomer/individualcust
 import { DisplayallcustomersComponent } from './displayallcustomers/displayallcustomers.component';
 import { DisplayallsuppliersComponent } from './displayallsuppliers/displayallsuppliers.component';
 import { TransactionComponent } from './transaction/transaction.component';
+import {JournalComponent} from './journal/journal.component';
 const routes: Routes = [{path:'login',component:LoginComponent},
                         {path:'home',component:HomeComponent},
                         {path:'signup',component:SignupComponent},
@@ -44,8 +45,8 @@ const routes: Routes = [{path:'login',component:LoginComponent},
                         {path:'individualcustomer',component:IndividualcustomerComponent}, 
                         {path:'allcustomers',component:DisplayallcustomersComponent},     
                         {path:'allsuppliers',component:DisplayallsuppliersComponent},  
-                        {path:'transactions',component:TransactionComponent} 
-                       
+                        {path:'transactions',component:TransactionComponent} ,
+                        {path:'journal',component:JournalComponent} 
                       ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
