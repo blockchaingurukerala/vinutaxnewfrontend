@@ -57,18 +57,47 @@ export class JournalComponent implements OnInit {
   }
 ];
   email=localStorage.getItem("uEmail");
-
+  jno="";
+  date="";
+  narration="";
+  sumdebitgbp=0;
+  sumcreditgbp=0;
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     
     if(localStorage.getItem("loggedIn")!="true"){
       this.router.navigate(['']);
     }
+    else{
+      this.api.createNextJournalNumber(this.email).subscribe((data:any)=>{
+          this.jno=data.msg;         
+      })
+    }
   
+  }
+  onPressKeyboarddebitgbp(val,j){    
+    this.sumdebitgbp=0;
+    // this.journalvalues.forEach(element => {
+    //   this.sumdebitgbp=this.sumdebitgbp+Number(element.debitgbp);
+    // });  
+    for(var i=0;i<this.journalvalues.length;i++)  {
+      this.sumdebitgbp=this.sumdebitgbp+Number(this.journalvalues[i].debitgbp);
+    }
+  }
+  onPressKeyboardcredittgbp(val,j){    
+    this.sumcreditgbp=0;
+    // this.journalvalues.forEach(element => {
+    //   this.sumcreditgbp=this.sumcreditgbp+Number(element.debitgbp);
+    // });  
+    for(var i=0;i<this.journalvalues.length;i++)  {
+      this.sumcreditgbp=this.sumcreditgbp+Number(this.journalvalues[i].creditgbp);
+    }  
   }
 
   ngOnInit(): void {
   }
- 
+  postJournal(){
+
+  }
   
   setasCustomer(){   
     this.sharedservice.setCustomerOrSupplier("Customer");

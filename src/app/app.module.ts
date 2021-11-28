@@ -31,6 +31,7 @@ import { DisplayallsuppliersComponent } from './displayallsuppliers/displayallsu
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { TransactionComponent } from './transaction/transaction.component';
 import { JournalComponent } from './journal/journal.component';
+import { DisplayjournalsComponent } from './displayjournals/displayjournals.component';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { JournalComponent } from './journal/journal.component';
     DisplayallcustomersComponent,
     DisplayallsuppliersComponent,
     TransactionComponent,
-    JournalComponent 
+    JournalComponent,
+    DisplayjournalsComponent 
   ],
   imports: [
     BrowserModule,

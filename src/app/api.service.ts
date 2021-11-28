@@ -235,5 +235,8 @@ getAllCashAccounts(email:string){
  getAllBankStatements(email:string){
   return this.http.post("http://localhost:3000/getAllBankStatements",{"email":email});
  }
+ createNextJournalNumber(whose:string){
+  return this.http.post("http://localhost:3000/createNextJournalNumber",{"whose":whose});
+}
 
 }
