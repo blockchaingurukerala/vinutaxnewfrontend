@@ -70,7 +70,7 @@
             <div class="col col-12 col-md-9 col-lg-9 col-sm-9"></div>
             <div class="col col-12 col-md-2 col-lg-2 col-sm-2">
                 <label for="amountsare">Amounts Are</label>
-                <select name="" id="amountsare" class="form-control">
+                <select name="" id="amountsare" class="form-control" [(ngModel)]="tax">
                     <option value="notax" selected>No Tax</option>
                     <option value="taxinclusive" >Tax Inclusive</option>
                     <option value="taxexclusive" >Tax Exclusive</option>

@@ -60,6 +60,7 @@ export class JournalComponent implements OnInit {
   jno="";
   date="";
   narration="";
+  tax="";
   sumdebitgbp=0;
   sumcreditgbp=0;
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
@@ -96,6 +97,18 @@ export class JournalComponent implements OnInit {
   ngOnInit(): void {
   }
   postJournal(){
+    for(var i=0;i<this.journalvalues.length;i++){    
+      if((this.journalvalues[i].debitgbp=='')&&(this.journalvalues[i].creditgbp=='')){
+        this.journalvalues.splice(i,1);
+        i--;
+      }
+    }
+    console.log(this.narration)
+    console.log(this.date);
+    console.log(this.jno);
+    console.log(this.tax);
+    console.log(this.journalvalues);
+
 
   }
   
