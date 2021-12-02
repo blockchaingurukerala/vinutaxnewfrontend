@@ -54,27 +54,21 @@
         <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
             <table class="table table-hover">
                 <tr>
-                    <th>Invoice</th>
-                    <th>Reference</th>
-                    <th>To</th>
+                    <th>ID</th>
+                    <th>Narration</th>
+                  
                     <th>Date</th>
-                    <th>Due Date</th>
+                    
                     <th>Total Amount</th>
-                    <th>Paid</th>
-                    <th>Status</th>
+                   
                 </tr>
                 <tbody>
-                    <!-- <tr *ngFor="let customerinvoice of customerinvoices; let i = index;let last = last;" (click)="editordelete(customerinvoice.id,customerinvoice.status);">
-                        <td>{{customerinvoice.invoiceid}}</td>
-                        <td>{{customerinvoice.reference}}</td>
-                        <td *ngIf="customerinvoice.link"><a routerLink="/individualcustomer" (click)="customerclicked(customerinvoice.customerid);">{{customerinvoice.customername}}</a></td>
-                        <td *ngIf="!customerinvoice.link">{{customerinvoice.customername}}</td>
-                        <td>{{customerinvoice.date}}</td>
-                        <td>{{customerinvoice.duedate}}</td>
-                        <td>{{customerinvoice.totalamount}}</td>
-                        <td>{{customerinvoice.allocatedAmount}}</td>
-                        <td>{{customerinvoice.status}}</td>
-                    </tr> -->
+                    <tr *ngFor="let journal of journaldetails; let i = index;let last = last;" (click)="editordeleteJournal(journal.id);">
+                        <td>{{journal.jno}}</td>
+                        <td>{{journal.narration}}</td>
+                        <td>{{journal.date}}</td>
+                        <td>{{journal.totalamout}}</td>                        
+                    </tr>
                 </tbody>              
             </table>
         </div>

@@ -10,11 +10,31 @@ import { SharedService } from '../shared.service';
 })
 export class DisplayjournalsComponent implements OnInit {
 
-  
+  whose=localStorage.getItem("uEmail");
+  totalamout=0;
+  journaldetails=[];
 
   constructor(private router:Router,private api:ApiService,private sharedapi:SharedService) {
     if(localStorage.getItem("loggedIn")!="true"){
       this.router.navigate(['']);
+    }
+    else{
+      this.whose=localStorage.getItem("uEmail");
+      this.api.getAllJournals(this.whose).subscribe((data:any)=>{        
+        for(var j=0;j<data.length;j++){
+          this.totalamout=0;          
+          for(var i=0;i<data[j].journals.length;i++){   
+                this.totalamout=Number(this.totalamout)+Number(data[j].journals[i].debitgbp);
+          }
+          this.journaldetails.push({
+            "id":data[j]._id,
+            "jno":data[j].journalid,
+          "narration":data[j].narration,          
+          "date":data[j].date,
+          "totalamout":this.totalamout});
+          this.totalamout=0;
+        }        
+      })
     }
          
    }
@@ -25,9 +45,9 @@ export class DisplayjournalsComponent implements OnInit {
     this.router.navigate(['/journal']);
 
   }
-  editordelete(i,status){
+  editordeleteJournal(id){
    // window.alert(status)
-    this.sharedapi.setidforcustomeredit(i,status);
+    // this.sharedapi.setidforcustomeredit(i,status);
     //this.router.navigate(['\editcustomerinvoice']);
      this.router.navigate(['/intermediatedisplay']);    
   }

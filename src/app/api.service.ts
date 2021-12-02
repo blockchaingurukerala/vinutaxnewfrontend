@@ -238,5 +238,11 @@ getAllCashAccounts(email:string){
  createNextJournalNumber(whose:string){
   return this.http.post("http://localhost:3000/createNextJournalNumber",{"whose":whose});
 }
+addNewJournal(whose:string,narration:string,date:string,jno:string,tax:string,journalentries:any){
+  return this.http.post("http://localhost:3000/addNewJournal",{"whose":whose,"narration":narration,"date":date,"jno":jno,"tax":tax,"journalentries":journalentries});
+}
+getAllJournals(whose:string){
+  return this.http.post("http://localhost:3000/getAllJournals",{"whose":whose});
+ }
 
 }
