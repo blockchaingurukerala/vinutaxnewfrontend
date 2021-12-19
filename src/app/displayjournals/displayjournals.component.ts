@@ -29,10 +29,10 @@ export class DisplayjournalsComponent implements OnInit {
           this.journaldetails.push({
             "id":data[j]._id,
             "jno":data[j].journalid,
-          "narration":data[j].narration,          
-          "date":data[j].date,
-          "totalamout":this.totalamout});
-          this.totalamout=0;
+            "narration":data[j].narration,          
+            "date":data[j].date,
+            "totalamout":this.totalamout});
+            this.totalamout=0;
         }        
       })
     }

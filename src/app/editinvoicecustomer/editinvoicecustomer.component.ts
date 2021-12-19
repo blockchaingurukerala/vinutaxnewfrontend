@@ -47,6 +47,7 @@ export class EditinvoicecustomerComponent implements OnInit {
   displaycategorynames=[];
   addnewcategoryenable=[];
   categorynames=[];
+  whose=localStorage.getItem("uEmail");
   generatePDF(action = 'open') {
     let docDefinition = {
       content: [
@@ -170,6 +171,7 @@ export class EditinvoicecustomerComponent implements OnInit {
     this.status=status;
     this.displaycategorynames[0]=false;
     this.addnewcategoryenable[0]=false;
+    this.whose=localStorage.getItem("uEmail");
     if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
       this.displaycustomerorsupplier="Customer"; 
       this.categorynames=[];
@@ -294,9 +296,11 @@ export class EditinvoicecustomerComponent implements OnInit {
       for(var o=0;o<len;o++){  
         this.categorynamefront.push({"titlecategory":data[op].titlecategory,"category":[]});
         for(var q=0;q<data[op].category.length;q++) {
-          if(data[op].category[q].toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
-            this.categorynamefront[o].category.push(data[op].category[q]);           
-            flag=true;           
+          if((data[op].category[q].whose=="All")||(data[op].category[q].whose==this.whose)){
+            if(data[op].category[q].category.toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
+              this.categorynamefront[o].category.push(data[op].category[q].category);           
+              flag=true;           
+            }
           }
         }
         if(this.categorynamefront[o].category.length<=0){
@@ -438,7 +442,7 @@ export class EditinvoicecustomerComponent implements OnInit {
       window.alert("Category should not be empty");
       return;
     }    
-    this.api.insertNewCategory(this.categorytitle,this.invoice.products[i].category).subscribe((data:any)=>{       
+    this.api.insertNewCategory(this.categorytitle,this.invoice.products[i].category,this.whose).subscribe((data:any)=>{       
       window.alert(data.msg);   
       this.addnewcategoryenable[i]=false;       
      });

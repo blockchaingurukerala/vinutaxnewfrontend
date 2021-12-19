@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
   }];  
    options = [];  
   selectedUser: any; 
-  email="";
+  email=localStorage.getItem("uEmail");
   incomeid=0;
 //category drop down ends
   constructor(private router:Router,private api:ApiService,private sharedapi:SharedService) { 
@@ -28,6 +28,7 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['']);
     }
     this.username=localStorage.getItem("uName"); 
+    this.email=localStorage.getItem("uEmail");
     this.api.getCategories().subscribe((data:any)=>{   
       data.forEach(element => {
         this.options.push(element.category);

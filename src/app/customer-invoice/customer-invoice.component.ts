@@ -39,7 +39,7 @@ export class CustomerInvoiceComponent implements OnInit {
   categorytitle="";
   invoice = new Invoice(); 
   names=[];
-  categorynamefront=[];
+  
   categorynames=[];
   i=0;
   displaycustomerorsupplier="NONE";
@@ -51,8 +51,10 @@ export class CustomerInvoiceComponent implements OnInit {
   btnEnable=false;
   displaynames=false;
   addnewenable=false;
-  displaycategorynames=[]
-  addnewcategoryenable=[]
+  categorynamefront=[];
+  displaycategorynames=[];
+  addnewcategoryenable=[];
+  whose=localStorage.getItem("uEmail");
   generatePDF(action = 'open') {
     let docDefinition = {
       content: [
@@ -176,6 +178,7 @@ export class CustomerInvoiceComponent implements OnInit {
     this.btnEnable=false;
     this.displaycategorynames[0]=false;
     this.addnewcategoryenable[0]=false;
+    this.whose=localStorage.getItem("uEmail");
     if(this.sharedapi.getCustomerOrSupplier()=="Customer"){
       this.heading="Customer Details";
       this.categorynames=[];
@@ -257,19 +260,7 @@ export class CustomerInvoiceComponent implements OnInit {
       this.addnewenable=true;
     }
   }
-  onPressKeyboardCategory(searchValue: string,j:number){   
-    // this.displaycategorynames[j]=true;    
-    // this.addnewcategoryenable[j]=false;
-    // var flag=false;
-    // var i=0;    
-    // for(i=0;i<this.categorynames.length;i++){      
-    //   if(this.categorynames[i].category.toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
-    //     flag=true;break;
-    //   }
-    // }
-    // if(flag==false){       
-    //   this.addnewcategoryenable[j]=true;      
-    // }   
+  onPressKeyboardCategory(searchValue: string,j:number){       
     this.categorynamefront=[];
     var flag=false;
     this.displaycategorynames[j]=true;    
@@ -278,11 +269,15 @@ export class CustomerInvoiceComponent implements OnInit {
       var len=data.length; 
       var op=0;
       for(var o=0;o<len;o++){  
+      
+        
         this.categorynamefront.push({"titlecategory":data[op].titlecategory,"category":[]});
         for(var q=0;q<data[op].category.length;q++) {
-          if(data[op].category[q].toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
-            this.categorynamefront[o].category.push(data[op].category[q]);           
-            flag=true;           
+          if((data[op].category[q].whose=="All")||(data[op].category[q].whose==this.whose)){
+            if(data[op].category[q].category.toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
+              this.categorynamefront[o].category.push(data[op].category[q].category);           
+              flag=true;           
+            }
           }
         }
         if(this.categorynamefront[o].category.length<=0){
@@ -474,7 +469,7 @@ export class CustomerInvoiceComponent implements OnInit {
       window.alert("Category should not be empty");
       return;
     }    
-    this.api.insertNewCategory(this.categorytitle,this.invoice.products[i].category).subscribe((data:any)=>{       
+    this.api.insertNewCategory(this.categorytitle,this.invoice.products[i].category,this.whose).subscribe((data:any)=>{       
       window.alert(data.msg);   
       this.addnewcategoryenable[i]=false;       
      });

@@ -93,6 +93,7 @@
                           </tr>
                         <tr *ngIf="!matchactive[i]">                            
                           <td>
+                              
                               <input type="text" class="form-control" name="allocate" id="allocate" [(ngModel)]="payment.category"
                               (input)="onPressKeyboardCategory($event.target.value,i)" required placeholder="Category"> 
                               <div *ngIf="displaycategorynames[i]">
@@ -141,6 +142,8 @@
                                 </table>                                              
                             </div>    
                           </td>
+
+
                         </tr>
                     </table> 
                   </td>

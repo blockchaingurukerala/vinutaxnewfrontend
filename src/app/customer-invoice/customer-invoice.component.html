@@ -150,21 +150,8 @@
                                                 #ProductCategory="ngModel"                                               
                                                     [(ngModel)]="product.category"  (input)="onPressKeyboardCategory($event.target.value,i)" required>   
                                                     
-                                                    <div *ngIf="displaycategorynames[i]">
-                                                        <!-- <table class="table table-hover">
-                                                            <tbody>
-                                                                <tr *ngFor="let c of categorynames | filter : product.category" (click)="selectedProductCategory(c.category,i)">
-                                                                    <td> {{c.category}}</td>                                                                                                                                       
-                                                                </tr>                                                       
-                                                            </tbody>
-
-                                                            <tr *ngIf="addnewcategoryenable[i]">
-                                                                <td align="center">
-                                                                 <button type="button" class="btn btn-info" (click)="addNewCategory(i)">  <i class="glyphicon glyphicon-user">ADD THIS CATEGORY</i></button>
-                                                                </td>                                                        
-                                                             </tr>
-                                                        </table>   
-                                                                                                -->
+                                                    <div *ngIf="displaycategorynames[i]">                                                 
+                                                                                               
                                                         <table class="table ">
                                                             <tbody>                        
                                                                     <tr *ngFor="let title of categorynamefront" >

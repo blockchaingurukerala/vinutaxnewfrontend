@@ -33,8 +33,8 @@ export class ApiService {
     //return this.http.post("https://exambackend.herokuapp.com/insert",{"user":user})     
     return this.http.post("http://localhost:3000/checkAvailabilityExpenceCategory",{"category":category}) ;  
   }
-  insertNewCategory(titlecategory:string,category:string){      
-    return this.http.post("http://localhost:3000/insertNewCategory",{"titlecategory":titlecategory,"category":category});
+  insertNewCategory(titlecategory:string,category:string,whose:string){      
+    return this.http.post("http://localhost:3000/insertNewCategory",{"titlecategory":titlecategory,"category":category,"whose":whose});
   }
   insertNewExpenceCategory(category:string){      
     return this.http.post("http://localhost:3000/insertNewExpenceCategory",{"category":category});

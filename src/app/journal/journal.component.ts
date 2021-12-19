@@ -61,10 +61,14 @@ export class JournalComponent implements OnInit {
   date="";
   narration="";
   tax="";
+  categorytitle="";
   sumdebitgbp=0;
   sumcreditgbp=0;
   postdisabe=true;
   whose=localStorage.getItem("uEmail");
+  categorynamefront=[];
+  displaycategorynames=[];
+  addnewcategoryenable=[];
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     
     if(localStorage.getItem("loggedIn")!="true"){
@@ -107,6 +111,57 @@ export class JournalComponent implements OnInit {
     else{
       this.postdisabe=true;
     }
+  }
+
+
+  onPressKeyboardCategory(searchValue: string,j:number){       
+    this.categorynamefront=[];
+    var flag=false;
+    this.displaycategorynames[j]=true;    
+    this.addnewcategoryenable[j]=false;
+    this.api.getCategories().subscribe( (data:any)=>{  
+      var len=data.length; 
+      var op=0;
+      for(var o=0;o<len;o++){  
+        this.categorynamefront.push({"titlecategory":data[op].titlecategory,"category":[]});
+        for(var q=0;q<data[op].category.length;q++) {
+          if((data[op].category[q].whose=="All")||(data[op].category[q].whose==this.whose)){
+            if(data[op].category[q].category.toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
+              this.categorynamefront[o].category.push(data[op].category[q].category);           
+              flag=true;           
+            }
+          }
+        }
+        if(this.categorynamefront[o].category.length<=0){
+            this.categorynamefront.splice(o,1);
+              len--;  
+              o--;
+        }
+        op++;
+      }   
+      if(flag==false){       
+          this.addnewcategoryenable[j]=true;      
+      } 
+    });    
+  }
+  addNewCategory(i:number){
+    if(!this.categorytitle){
+      window.alert("Select Category Title");
+      return;
+    }
+    if(!this.journalvalues[i].account){
+      window.alert("Category should not be empty");
+      return;
+    }    
+    this.api.insertNewCategory(this.categorytitle,this.journalvalues[i].account,this.email).subscribe((data:any)=>{       
+      window.alert(data.msg);   
+      this.addnewcategoryenable[i]=false;       
+     });
+  }
+  selectedProductCategory(c,i:number){
+    //this.invoice.products[i].category=c;   
+    this.journalvalues[i].account=c; 
+    this.displaycategorynames[i]=false;     
   }
 
   ngOnInit(): void {

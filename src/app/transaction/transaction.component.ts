@@ -102,7 +102,7 @@ export class TransactionComponent implements OnInit {
       window.alert("Category should not be empty");
       return;
     }    
-    this.api.insertNewCategory(this.categorytitle,this.payments[i].category).subscribe((data:any)=>{       
+    this.api.insertNewCategory(this.categorytitle,this.payments[i].category,this.email).subscribe((data:any)=>{       
       window.alert(data.msg);   
       this.addnewcategoryenable[i]=false;       
      });
@@ -118,9 +118,11 @@ export class TransactionComponent implements OnInit {
       for(var o=0;o<len;o++){  
         this.categorynamefront.push({"titlecategory":data[op].titlecategory,"category":[]});
         for(var q=0;q<data[op].category.length;q++) {
-          if(data[op].category[q].toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
-            this.categorynamefront[o].category.push(data[op].category[q]);           
-            flag=true;           
+          if((data[op].category[q].whose=="All")||(data[op].category[q].whose==this.email)){
+            if(data[op].category[q].category.toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
+              this.categorynamefront[o].category.push(data[op].category[q].category);           
+              flag=true;           
+            }
           }
         }
         if(this.categorynamefront[o].category.length<=0){

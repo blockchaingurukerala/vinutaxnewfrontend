@@ -99,10 +99,68 @@
                                      <input type="text" class="form-control" [(ngModel)]="journalvalue.description"
                                      name="desc_{{i}}">
                                </td>
-                               <td>
+
+                               <!-- <td>
                                     <input type="text" class="form-control" [(ngModel)]="journalvalue.account"
                                     name="account_{{i}}">    
-                               </td>
+                               </td> -->
+                                <!-- account display -->
+                                <td>
+                                    <input type="text" class="form-control" name="category{{i}}"   id="category"
+                                                                               
+                                        [(ngModel)]="journalvalue.account"  (input)="onPressKeyboardCategory($event.target.value,i)" required>   
+                                        
+                                        <div *ngIf="displaycategorynames[i]">                                                 
+                                                                                   
+                                            <table class="table ">
+                                                <tbody>                        
+                                                        <tr *ngFor="let title of categorynamefront" >
+                                                        <td> <b>{{title.titlecategory}}</b></td>
+                                                        <td>
+                                                            <table class="table table-hover">
+                                                                <tbody>
+                                                                    <tr *ngFor="let c of title.category " (click)="selectedProductCategory(c,i)">
+                                                                        
+                                                                        <td> {{c}}</td>         
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>           
+                                                </tbody>
+            
+                                                <tr *ngIf="addnewcategoryenable[i]">
+                                                    <td>
+                                                        <select class="form-control" name="selectcategorytt" id="" [(ngModel)]="categorytitle">                                                <option value="Sales">Sales</option>                                                
+                                                            <option value="Cost of sales">Cost of sales </option>
+                                                            <option value="Other business income">Other business income </option>
+                                                            <option value="Expenses">Expenses</option>
+                                                            <option value="Plant & machinery">Plant & machinery </option>
+                                                            <option value="Computer equipment">Computer equipment </option>
+                                                            <option value="Motor vehicles">Motor vehicles </option>
+                                                            <option value="Fixtures & fittings">Fixtures & fittings </option>
+                                                            <option value="Land & buildings">Land & buildings </option>
+                                                            <option value="Intangible Fixed Assets">Intangible Fixed Assets </option>
+                                                            <option value="Customers">Customers</option>
+                                                            <option value="Current Assets">Current Assets </option>
+                                                            <option value="Suppliers">Suppliers</option>
+                                                            <option value="Bank">Bank</option>
+                                                            <option value="Liabilities">Liabilities </option>
+                                                            <option value="Capital account">Capital account</option>                                             
+                                                        </select>
+                                                    </td>
+                                                    <td align="center">
+                                                        <button type="button" class="btn btn-info" (click)="addNewCategory(i)">ADD </button>
+                                                    </td>                                                        
+                                                    </tr>
+                                            </table>  
+                                        </div> 
+                                        
+                                   </td>
+
+                                <!-- accountdisplay ends -->
+
+
                                <td>                                     
                                </td>
                                <td>
@@ -141,6 +199,9 @@
         </div>
         <div class="col col-12 col-md-1 col-lg-1 col-sm-1"></div>
        </div>
+
+
+       
        <div class="row" style="background-color: lightblue;">
            <div class="col col-12 col-md-1 col-lg-1 col-sm-1"></div>
            <div class="col col-12 col-md-10 col-lg-10 col-sm-10">
