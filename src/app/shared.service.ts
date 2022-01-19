@@ -10,6 +10,7 @@ export class SharedService {
   customerinvoicestatus:string;
   selectedcustomer :string;
   customerOrSupplier:string;
+  selectedjournal:string;
 
   _comp1ValueBS = new BehaviorSubject<string>('');
   constructor() { 
@@ -41,6 +42,9 @@ export class SharedService {
   }
   getCustomerOrSupplier(){
     return this.customerOrSupplier;
+  }
+  setJournalSelected(id:string){
+    this.selectedjournal=id;
   }
 
 }

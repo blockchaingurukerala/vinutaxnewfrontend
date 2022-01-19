@@ -46,10 +46,13 @@ export class DisplayjournalsComponent implements OnInit {
 
   }
   editordeleteJournal(id){
-   // window.alert(status)
+    window.alert(id)
     // this.sharedapi.setidforcustomeredit(i,status);
     //this.router.navigate(['\editcustomerinvoice']);
-     this.router.navigate(['/intermediatedisplay']);    
+     
+     this.sharedapi.setJournalSelected(id) ;
+     this.router.navigate(['/individualJournal']);  
+     
   }
   customerclicked(i){   
     this.sharedapi.setSelectedCustomerID(i);

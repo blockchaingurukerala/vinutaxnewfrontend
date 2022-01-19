@@ -25,6 +25,7 @@ import { TransactionComponent } from './transaction/transaction.component';
 import {JournalComponent} from './journal/journal.component';
 import { DisplayjournalsComponent } from './displayjournals/displayjournals.component';
 import { AdminAddCategoriesComponent } from './admin-add-categories/admin-add-categories.component';
+import { IndividualjournalComponent } from './individualjournal/individualjournal.component';
 const routes: Routes = [{path:'login',component:LoginComponent},
                         {path:'home',component:HomeComponent},
                         {path:'signup',component:SignupComponent},
@@ -50,7 +51,8 @@ const routes: Routes = [{path:'login',component:LoginComponent},
                         {path:'transactions',component:TransactionComponent} ,
                         {path:'journal',component:JournalComponent} ,
                         {path:'displayjournals',component:DisplayjournalsComponent} ,
-                        {path:'qwert',component:AdminAddCategoriesComponent}
+                        {path:'qwert',component:AdminAddCategoriesComponent},
+                        {path:'individualJournal',component:IndividualjournalComponent} 
                       ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -244,5 +244,11 @@ addNewJournal(whose:string,narration:string,date:string,jno:string,tax:string,jo
 getAllJournals(whose:string){
   return this.http.post("http://localhost:3000/getAllJournals",{"whose":whose});
  }
+ getJournalFromID(id:string){
+  return this.http.post("http://localhost:3000/getJournalFromID",{"id":id});
+ }
+ deleteJournal(id:string){
+  return this.http.post("http://localhost:3000/deleteJournal",{"id":id});
+ }
 
 }

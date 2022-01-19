@@ -33,6 +33,7 @@ import { TransactionComponent } from './transaction/transaction.component';
 import { JournalComponent } from './journal/journal.component';
 import { DisplayjournalsComponent } from './displayjournals/displayjournals.component';
 import { AdminAddCategoriesComponent } from './admin-add-categories/admin-add-categories.component';
+import { IndividualjournalComponent } from './individualjournal/individualjournal.component';
 
 
 @NgModule({
@@ -62,7 +63,8 @@ import { AdminAddCategoriesComponent } from './admin-add-categories/admin-add-ca
     TransactionComponent,
     JournalComponent,
     DisplayjournalsComponent,
-    AdminAddCategoriesComponent 
+    AdminAddCategoriesComponent,
+    IndividualjournalComponent 
   ],
   imports: [
     BrowserModule,

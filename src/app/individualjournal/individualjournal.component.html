@@ -1,0 +1,195 @@
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li ><a routerLink="/summary">Summary</a></li>
+        <li><a routerLink="/transactions">Transactions</a></li>
+        <li ><a routerLink="/dashboard">Income</a></li>
+        <li ><a routerLink="/expence">Expence</a></li>
+        <li><a routerLink="/report">Report</a></li>    
+        <li><a routerLink="/allaccount">All Account</a></li> 
+        <li class="dropdown ">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                Business <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a routerLink="/displaycustomerinvoices" (click)="setasCustomer();" >Invoice</a></li>
+                <li><a routerLink="/allcustomers" (click)="setasCustomer();">Customers</a></li>
+                <li><a routerLink="/displaycustomerinvoices" (click)="setasSupplier();">Bills To Pay</a></li> 
+                <li><a routerLink="/allcustomers" (click)="setasSupplier();">Suppliers</a></li> 
+             </ul>
+             
+        </li>   
+        <li  class="active"><a routerLink="/displayjournals">Journal</a></li>     
+      </ul>
+      <br>
+
+      <div class="row">       
+        <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
+            <button type="button" class="btn btn-info " style="width: 100%" >Journal Page</button>
+        </div>
+    </div>    
+    <br>
+
+   
+    <div class="container">
+        <div class="row" style="border: 2px solid red;">
+            <div class="col col-12 col-md-12 col-sm-12">               
+                    <p>We recommend that only your accountant or bookkeeper create journals, unless you have experience managing your general ledger. </p>
+           </div>
+        </div>
+        <div class="row" style="background-color: lightblue;">
+            <div class="col col-12 col-md-1 col-lg-1 col-sm-1"></div>
+            <div class="col col-12 col-md-10 col-lg-10 col-sm-10" >
+                <!-- new journal -->
+                
+                           <table class="table">
+                               <tr>
+                                   <td>
+                                       <label for="narration">Narration</label>
+                                       <input type="text" class="form-control" [(ngModel)]="narration" id="narration" readonly *ngIf="!edit">
+                                       <input type="text" class="form-control" [(ngModel)]="narration" id="narration"  *ngIf="edit">
+                                   </td>
+                                   <td>
+                                   </td>
+                                   <td>
+                                    <label for="date">Date</label>
+                                    <input type="date" [(ngModel)]="date" id="date" readonly  *ngIf="!edit">
+                                    <input type="date" [(ngModel)]="date" id="date"  *ngIf="edit" >
+                                   </td>
+                                   <td></td>
+                                   <td colspan="3" style="text-align: right;">
+                                    <label for="autodate">Journal Number</label>
+                                    <input type="text" [(ngModel)]="jno" id="autodate"   readonly>
+                                   </td>
+                               </tr>
+                           </table>
+
+                  <!-- new journal -->
+            </div>
+            <div class="col col-12 col-md-1 col-lg-1 col-sm-1"></div>
+        </div>
+        <div class="row" style="background-color: lightblue;">
+            <div class="col col-12 col-md-9 col-lg-9 col-sm-9"></div>
+            <div class="col col-12 col-md-2 col-lg-2 col-sm-2">
+                <label for="amountsare">Amounts Are</label>
+                <select name="" id="amountsare" class="form-control" [(ngModel)]="tax">
+                    <option value="notax" selected>No Tax</option>
+                    <option value="taxinclusive" >Tax Inclusive</option>
+                    <option value="taxexclusive" >Tax Exclusive</option>
+                </select>
+            </div>
+            <div class="col col-12 col-md-1 col-lg-1col-sm-1"></div>
+        </div>
+    
+       <div class="row" style="background-color: lightblue;">
+        <div class="col col-12 col-md-1 col-lg-1 col-sm-1"></div>
+        <div class="col col-12 col-md-10 col-lg-10 col-sm-10">
+                       <table class="table">
+                           <thead>
+                              <tr>
+                                  <th>SI</th>
+                                  <th>Description</th>
+                                  <th>Account</th>
+                                  <th>Tax Rate</th>
+                                  <th>Region</th>
+                                  <th>Debit GBP</th>
+                                  <th>Credit GBP</th>
+                              </tr>
+                           </thead>
+                           <tr *ngFor="let journalvalue of journalvalues;let i=index">
+                               <td>{{i+1}}</td>
+                               <td>
+                                     <input type="text" class="form-control" [(ngModel)]="journalvalue.description"
+                                     name="desc_{{i}}" readonly *ngIf="!edit">
+                                     <input type="text" class="form-control" [(ngModel)]="journalvalue.description"
+                                     name="desc_{{i}}" *ngIf="edit">
+                               </td>
+
+                               <!-- <td>
+                                    <input type="text" class="form-control" [(ngModel)]="journalvalue.account"
+                                    name="account_{{i}}">    
+                               </td> -->
+                                <!-- account display -->
+                                <td>
+                                    <input type="text" class="form-control" name="category{{i}}"   id="category"
+                                                                               
+                                        [(ngModel)]="journalvalue.account"  readonly *ngIf="!edit" >   
+                                        
+                                        <input type="text" class="form-control" name="category{{i}}"   id="category"
+                                                                               
+                                        [(ngModel)]="journalvalue.account"  *ngIf="edit" >  
+                                        
+                                   </td>
+
+                                <!-- accountdisplay ends -->
+
+
+                               <td>                                     
+                               </td>
+                               <td>
+                                 <input type="text" class="form-control" [(ngModel)]="journalvalue.region"
+                                 name="region_{{i}}" readonly *ngIf="!edit" >
+                                 <input type="text" class="form-control" [(ngModel)]="journalvalue.region"
+                                 name="region_{{i}}"  *ngIf="edit" >
+                               </td>
+                               <td>
+                                <input type="text" class="form-control" [(ngModel)]="journalvalue.debitgbp"
+                                name="debitgbp_{{i}}" readonly *ngIf="!edit">
+                                <input type="text" class="form-control" [(ngModel)]="journalvalue.debitgbp"
+                                name="debitgbp_{{i}}"  *ngIf="edit">
+                              </td>
+                              <td>
+                                <input type="text" class="form-control"  [(ngModel)]="journalvalue.creditgbp"
+                                name="creditgbp_{{i}}" readonly *ngIf="!edit">
+                                <input type="text" class="form-control"  [(ngModel)]="journalvalue.creditgbp"
+                                name="creditgbp_{{i}}"  *ngIf="edit">
+                              </td>
+                              <td>
+                                <!-- <button type="button">X</button> -->
+                              </td>
+                             
+                           </tr>
+                           <br>
+                           <tr>
+                                <td colspan="4"></td>
+                                <td style="text-align: right;">SubTotal</td>
+                                <td style="text-align: right;">{{sumdebitgbp}}</td>
+                                <td style="text-align: right;">{{sumcreditgbp}}</td>
+                           </tr>
+                           <tr><td colspan="4"></td> <td colspan="3"><hr style="height:2px;border-width:0;color:gray;background-color:gray"></td></tr>
+                           <tr>
+                            <td colspan="4"></td>
+                            <td style="text-align: right;">Total</td>
+                            <td style="text-align: right;">0.00</td>
+                            <td style="text-align: right;">0.00</td>
+                       </tr>
+                       <tr><td colspan="4"></td> <td colspan="3"><hr style="height:2px;border-width:0;color:gray;background-color:gray"></td></tr>
+                       </table>
+        </div>
+        <div class="col col-12 col-md-1 col-lg-1 col-sm-1"></div>
+       </div>
+
+
+       
+       <div class="row" style="background-color: lightblue;">
+           <div class="col col-12 col-md-1 col-lg-1 col-sm-1"></div>
+           <div class="col col-12 col-md-10 col-lg-10 col-sm-10">
+               <table class="table">
+                   <tr>
+                       <td><button class="btn btn-danger" (click)="deleteJournal()">Delete</button></td>
+                       <td colspan="5"></td>
+                       <!-- <td><button class="btn btn-success" [disabled]="postdisabe" (click)="postJournal()">Post</button></td> -->
+                       <td><button class="btn btn-primary" (click)="editJournal()">Edit</button></td>
+
+                   </tr>
+               </table>
+           </div>
+           <div class="col col-12 col-md-1 col-lg-1 col-sm-1"></div>
+       </div>
+    </div>
+    
+</div>
+
+
+
+
+

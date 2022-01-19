@@ -124,6 +124,7 @@ export class TransactionComponent implements OnInit {
               flag=true;           
             }
           }
+          
         }
         if(this.categorynamefront[o].category.length<=0){
             this.categorynamefront.splice(o,1);
