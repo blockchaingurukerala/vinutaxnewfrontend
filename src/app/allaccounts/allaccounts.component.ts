@@ -192,28 +192,45 @@ export class AllaccountsComponent implements OnInit {
     this.netincome=0;
     this.email=localStorage.getItem("uEmail");   
     this.api.getAllCashAccounts(this.email).subscribe(async (data:any)=>{   
-      console.log(data);
-      this.incomes=data;
-      this.expences=data;
-      for(var i=0;i<this.incomes.length;i++){
-        var dateString=this.incomes[i].date;
-        let incomeDate = new Date(dateString); 
-          if((incomeDate.getTime()< new Date(this.lowerdate).getTime())||(incomeDate.getTime()> new Date(this.higherdate).getTime())){
-            this.incomes.splice(i,1);
-            this.expences.splice(i,1);
-            i--;
-          }  
-      }
-      this.incomes.forEach(element => {        
-        this.totalincome=this.totalincome+element.amount;
-      });
-      //for display categorywise in front end
-      for(const {category, amount} of this.incomes) {       
-              await new Promise<void>(resolve => {                
-                  this.consolidatedincomes.set(category, (Number(this.consolidatedincomes.get(category)) || 0) + Number(amount));                  
-                  resolve();                
-            }); 
-      }  
+      
+      //Reading from the Journals
+     this.api.getAllJournals(this.email).subscribe(async (journals:any)=>{ 
+            this.incomes=data;
+            this.expences=data;
+            for(var p=0;p<journals.length;p++){
+                for(var q=0;q<journals[p].journals.length;q++){
+                  var obj={};
+                  if(journals[p].journals[q].debitgbp){
+                    obj={"_id":journals[p]._id,"cashaccountid":journals[p].journalid,"count":journals[p].count,"date":journals[p].date,"whose":journals[p].whose,"amount":journals[p].journals[q].debitgbp,"category":journals[p].journals[q].account,"description":journals[p].journals[q].description}
+                  }
+                  else{
+                    obj={"_id":journals[p]._id,"cashaccountid":journals[p].journalid,"count":journals[p].count,"date":journals[p].date,"whose":journals[p].whose,"amount":-1*journals[p].journals[q].creditgbp,"category":journals[p].journals[q].account,"description":journals[p].journals[q].description}
+                  }
+                  
+                  this.incomes.push(obj);                  
+                }
+            }
+            for(var i=0;i<this.incomes.length;i++){
+              var dateString=this.incomes[i].date;
+              let incomeDate = new Date(dateString); 
+                if((incomeDate.getTime()< new Date(this.lowerdate).getTime())||(incomeDate.getTime()> new Date(this.higherdate).getTime())){
+                  this.incomes.splice(i,1);
+                  this.expences.splice(i,1);
+                  i--;
+                }  
+            }
+            this.incomes.forEach(element => {        
+              this.totalincome=this.totalincome+element.amount;
+            });
+            //for display categorywise in front end
+            for(const {category, amount} of this.incomes) {       
+                    await new Promise<void>(resolve => {                
+                        this.consolidatedincomes.set(category, (Number(this.consolidatedincomes.get(category)) || 0) + Number(amount));                  
+                        resolve();                
+                  }); 
+            }  
+          });
+
     }); 
   }
   // getIncomesAndExpencesOld(){ 

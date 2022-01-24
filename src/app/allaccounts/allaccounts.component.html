@@ -77,11 +77,12 @@
           <form #addressForm="ngForm" ngNativeValidate  (ngSubmit)="updateIncome()">  
             <table class="table" *ngIf="incomeclick">
                   <tr>
-                    <th  colspan="4" align="center">Category</th>                        
+                    <th  colspan="5" align="center">Category</th>                        
                   </tr>  
                 
                     <tr>
                       <!-- <th style="text-align: center;">No</th> -->
+                      <th style="text-align: center;">ID</th>
                       <th style="text-align: center;">Category</th>
                       <th style="text-align: center;">Date</th>
                       <th style="text-align: center;">Description</th>
@@ -90,6 +91,7 @@
                            
                   <tr *ngFor="let displayincome of displayincomes ; let i = index;">  
                       <!-- <td> {{displayincome.category}}</td>                                                    -->
+                      <td><input name="id_{{i}}" class="form-control"  [(ngModel)]="displayincome.cashaccountid" readonly></td> 
                       <td><input name="cat_{{i}}" class="form-control"  [(ngModel)]="displayincome.category" readonly></td> 
                       <!-- <td>{{displayincome.category}}</td> -->
                       <td><input name="date_{{i}}" type="date" class="form-control"  [(ngModel)]="displayincome.date" required [readonly]="isReadonly[i]"></td> 
