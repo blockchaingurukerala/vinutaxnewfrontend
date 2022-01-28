@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { ApiService } from '../api.service';
 import {Router} from '@angular/router';
 import {SharedService} from '../shared.service';
@@ -21,7 +21,10 @@ class Payment{
 })
 
 export class TransactionComponent implements OnInit {
+  categoryCode="";
+  categoryName="";
   categorytitle="";
+ 
   // categorytitles=[];
   categorynamesoriginal=[];
   categorynames=[];
@@ -39,6 +42,8 @@ export class TransactionComponent implements OnInit {
   outby=[];
   savebtndisabled=[];
    today = new Date().toISOString().split('T')[0];
+
+   @ViewChild('closebutton') closebutton;
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     // var id=this.sharedservice.getidforcustomeredit();
     this.categorynames=[];
@@ -93,18 +98,25 @@ export class TransactionComponent implements OnInit {
     this.payments[i].category=c;    
     this.displaycategorynames[i]=false; 
   }
-  addNewCategory(i:number){
+  
+  addNewCategory(){
     if(!this.categorytitle){
       window.alert("Select Category Title");
       return;
     }
-    if(!this.payments[i].category){
-      window.alert("Category should not be empty");
+    if(!this.categoryCode){
+      window.alert("Category Code should not be empty");
       return;
     }    
-    this.api.insertNewCategory(this.categorytitle,this.payments[i].category,this.email).subscribe((data:any)=>{       
-      window.alert(data.msg);   
-      this.addnewcategoryenable[i]=false;       
+    if(!this.categoryName){
+      window.alert("Category Name should not be empty");
+      return;
+    }
+    var category=this.categoryCode+"-"+this.categoryName;
+    this.api.insertNewCategory(this.categorytitle,category,this.email).subscribe((data:any)=>{       
+      window.alert(data.msg); 
+      this.closebutton.nativeElement.click();
+      //this.addnewcategoryenable[i]=false;       
      });
   }
   onPressKeyboardCategory(searchValue: string,j:number){     
