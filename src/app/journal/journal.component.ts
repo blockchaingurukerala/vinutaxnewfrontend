@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { SharedService } from '../shared.service';
@@ -62,6 +62,8 @@ export class JournalComponent implements OnInit {
   narration="";
   tax="";
   categorytitle="";
+  categoryCode="";
+  categoryName="";
   sumdebitgbp=0;
   sumcreditgbp=0;
   postdisabe=true;
@@ -69,6 +71,7 @@ export class JournalComponent implements OnInit {
   categorynamefront=[];
   displaycategorynames=[];
   addnewcategoryenable=[];
+  @ViewChild('closebutton') closebutton;
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     
     if(localStorage.getItem("loggedIn")!="true"){
@@ -144,18 +147,24 @@ export class JournalComponent implements OnInit {
       } 
     });    
   }
-  addNewCategory(i:number){
+  addNewCategory(){
     if(!this.categorytitle){
       window.alert("Select Category Title");
       return;
     }
-    if(!this.journalvalues[i].account){
-      window.alert("Category should not be empty");
+    if(!this.categoryCode){
+      window.alert("Category Code should not be empty");
       return;
     }    
-    this.api.insertNewCategory(this.categorytitle,this.journalvalues[i].account,this.email).subscribe((data:any)=>{       
-      window.alert(data.msg);   
-      this.addnewcategoryenable[i]=false;       
+    if(!this.categoryName){
+      window.alert("Category Name should not be empty");
+      return;
+    }
+    var category=this.categoryCode+"-"+this.categoryName;
+    this.api.insertNewCategory(this.categorytitle,category,this.whose).subscribe((data:any)=>{       
+      window.alert(data.msg); 
+      this.closebutton.nativeElement.click();
+      //this.addnewcategoryenable[i]=false;       
      });
   }
   selectedProductCategory(c,i:number){

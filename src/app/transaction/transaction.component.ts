@@ -32,7 +32,9 @@ export class TransactionComponent implements OnInit {
   incomecategories=[];
   expencecategories=[];
   displaycategorynames=[];
+  displaycategorynames1=[];
   addnewcategoryenable=[];
+  addnewcategoryenable1=[];
   payments: Payment[] = [];
   matchactive=[];
   email=localStorage.getItem("uEmail");
@@ -44,6 +46,7 @@ export class TransactionComponent implements OnInit {
    today = new Date().toISOString().split('T')[0];
 
    @ViewChild('closebutton') closebutton;
+   public adjustedvalues: any[] = [{description: '',category: '',amount: ''}];
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     // var id=this.sharedservice.getidforcustomeredit();
     this.categorynames=[];
@@ -98,7 +101,10 @@ export class TransactionComponent implements OnInit {
     this.payments[i].category=c;    
     this.displaycategorynames[i]=false; 
   }
-  
+  selectedProductCategory1(c,i:number){    
+    this.adjustedvalues[i].category=c;    
+    this.displaycategorynames1[i]=false; 
+  }
   addNewCategory(){
     if(!this.categorytitle){
       window.alert("Select Category Title");
@@ -135,8 +141,7 @@ export class TransactionComponent implements OnInit {
               this.categorynamefront[o].category.push(data[op].category[q].category);           
               flag=true;           
             }
-          }
-          
+          }          
         }
         if(this.categorynamefront[o].category.length<=0){
             this.categorynamefront.splice(o,1);
@@ -147,6 +152,36 @@ export class TransactionComponent implements OnInit {
       }   
       if(flag==false){       
           this.addnewcategoryenable[j]=true;      
+      } 
+    });    
+  }
+  onPressKeyboardCategory1(searchValue: string,j:number){     
+    this.categorynamefront=[];
+    var flag=false;
+    this.displaycategorynames1[j]=true;    
+    this.addnewcategoryenable1[j]=false;
+    this.api.getCategories().subscribe( (data:any)=>{  
+      var len=data.length; 
+      var op=0;
+      for(var o=0;o<len;o++){  
+        this.categorynamefront.push({"titlecategory":data[op].titlecategory,"category":[]});
+        for(var q=0;q<data[op].category.length;q++) {
+          if((data[op].category[q].whose=="All")||(data[op].category[q].whose==this.email)){
+            if(data[op].category[q].category.toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
+              this.categorynamefront[o].category.push(data[op].category[q].category);           
+              flag=true;           
+            }
+          }          
+        }
+        if(this.categorynamefront[o].category.length<=0){
+            this.categorynamefront.splice(o,1);
+              len--;  
+              o--;
+        }
+        op++;
+      }   
+      if(flag==false){       
+          this.addnewcategoryenable1[j]=true;      
       } 
     });    
   }
@@ -221,84 +256,7 @@ export class TransactionComponent implements OnInit {
    
    
 
-  //  savePaymentOld(i:number){
-  //   this.email=localStorage.getItem("uEmail");
-  //    //update in income table
-  //   if(this.payments[i].paidin){
-  //     this.payments[i].amount=this.payments[i].paidin;
-  //     let refund = this.expencecategories.filter(x => x.category.toUpperCase() === this.payments[i].category.toUpperCase())[0];
-  //     if(refund){
-  //       window.alert("This is Supplier REFUND");
-  //       this.payments[i].amount=-1*this.payments[i].paidout;
-  //       this.api.getExpenceID(this.email).subscribe((data:any)=>{
-  //         var expenceid=parseInt(data.len); 
-  //         this.payments[i].id=expenceid;
-  //         this.api.updateExpences(this.email,this.payments[i]).subscribe((data:any)=>{
-  //           if(data.msg=="Updated"){
-  //             window.alert("Saved Successfully");
-  //             this.router.navigate(['/report']);
-  //           }
-  //           else{
-  //             window.alert("Please Try after some time");
-  //           }  
-  //         });
-  //       });
-  //     } 
-  //     else{
-  //       this.api.getIncomeID(this.email).subscribe((data:any)=>{
-  //         var incomeid=parseInt(data.len); 
-  //         this.payments[i].id=incomeid;
-  //         this.api.updateIncomes(this.email,this.payments[i]).subscribe((data:any)=>{
-  //           if(data.msg=="Updated"){
-  //             window.alert("Saved Successfully");
-  //             this.router.navigate(['/report']);
-  //           }
-  //           else{
-  //             window.alert("Please Try after some time");
-  //           }  
-  //         });
-  //       });
-  //     }
-
-  //   }
-  //   //update in expence table
-  //   if(this.payments[i].paidout){
-  //     this.payments[i].amount=this.payments[i].paidout;
-  //     let refund = this.incomecategories.filter(x => x.category.toUpperCase() === this.payments[i].category.toUpperCase())[0];
-  //     if(refund){
-  //       //window.alert("This is Customer REFUND");
-  //       this.payments[i].amount=-1*this.payments[i].paidout;
-  //       this.api.getIncomeID(this.email).subscribe((data:any)=>{
-  //         var incomeid=parseInt(data.len); 
-  //         this.payments[i].id=incomeid;
-  //         this.api.updateIncomes(this.email,this.payments[i]).subscribe((data:any)=>{
-  //           if(data.msg=="Updated"){
-  //             window.alert("Saved Successfully");
-  //             this.router.navigate(['/report']);
-  //           }
-  //           else{
-  //             window.alert("Please Try after some time");
-  //           }  
-  //         });
-  //       });
-  //     } 
-  //     else{
-  //       this.api.getExpenceID(this.email).subscribe((data:any)=>{
-  //         var expenceid=parseInt(data.len); 
-  //         this.payments[i].id=expenceid;
-  //         this.api.updateExpences(this.email,this.payments[i]).subscribe((data:any)=>{
-  //           if(data.msg=="Updated"){
-  //             window.alert("Saved Successfully");
-  //             this.router.navigate(['/report']);
-  //           }
-  //           else{
-  //             window.alert("Please Try after some time");
-  //           }  
-  //         });
-  //       });
-  //     }     
-  //   }   
-  //  }
+ 
 
 
    matchSelected(i){
@@ -591,23 +549,6 @@ export class TransactionComponent implements OnInit {
 
 
 
-    //   this.customerinvoices.forEach(element => {
-    //     // console.log("Allocated amount")
-    //     // console.log(element.allocatedAmount)
-    //    if(element.allocatedAmount>0){          
-    //      this.api.allocateToSupplierInvoice(whose,element.id,date,element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
-    //          //console.log(data)
-    //      });       
-    //    }
-    //   });
-    //   this.suppliernegativeinvoices.forEach(element => {   
-
-    //   if(element.allocatedAmount>0){          
-    //     this.api.allocateToCustomerInvoice(whose,element.id,date,-1*element.totalamount,element.allocatedAmount).subscribe((data:any)=>{
-    //        // console.log(data)
-    //     });       
-    //   }
-    //  });   
      
      
     }
@@ -642,5 +583,13 @@ export class TransactionComponent implements OnInit {
     this.sharedservice.setCustomerOrSupplier("Supplier");
      this.sharedservice.setSelectedCustomerID(i);
    }
+   addNewLine(){
+    this.adjustedvalues.push( {description: '',category: '',amount: ''});
+  }
+  removeNewLine(i: number) {
+    this.displaycategorynames1[i]=false; 
+   this.adjustedvalues.splice(i, 1);
+
+ }
 
 }

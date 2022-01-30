@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { ApiService } from '../api.service';
@@ -37,6 +37,8 @@ class Invoice{
 })
 export class CustomerInvoiceComponent implements OnInit {
   categorytitle="";
+  categoryCode="";
+  categoryName="";
   invoice = new Invoice(); 
   names=[];
   
@@ -55,6 +57,7 @@ export class CustomerInvoiceComponent implements OnInit {
   displaycategorynames=[];
   addnewcategoryenable=[];
   whose=localStorage.getItem("uEmail");
+  @ViewChild('closebutton') closebutton;
   generatePDF(action = 'open') {
     let docDefinition = {
       content: [
@@ -444,35 +447,24 @@ export class CustomerInvoiceComponent implements OnInit {
     this.router.navigate(['/report']); 
   }
   }
-  addNewCategory(i:number){
-    // if(this.sharedapi.getCustomerOrSupplier()=="Customer"){
-    //   // this.api.insertNewCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
-    //   //   window.alert(data.msg);   
-    //   //   this.addnewcategoryenable[i]=false;       
-    //   //  });
-    // }
-    // else if(this.sharedapi.getCustomerOrSupplier()=="Supplier"){
-    //   // this.api.insertNewExpenceCategory(this.invoice.products[i].category).subscribe((data:any)=>{       
-    //   //   window.alert(data.msg);   
-    //   //   this.addnewcategoryenable[i]=false;        
-    //   //  });
-    // }
-    // else{
-    //   window.alert("Error try again later..");
-    //   this.router.navigate(['/report']); 
-    // }
+  addNewCategory(){
     if(!this.categorytitle){
       window.alert("Select Category Title");
       return;
     }
-    if(!this.invoice.products[i].category){
-      window.alert("Category should not be empty");
+    if(!this.categoryCode){
+      window.alert("Category Code should not be empty");
       return;
     }    
-    this.api.insertNewCategory(this.categorytitle,this.invoice.products[i].category,this.whose).subscribe((data:any)=>{       
-      window.alert(data.msg);   
-      this.addnewcategoryenable[i]=false;       
+    if(!this.categoryName){
+      window.alert("Category Name should not be empty");
+      return;
+    }
+    var category=this.categoryCode+"-"+this.categoryName;
+    this.api.insertNewCategory(this.categorytitle,category,this.whose).subscribe((data:any)=>{       
+      window.alert(data.msg); 
+      this.closebutton.nativeElement.click();
+      //this.addnewcategoryenable[i]=false;       
      });
-    
   }
 }
