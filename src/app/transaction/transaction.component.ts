@@ -42,6 +42,10 @@ export class TransactionComponent implements OnInit {
   customerinvoices = []; 
   suppliernegativeinvoices=[];
   outby=[];
+  adjustedoutby=[];
+  sum=[];
+  adjustedsum=[];
+  recievedamount=[];
   savebtndisabled=[];
    today = new Date().toISOString().split('T')[0];
 
@@ -77,6 +81,9 @@ export class TransactionComponent implements OnInit {
     this.addnewcategoryenable[0]=false;
     this.matchactive[0]=false;
     this.outby[0]=0;
+    this.sum[0]=0;
+    this.adjustedsum[0]=0;
+    this.adjustedoutby[0]=0;
     this.savebtndisabled[0]=true;
   }
   addPayment(){
@@ -85,6 +92,9 @@ export class TransactionComponent implements OnInit {
     this.addnewcategoryenable.push(false);
     this.matchactive.push(false);
     this.outby.push(0);
+    this.sum.push(0);
+    this.adjustedsum.push(0)
+    this.adjustedoutby.push(0);
     this.savebtndisabled.push(true);
   }
   removePayment(i: number) {
@@ -93,6 +103,9 @@ export class TransactionComponent implements OnInit {
     this.addnewcategoryenable.splice(i, 1);
     this.matchactive.splice(i,1);
     this.outby.splice(i,1);
+    this.sum.splice(i,1);
+    this.adjustedsum.splice(i,1);
+    this.adjustedoutby.splice(i,1);
     this.savebtndisabled.splice(i,1);
   }
   ngOnInit(): void {
@@ -155,6 +168,25 @@ export class TransactionComponent implements OnInit {
       } 
     });    
   }
+  onPressKeyboardAdjustedValue(amt:string,j:number,i:number){
+      var sum=0;
+      //this.outby[i]=this.adjustedoutby[i];
+      for(var k=0;k<this.adjustedvalues.length;k++){
+        if(this.adjustedvalues[k].amount)
+           sum=sum+Number(this.adjustedvalues[k].amount)
+      }
+      //this.outby[i]=this.outby[i]-sum;
+      this.adjustedsum[i]=sum;
+      //enable SAVE button
+        if((this.sum[i]+this.adjustedsum[i])==this.recievedamount[i]){
+          this.savebtndisabled[i]=false;
+        }
+        else{
+          this.savebtndisabled[i]=true;
+        }
+      
+      
+  }
   onPressKeyboardCategory1(searchValue: string,j:number){     
     this.categorynamefront=[];
     var flag=false;
@@ -190,16 +222,20 @@ export class TransactionComponent implements OnInit {
      window.alert("This Payment is Changed to PayOut");
      this.payments[j].paidin=null;     
    } 
-   this.outby[j]=parseFloat(paidOut)
+   this.outby[j]=parseFloat(paidOut);
+   this.recievedamount[j]=Number(paidOut);
+   this.adjustedoutby[j]=this.outby[j];
    
   }
   onPressKeyboardPaidIn(paidOut: string,j:number){   
     if(this.payments[j].paidout) {
-      window.alert("This Payment is Changed to PayIn");
-      
-      this.payments[j].paidout=null;     
+      window.alert("This Payment is Changed to PayIn");      
+      this.payments[j].paidout=null;   
+
     } 
-    this.outby[j]=parseFloat(paidOut)
+    this.recievedamount[j]=Number(paidOut);
+    this.outby[j]=parseFloat(paidOut);
+    this.adjustedoutby[j]=this.outby[j];
    }
 
 
@@ -254,11 +290,6 @@ export class TransactionComponent implements OnInit {
      });
     }
    
-   
-
- 
-
-
    matchSelected(i){
      var p=0;
      for(p=0;p<this.matchactive.length;p++){
@@ -266,9 +297,6 @@ export class TransactionComponent implements OnInit {
          this.matchactive[p]=false;
        }
      }
-
-
-
 
     if(this.payments[i].paidin){
       //customer invoice and Supplier negative inoice;
@@ -300,8 +328,6 @@ export class TransactionComponent implements OnInit {
        });
      }); 
     }
-
-
 
     else if(this.payments[i].paidout){
       //Supplier invoice and Customer negative invoice
@@ -337,9 +363,6 @@ export class TransactionComponent implements OnInit {
       window.alert("Enter Amount");
     }
    }
-
-
-
    checkValuePositive(k,i){   
     //window.alert("clicked chkpositive"+this.customerinvoices[k].balanceamount)
      var recievedamount=0;
@@ -356,14 +379,17 @@ export class TransactionComponent implements OnInit {
           return;
         }
         else if(this.customerinvoices[k].balanceamount1<=this.outby[i]){         
-          this.customerinvoices[k].allocatedAmount=this.customerinvoices[k].balanceamount1;         
+          this.customerinvoices[k].allocatedAmount=this.customerinvoices[k].balanceamount1;  
+            this.sum[i]=this.sum[i]+this.customerinvoices[k].allocatedAmount;     
         }   
         else{
-          this.customerinvoices[k].allocatedAmount=this.outby[i];         
+          this.customerinvoices[k].allocatedAmount=this.outby[i];   
+          this.sum[i]=this.sum[i]+this.customerinvoices[k].allocatedAmount;      
         }  
         this.outby[i]=this.outby[i]-this.customerinvoices[k].balanceamount1; 
       }
       else{
+        this.sum[i]=this.sum[i]-this.customerinvoices[k].allocatedAmount;
         this.customerinvoices[k].allocatedAmount=0;
         this.outby[i]=this.outby[i]+this.customerinvoices[k].balanceamount1;
       }   
@@ -403,6 +429,13 @@ export class TransactionComponent implements OnInit {
       }
       this.savebtndisabled[i]=true;
     }
+    //enable SAVE button
+    if((this.sum[i]+this.adjustedsum[i])==this.recievedamount[i]){
+      this.savebtndisabled[i]=false;
+    }
+    else{
+      this.savebtndisabled[i]=true;
+    }
    }
 
    checkValueNegative(k,i){   
@@ -423,14 +456,17 @@ export class TransactionComponent implements OnInit {
           return         
         }
         else if(this.suppliernegativeinvoices[k].balanceamount1<=this.outby[i]){
-          this.suppliernegativeinvoices[k].allocatedAmount=this.suppliernegativeinvoices[k].balanceamount1;          
+          this.suppliernegativeinvoices[k].allocatedAmount=this.suppliernegativeinvoices[k].balanceamount1; 
+          this.sum[i]=this.sum[i]+this.suppliernegativeinvoices[k].allocatedAmount;           
         }   
         else{
           this.suppliernegativeinvoices[k].allocatedAmount=this.outby[i];
+          this.sum[i]=this.sum[i]+this.suppliernegativeinvoices[k].allocatedAmount;  
         }  
         this.outby[i]=this.outby[i]-this.suppliernegativeinvoices[k].balanceamount1;                
       }
       else{
+        this.sum[i]=this.sum[i]-this.suppliernegativeinvoices[k].allocatedAmount;  
         this.suppliernegativeinvoices[k].allocatedAmount=0;
         this.outby[i]=this.outby[i]+this.suppliernegativeinvoices[k].balanceamount1;
       }
@@ -465,7 +501,14 @@ export class TransactionComponent implements OnInit {
           this.suppliernegativeinvoices[z].checked=false;
         }
         this.savebtndisabled[i]=true;
-    }    
+    }   
+      //enable SAVE button
+      if((this.sum[i]+this.adjustedsum[i])==this.recievedamount[i]){
+        this.savebtndisabled[i]=false;
+      }
+      else{
+        this.savebtndisabled[i]=true;
+      }
    }
    
    async allocateAmount(date,desc,i){    

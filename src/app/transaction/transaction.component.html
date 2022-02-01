@@ -170,14 +170,7 @@
                             <td>{{suppliernegativeinvoice.balanceamount}}</td>                             
                             <td>{{suppliernegativeinvoice.allocatedAmount}}</td>                     
                         </tr>
-                        <tr>
-                            <td colspan="5">
-
-                            </td>
-                            <td colspan="3">
-                                Total is out by {{outby[i]}}
-                            </td>
-                        </tr>
+                       
                         <tr>
                             <td colspan="8">
                                      <!-- adjustments to cash table start -->
@@ -226,7 +219,7 @@
                         </td>
                         <td>
                             <input type="text" class="form-control" [(ngModel)]="adjustedvalue.amount"
-                            name="amount_{{t}}">
+                            name="amount_{{t}}" (input)="onPressKeyboardAdjustedValue($event.target.value,t,i)">
                         </td>
                         <td>
                             <button type="button" (click)="removeNewLine(t)" >X</button>
@@ -243,6 +236,13 @@
 
                             </td>
                         </tr>
+                            <tr>
+                                <td colspan="7" style="text-align: right;">
+                                    Total is out by {{recievedamount[i]-(sum[i]+adjustedsum[i])}}
+                                </td>
+                            </tr>
+                        
+
                         <tr>
                             <td colspan="8" align="center" >
                                 <button type="button" class="btn btn-primary" [disabled]="savebtndisabled[i]" (click)="allocateAmount(payment.date,payment.description,i)">SAVE</button>
