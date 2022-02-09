@@ -226,6 +226,11 @@ createNextCashAccountNumber(whose:string){
 addCashAccount(whose:string,payment:any){
   return this.http.post("http://localhost:3000/addCashAccount",{"whose":whose,"payment":payment});
 }
+
+addCashAccountFromAdjusted(whose:string,adjustedamount:any,date:string,cashaccountid:string){
+  return this.http.post("http://localhost:3000/addCashAccountFromAdjusted",{"whose":whose,"adjustedamount":adjustedamount,"date":date,"cashaccountid":cashaccountid});
+}
+
 getAllCashAccounts(email:string){
   return this.http.post("http://localhost:3000/getAllCashAccounts",{"email":email});
  }

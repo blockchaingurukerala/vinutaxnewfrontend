@@ -184,8 +184,6 @@ export class TransactionComponent implements OnInit {
         else{
           this.savebtndisabled[i]=true;
         }
-      
-      
   }
   onPressKeyboardCategory1(searchValue: string,j:number){     
     this.categorynamefront=[];
@@ -511,19 +509,18 @@ export class TransactionComponent implements OnInit {
       }
    }
    
-   async allocateAmount(date,desc,i){    
+   async allocateAmount(date222,desc,i){    
      var whose=localStorage.getItem("uEmail"); 
       var amount=0;
+      window.alert(this.payments[i].date)
      if(this.payments[i].paidin){ 
        amount=this.payments[i].paidin;
        for(var j=0;j<this.customerinvoices.length;j++) {
           await new Promise<void> (resolve1 => {
-            if(this.customerinvoices[j].allocatedAmount>0){ 
-             
+            if(this.customerinvoices[j].allocatedAmount>0){              
             // window.alert("allocating"+element.allocatedAmount)  ;       
-              this.api.allocateToCustomerInvoice(whose,this.customerinvoices[j].id,date,this.customerinvoices[j].totalamount,-1*this.customerinvoices[j].allocatedAmount).subscribe((data:any)=>{
-                // console.log(data)
-               
+              this.api.allocateToCustomerInvoice(whose,this.customerinvoices[j].id,date222,this.customerinvoices[j].totalamount,-1*this.customerinvoices[j].allocatedAmount).subscribe((data:any)=>{
+                // console.log(data)               
                 resolve1();
               });       
             }
@@ -536,9 +533,8 @@ export class TransactionComponent implements OnInit {
         await new Promise<void> (resolve1 => {
           if(this.suppliernegativeinvoices[k].allocatedAmount>0){            
           // window.alert("allocating"+element.allocatedAmount)  ;       
-            this.api.allocateToSupplierInvoice(whose,this.suppliernegativeinvoices[k].id,date,-1*this.suppliernegativeinvoices[k].totalamount,-1*this.suppliernegativeinvoices[k].allocatedAmount).subscribe((data:any)=>{
-              // console.log(data)
-             
+            this.api.allocateToSupplierInvoice(whose,this.suppliernegativeinvoices[k].id,date222,-1*this.suppliernegativeinvoices[k].totalamount,-1*this.suppliernegativeinvoices[k].allocatedAmount).subscribe((data:any)=>{
+              // console.log(data)             
               resolve1();
             });       
           }
@@ -560,12 +556,10 @@ export class TransactionComponent implements OnInit {
       amount=this.payments[i].paidout;
       for(var j=0;j<this.customerinvoices.length;j++) {
         await new Promise<void> (resolve1 => {
-          if(this.customerinvoices[j].allocatedAmount>0){ 
-           
+          if(this.customerinvoices[j].allocatedAmount>0){            
           // window.alert("allocating"+element.allocatedAmount)  ;       
-            this.api.allocateToSupplierInvoice(whose,this.customerinvoices[j].id,date,this.customerinvoices[j].totalamount,this.customerinvoices[j].allocatedAmount).subscribe((data:any)=>{
-              // console.log(data)
-             
+            this.api.allocateToSupplierInvoice(whose,this.customerinvoices[j].id,date222,this.customerinvoices[j].totalamount,this.customerinvoices[j].allocatedAmount).subscribe((data:any)=>{
+              // console.log(data)             
               resolve1();
             });       
           }
@@ -578,9 +572,8 @@ export class TransactionComponent implements OnInit {
       await new Promise<void> (resolve1 => {
         if(this.suppliernegativeinvoices[k].allocatedAmount>0){            
         // window.alert("allocating"+element.allocatedAmount)  ;       
-          this.api.allocateToCustomerInvoice(whose,this.suppliernegativeinvoices[k].id,date,-1*this.suppliernegativeinvoices[k].totalamount,this.suppliernegativeinvoices[k].allocatedAmount).subscribe((data:any)=>{
-            // console.log(data)
-           
+          this.api.allocateToCustomerInvoice(whose,this.suppliernegativeinvoices[k].id,date222,-1*this.suppliernegativeinvoices[k].totalamount,this.suppliernegativeinvoices[k].allocatedAmount).subscribe((data:any)=>{
+            // console.log(data)           
             resolve1();
           });       
         }
@@ -590,17 +583,42 @@ export class TransactionComponent implements OnInit {
       });
      }    
 
-
-
-     
-     
     }
 
     //adding to bankStatement
-    this.api.addbankstatement(date,amount,desc,whose).subscribe((data:any)=>{
-      window.alert("Saved Successfully");
+    this.api.addbankstatement(date222,amount,desc,whose).subscribe((data:any)=>{
+     // window.alert("Saved Successfully");
       this.removePayment(i);
     });
+
+    //Adjusted amount needs to add in cash account
+    window.alert(date222)
+    window.alert(this.adjustedvalues.length);
+   
+
+    for(var h=0;h<this.adjustedvalues.length;h++){
+      await new Promise<void> (resolve2 => {
+        this.api.createNextCashAccountNumber(this.email).subscribe((data:any)=>{
+          var cashaccountid=data.msg;
+          var amount=0;
+         
+          this.api.addCashAccountFromAdjusted(this.email,this.adjustedvalues[h],date222,cashaccountid).subscribe((data1:any)=>{
+            if(data1.msg=="Successfully Saved"){
+              resolve2();             
+            }
+            else{
+              window.alert("Please Try after some time");
+              resolve2();
+            }  
+          });
+
+        });
+      });
+      
+    }
+    
+     //Adjested value to cash account ends
+
    }
 
    createSelected(i){      
