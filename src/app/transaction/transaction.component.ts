@@ -51,6 +51,7 @@ export class TransactionComponent implements OnInit {
 
    @ViewChild('closebutton') closebutton;
    public adjustedvalues: any[] = [{description: '',category: '',amount: ''}];
+   public negativeadjustedvalues: any[] = [{description: '',category: '',amount: ''}];
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     // var id=this.sharedservice.getidforcustomeredit();
     this.categorynames=[];
@@ -169,6 +170,9 @@ export class TransactionComponent implements OnInit {
     });    
   }
   onPressKeyboardAdjustedValue(amt:string,j:number,i:number){
+    console.log(this.adjustedvalues);
+  console.log(this.negativeadjustedvalues);
+
       var sum=0;
       //this.outby[i]=this.adjustedoutby[i];
       for(var k=0;k<this.adjustedvalues.length;k++){
@@ -512,8 +516,9 @@ export class TransactionComponent implements OnInit {
    async allocateAmount(date222,desc,i){    
      var whose=localStorage.getItem("uEmail"); 
       var amount=0;
-      window.alert(this.payments[i].date)
+     var checkpaidin=0;//checking  paidin or paidout
      if(this.payments[i].paidin){ 
+      checkpaidin=1;
        amount=this.payments[i].paidin;
        for(var j=0;j<this.customerinvoices.length;j++) {
           await new Promise<void> (resolve1 => {
@@ -553,6 +558,7 @@ export class TransactionComponent implements OnInit {
      }
 
      else if(this.payments[i].paidout){
+      checkpaidin=0;
       amount=this.payments[i].paidout;
       for(var j=0;j<this.customerinvoices.length;j++) {
         await new Promise<void> (resolve1 => {
@@ -592,33 +598,59 @@ export class TransactionComponent implements OnInit {
     });
 
     //Adjusted amount needs to add in cash account
-    window.alert(date222)
-    window.alert(this.adjustedvalues.length);
+    //window.alert(date222)
+   // window.alert(this.adjustedvalues.length);
    
-
+   var flag=1;
+   
     for(var h=0;h<this.adjustedvalues.length;h++){
       await new Promise<void> (resolve2 => {
         this.api.createNextCashAccountNumber(this.email).subscribe((data:any)=>{
           var cashaccountid=data.msg;
           var amount=0;
-         
-          this.api.addCashAccountFromAdjusted(this.email,this.adjustedvalues[h],date222,cashaccountid).subscribe((data1:any)=>{
-            if(data1.msg=="Successfully Saved"){
-              resolve2();             
-            }
-            else{
-              window.alert("Please Try after some time");
-              resolve2();
-            }  
-          });
+          if(checkpaidin==1){ //if paidin
+                //Find negativeadustment negativeadjustedvalues
+                
+                this.negativeadjustedvalues[h].description=this.adjustedvalues[h].description;
+                this.negativeadjustedvalues[h].category=this.adjustedvalues[h].category;
+                this.negativeadjustedvalues[h].amount=-1*Number(this.adjustedvalues[h].amount);
+
+                this.api.addCashAccountFromAdjusted(this.email,this.negativeadjustedvalues[h],date222,cashaccountid).subscribe((data1:any)=>{
+                  if(data1.msg=="Successfully Saved"){
+                    resolve2();             
+                  }
+                  else{
+                    window.alert("Please Try after some time");
+                    flag=0;
+                    resolve2();
+                  }  
+                });
+        }
+        else if(checkpaidin==0){ //if paidout
+            this.api.addCashAccountFromAdjusted(this.email,this.adjustedvalues[h],date222,cashaccountid).subscribe((data1:any)=>{
+              if(data1.msg=="Successfully Saved"){
+                resolve2();             
+              }
+              else{
+                window.alert("Please Try after some time");
+                flag=0;
+                resolve2();
+              }  
+            });
+        }
 
         });
       });
       
+    }    
+    if(flag==1){
+      window.alert("SAVED Successfully")
     }
-    
+    else{
+      window.alert("Pls Try after some time")
+    }
+    this.router.navigate(['\allacount']); 
      //Adjested value to cash account ends
-
    }
 
    createSelected(i){      
@@ -646,11 +678,13 @@ export class TransactionComponent implements OnInit {
    }
    addNewLine(){
     this.adjustedvalues.push( {description: '',category: '',amount: ''});
+    this.negativeadjustedvalues.push( {description: '',category: '',amount: ''});
+    
   }
   removeNewLine(i: number) {
     this.displaycategorynames1[i]=false; 
    this.adjustedvalues.splice(i, 1);
-
+   this.negativeadjustedvalues.splice(i, 1);
  }
 
 }

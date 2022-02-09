@@ -173,7 +173,7 @@
                        
                         <tr>
                             <td colspan="8">
-                                
+
                                      <!-- adjustments to cash table start -->
                 <table class="table" style="background-color: lightblue;">
                     <thead>
@@ -188,10 +188,12 @@
                         <td>
                             <input type="text" class="form-control" [(ngModel)]="adjustedvalue.description"
                             name="desc_{{t}}">
+                            
                         </td>
                         <td>
                             <input type="text" class="form-control" [(ngModel)]="adjustedvalue.category"
                             name="category_{{t}}" (input)="onPressKeyboardCategory1($event.target.value,t)">
+                            
                             <div *ngIf="displaycategorynames1[t]">
                                 <table class="table ">
                                     <tbody>
@@ -221,6 +223,7 @@
                         <td>
                             <input type="text" class="form-control" [(ngModel)]="adjustedvalue.amount"
                             name="amount_{{t}}" (input)="onPressKeyboardAdjustedValue($event.target.value,t,i)">
+                                              
                         </td>
                         <td>
                             <button type="button" (click)="removeNewLine(t)" >X</button>
