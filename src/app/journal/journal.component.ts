@@ -15,7 +15,7 @@ export class JournalComponent implements OnInit {
     description: '', 
     account: '',
     taxrate: '',
-    region: '' ,
+    
     debitgbp: '' ,
     creditgbp: ''    
   },
@@ -24,7 +24,7 @@ export class JournalComponent implements OnInit {
     description: '', 
     account: '',
     taxrate: '',
-    region: '' ,
+   
     debitgbp: '' ,
     creditgbp: ''    
   },
@@ -33,7 +33,7 @@ export class JournalComponent implements OnInit {
     description: '', 
     account: '',
     taxrate: '',
-    region: '' ,
+    
     debitgbp: '' ,
     creditgbp: ''    
   },
@@ -42,7 +42,7 @@ export class JournalComponent implements OnInit {
     description: '', 
     account: '',
     taxrate: '',
-    region: '' ,
+    
     debitgbp: '' ,
     creditgbp: ''    
   },
@@ -51,7 +51,7 @@ export class JournalComponent implements OnInit {
     description: '', 
     account: '',
     taxrate: '',
-    region: '' ,
+    
     debitgbp: '' ,
     creditgbp: ''    
   }
@@ -60,7 +60,7 @@ export class JournalComponent implements OnInit {
   jno="";
   date="";
   narration="";
-  tax="";
+  tax='notax';
   categorytitle="";
   categoryCode="";
   categoryName="";
@@ -71,6 +71,7 @@ export class JournalComponent implements OnInit {
   categorynamefront=[];
   displaycategorynames=[];
   addnewcategoryenable=[];
+  disabletaxrate=true;
   @ViewChild('closebutton') closebutton;
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     
@@ -79,6 +80,7 @@ export class JournalComponent implements OnInit {
     }
     else{
       this.whose=localStorage.getItem("uEmail");
+      
       this.api.createNextJournalNumber(this.email).subscribe((data:any)=>{
           this.jno=data.msg;         
       })
@@ -192,6 +194,27 @@ export class JournalComponent implements OnInit {
       this.router.navigate(['/displayjournals']);
     });
   }
+
+  changeTaxInclude(){
+    if(this.tax!="notax"){
+      this.disabletaxrate=false;
+      for(var i=0;i<this.journalvalues.length;i++){
+        this.journalvalues[i].taxrate='std';
+      }
+    }
+    else{
+      this.disabletaxrate=true;
+      for(var i=0;i<this.journalvalues.length;i++){
+        this.journalvalues[i].taxrate='';
+      }
+    }
+  }  
+
+  changeTaxRate(taxrate,i){
+    window.alert("we");
+    window.alert(taxrate);
+    window.alert(this.journalvalues[i].taxrate);
+  }
   
   setasCustomer(){   
     this.sharedservice.setCustomerOrSupplier("Customer");
@@ -214,7 +237,7 @@ export class JournalComponent implements OnInit {
       description: '', 
       account: '',
       taxrate: '',
-      region: '' ,
+     
       debitgbp: '' ,
       creditgbp: ''    
     });

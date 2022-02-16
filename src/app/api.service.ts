@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as bcrypt from 'bcryptjs';
 import { HttpClient ,HttpHeaders } from '@angular/common/http';
+import { forkJoin } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,8 @@ export class ApiService {
     //return this.http.post("https://exambackend.herokuapp.com/insert",{"user":user})     
     return this.http.post("http://localhost:3000/checkAvailabilityExpenceCategory",{"category":category}) ;  
   }
-  insertNewCategory(titlecategory:string,category:string,whose:string){      
+  insertNewCategory(titlecategory:string,category:string,whose:string){    
+    
     return this.http.post("http://localhost:3000/insertNewCategory",{"titlecategory":titlecategory,"category":category,"whose":whose});
   }
   insertNewExpenceCategory(category:string){      
@@ -81,11 +83,18 @@ modifyIncomes(email:string,originalincomes:any[],modifiedincomes:any[]){
 modifyExpences(email:string,originalexpences:any[],modifiedexpences:any[]){
   return this.http.post("http://localhost:3000/modifyExpences",{"email":email,"originalexpences":originalexpences,"modifiedexpences":modifiedexpences});
 }
-addCustomerDetils(name:string,email:string,contactno:string,address:string,whose:string){
-  return this.http.post("http://localhost:3000/addCustomerDetils",{"name":name,"email":email,"contactno":contactno,"address":address,"whose":whose});
+ addCustomerDetils(name:string,email:string,contactno:string,address:string,whose:string) {
+  //titlecategory:string,category:string,whose:string
+ 
+    let call1=this.http.post("http://localhost:3000/insertNewCategory",{"titlecategory":"Customer","category":name,"whose":whose});
+  let call2=this.http.post("http://localhost:3000/addCustomerDetils",{"name":name,"email":email,"contactno":contactno,"address":address,"whose":whose});
+  return forkJoin([call1, call2]);
+
 }
 addSupplierDetils(name:string,email:string,contactno:string,address:string,whose:string){
-  return this.http.post("http://localhost:3000/addSupplierDetils",{"name":name,"email":email,"contactno":contactno,"address":address,"whose":whose});
+  let call1=this.http.post("http://localhost:3000/insertNewCategory",{"titlecategory":"Supplier","category":name,"whose":whose});
+  let call2=this.http.post("http://localhost:3000/addSupplierDetils",{"name":name,"email":email,"contactno":contactno,"address":address,"whose":whose});
+  return forkJoin([call1, call2]);
 }     
 addCustomerInvoice(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string,customername:string){
  

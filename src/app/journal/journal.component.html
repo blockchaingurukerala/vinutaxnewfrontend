@@ -69,7 +69,7 @@
             <div class="col col-12 col-md-9 col-lg-9 col-sm-9"></div>
             <div class="col col-12 col-md-2 col-lg-2 col-sm-2">
                 <label for="amountsare">Amounts Are</label>
-                <select name="" id="amountsare" class="form-control" [(ngModel)]="tax">
+                <select name="" id="amountsare" class="form-control" [(ngModel)]="tax" (change)="changeTaxInclude();">
                     <option value="notax" selected>No Tax</option>
                     <option value="taxinclusive" >Tax Inclusive</option>
                     <option value="taxexclusive" >Tax Exclusive</option>
@@ -86,9 +86,8 @@
                               <tr>
                                   <th>SI</th>
                                   <th>Description</th>
-                                  <th>Account</th>
+                                  <th>Account</th>                                  
                                   <th>Tax Rate</th>
-                                  <th>Region</th>
                                   <th>Debit GBP</th>
                                   <th>Credit GBP</th>
                               </tr>
@@ -142,11 +141,15 @@
                                 <!-- accountdisplay ends -->
 
 
-                               <td>                                     
-                               </td>
+                               
                                <td>
-                                 <input type="text" class="form-control" [(ngModel)]="journalvalue.region"
-                                 name="region_{{i}}"  >
+                                 <!-- <input type="text" class="form-control" [(ngModel)]="journalvalue.taxrate"
+                                 name="taxrate_{{i}}"  > -->
+                                 <select  name="taxrate_{{i}}" class="form-control" [(ngModel)]="journalvalue.taxrate" [disabled]="disabletaxrate" (change)="changeTaxRate($event.target.value,i)" >
+                                    <option value="std" selected>Std</option>
+                                    <option value="20percent" >20 %</option>
+                                    <option value="5percent" >5 %</option>
+                                </select>
                                </td>
                                <td>
                                 <input type="text" class="form-control" [(ngModel)]="journalvalue.debitgbp"
