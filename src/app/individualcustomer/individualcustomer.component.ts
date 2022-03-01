@@ -10,6 +10,7 @@ import {SharedService} from '../shared.service';
 })
 export class IndividualcustomerComponent implements OnInit {
   totalmamount=0;
+  showinvoice=true;
   editing=false;
   noediting=true;
    customerid="";
@@ -19,6 +20,7 @@ export class IndividualcustomerComponent implements OnInit {
    userAddress="";
     customerinvoices = []; 
     customerdrftinvoices=[];
+    displayincomes=[]
      whose=localStorage.getItem("uEmail"); 
      isOpen:boolean;
 
@@ -118,6 +120,20 @@ export class IndividualcustomerComponent implements OnInit {
   enableEditing(){
     this.editing=true;
     this.noediting=false;
+  }
+  showInvoices(){
+    this.showinvoice=true;
+  }
+  showAdvancePayment(){    
+    this.displayincomes=[];
+    this.api.getAllCashAccountsCustomer(this.userFullName,this.whose).subscribe((data:any)=>{
+      //console.log(data);
+      data.forEach(element => {
+        this.displayincomes.push(element)
+        //console.log(element)
+      });
+    })
+    this.showinvoice=false;
   }
   deleteCustomer(){
     if(this.sharedservice.getCustomerOrSupplier()=="Customer"){

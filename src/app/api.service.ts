@@ -94,7 +94,7 @@ modifyExpences(email:string,originalexpences:any[],modifiedexpences:any[]){
 addSupplierDetils(name:string,email:string,contactno:string,address:string,whose:string){
   let call1=this.http.post("http://localhost:3000/insertNewCategory",{"titlecategory":"Supplier","category":name,"whose":whose});
   let call2=this.http.post("http://localhost:3000/addSupplierDetils",{"name":name,"email":email,"contactno":contactno,"address":address,"whose":whose});
-  return forkJoin([call1, call2]);
+  return forkJoin([call1, call2]);  
 }     
 addCustomerInvoice(date:string,duedate:string,invoiceid:string,reference:string,products:any [],totalamount:number,additionaldetails:string,whose:string,customerid:string,customername:string){
  
@@ -242,6 +242,9 @@ addCashAccountFromAdjusted(whose:string,adjustedamount:any,date:string,cashaccou
 
 getAllCashAccounts(email:string){
   return this.http.post("http://localhost:3000/getAllCashAccounts",{"email":email});
+ }
+ getAllCashAccountsCustomer(username:string,email:string){
+  return this.http.post("http://localhost:3000/getAllCashAccountsCustomer",{"username":username,"email":email});
  }
  addbankstatement(date:string,amount:number,description:string,whose:string){
   return this.http.post("http://localhost:3000/addbankstatement",{"date":date,"amount":amount,"description":description,"whose":whose});
