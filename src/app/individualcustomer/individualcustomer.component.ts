@@ -23,7 +23,11 @@ export class IndividualcustomerComponent implements OnInit {
     displayincomes=[]
      whose=localStorage.getItem("uEmail"); 
      isOpen:boolean;
-
+     matchactive=[];
+     selectedmatchingcategory=[];
+     displaycategorynames=[];
+     categorynamefront=[];
+     addnewcategoryenable=[];
      displaycustomerorsupplier="NONE";
      viewuserdetails="NONE"
   EnterValidData(){
@@ -129,12 +133,110 @@ export class IndividualcustomerComponent implements OnInit {
     this.api.getAllCashAccountsCustomer(this.userFullName,this.whose).subscribe((data:any)=>{
       //console.log(data);
       data.forEach(element => {
-        this.displayincomes.push(element)
+        this.displayincomes.push(element);
+        this.matchactive.push(false);
+        this.displaycategorynames.push(false);
+        this.addnewcategoryenable.push(false);
         //console.log(element)
       });
     })
     this.showinvoice=false;
   }
+  matchSelected(i){
+    var p=0;
+    for(p=0;p<this.matchactive.length;p++){
+      if(p!=i){
+        this.matchactive[p]=false;
+      }
+    }
+    this.matchactive[i]=true;
+
+  }
+  createSelected(i){      
+    this.matchactive[i]=false;
+   }
+  onPressKeyboardCategory(searchValue: string,j:number){     
+    this.categorynamefront=[];
+    var flag=false;
+    this.displaycategorynames[j]=true;    
+    this.addnewcategoryenable[j]=false;
+    this.api.getCategories().subscribe( (data:any)=>{  
+      var len=data.length; 
+      var op=0;
+      for(var o=0;o<len;o++){  
+        this.categorynamefront.push({"titlecategory":data[op].titlecategory,"category":[]});
+        for(var q=0;q<data[op].category.length;q++) {
+          if((data[op].category[q].whose=="All")||(data[op].category[q].whose==this.whose)){
+            if(data[op].category[q].category.toUpperCase().indexOf(searchValue.toUpperCase())!=-1){
+              this.categorynamefront[o].category.push(data[op].category[q].category);           
+              flag=true;           
+            }
+          }          
+        }
+        if(this.categorynamefront[o].category.length<=0){
+            this.categorynamefront.splice(o,1);
+              len--;  
+              o--;
+        }
+        op++;
+      }   
+      if(flag==false){       
+          this.addnewcategoryenable[j]=true;      
+      } 
+    });    
+  }
+
+  savePayment(i:number){
+    // this.whose=localStorage.getItem("uEmail");
+    // var amount=0;
+    // if((!this.payments[i].paidin)&&(!this.payments[i].paidout)) {
+    //   window.alert("Enter Amount");
+    //   return;
+    // }
+    // if(!this.payments[i].category){
+    //   window.alert("Enter Category");
+    //   return;
+    // }
+    //  //update in income table
+    //  this.api.createNextCashAccountNumber(this.email).subscribe((data:any)=>{
+    //   this.payments[i].id=data.msg;
+
+    //   if(this.payments[i].paidin){
+    //     amount=this.payments[i].paidin;
+    //     this.payments[i].amount=-1*this.payments[i].paidin;
+    //     this.api.addCashAccount(this.email,this.payments[i]).subscribe((data:any)=>{
+    //       if(data.msg=="Successfully Saved"){
+    //         window.alert("Saved Successfully");
+    //         this.router.navigate(['/report']);
+    //       }
+    //       else{
+    //         window.alert("Please Try after some time");
+    //       }  
+    //     });
+    //   }
+    //   else if(this.payments[i].paidout){
+    //     amount=-1*this.payments[i].paidout;
+    //     this.payments[i].amount=this.payments[i].paidout;
+    //     this.api.addCashAccount(this.email,this.payments[i]).subscribe((data:any)=>{
+    //       if(data.msg=="Successfully Saved"){
+    //         window.alert("Saved Successfully");
+    //         this.router.navigate(['/report']);
+    //       }
+    //       else{
+    //         window.alert("Please Try after some time");
+    //       }  
+    //     });
+    //   }
+
+    //     //adding to bankStatement
+    //     this.api.addbankstatement(this.payments[i].date,amount,this.payments[i].description,this.email).subscribe((data:any)=>{
+    //       window.alert("Saved Successfully");
+    //      // this.removePayment(i);
+    //     });
+      
+    //  });
+    }
+
   deleteCustomer(){
     if(this.sharedservice.getCustomerOrSupplier()=="Customer"){
       this.api.deleteCustomer(this.customerid).subscribe((data:any)=>{

@@ -168,8 +168,7 @@
                                       <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
                                       <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
                                       <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4" style="border-top: 1px double #333;border-bottom: 2px double #333;">
-                                          <h3>Total  {{totalmamount}}</h3>                                         
-                                         
+                                          <h3>Total  {{totalmamount}}</h3>  
                                     </div>
                                   </div>
                               </div>
@@ -197,7 +196,67 @@
                                             <td><input name="date_{{i}}" type="date" class="form-control"  [(ngModel)]="displayincome.date" readonly ></td> 
                                             <td><input  name="desc_{{i}}" class="form-control"  [(ngModel)]="displayincome.description" readonly></td> 
                                             <td><input name="amt_{{i}}" class="form-control"  [(ngModel)]="displayincome.amount" readonly></td> 
-                                                                
+                                            
+
+                                            <!-- display matching starts -->
+                                            <td>
+                                                <table>
+                                                    <tr>
+                                                        <td align="center"> <b>Allocate</b> </td>
+                                                    </tr>
+                                                    <tr *ngIf="!matchactive[i]">
+                                                      <ul class="nav nav-tabs">
+                                                          <li class="active" ><a  (click)="createSelected(i);" style="cursor: pointer;">Create</a></li>
+                                                          <li ><a  (click)="matchSelected(i);" style="cursor: pointer;">Match</a></li> 
+                                                      </ul>  
+                                                    </tr>
+                                                    <tr *ngIf="matchactive[i]">
+                                                        <ul class="nav nav-tabs">
+                                                            <li  ><a style="cursor: pointer;" (click)="createSelected(i);">Create</a></li>
+                                                            <li class="active" ><a  (click)="matchSelected(i);">Match</a></li>                                 
+                                                        </ul>  
+                                                      </tr>
+                                                    <tr *ngIf="!matchactive[i]">                            
+                                                      <td>                              
+                                                          <input type="text" class="form-control" name="allocate" id="allocate" [(ngModel)]="     selectedmatchingcategory[i]"
+                                                          (input)="onPressKeyboardCategory($event.target.value,i)" required placeholder="Category"> 
+                                                          <div *ngIf="displaycategorynames[i]">
+                                                            <table class="table ">
+                                                                <tbody>
+                                                                     <tr *ngFor="let title of categorynamefront" >
+                                                                        <td> <b>{{title.titlecategory}}</b></td>
+                                                                        <td>
+                                                                            <table class="table table-hover">
+                                                                                <tbody>
+                                                                                    <tr *ngFor="let c of title.category " (click)="selectedProductCategory(c,i)">        
+                                                                                        <td> {{c}}</td>         
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>           
+                                                                </tbody>
+                                                                <tr *ngIf="addnewcategoryenable[i]">
+                                                                    <td align="center">
+                                                                        <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addnewcategory">
+                                                                            ADD NEW CATEGORY
+                                                                        </button>
+                                                                    </td> 
+                                                                 </tr>
+                                                            </table>  
+                                                        </div>    
+                                                      </td>
+                                                    </tr>
+                                                </table> 
+                                              </td>
+                                              <td *ngIf="!matchactive[i]">
+                                                <button type="button"  (click)="savePayment(i)" class="btn btn-primary">SAVE</button>
+                                             
+                                            </td>
+                                           
+                                            <!-- display matching ends -->    
+                                            
+                                            
                                        </tr>
                                       </table>
                                       </div>
