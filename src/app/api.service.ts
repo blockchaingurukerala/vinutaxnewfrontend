@@ -267,5 +267,8 @@ getAllJournals(whose:string){
  deleteJournal(id:string){
   return this.http.post("http://localhost:3000/deleteJournal",{"id":id});
  }
+ updateCashAccount(id:string,newcategory:string){
+  return this.http.post("http://localhost:3000/updateCashAccount",{"id":id,"newcategory":newcategory});
+ }
 
 }

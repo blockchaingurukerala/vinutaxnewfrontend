@@ -35,6 +35,8 @@ export class IndividualcustomerComponent implements OnInit {
   }
   constructor(private api:ApiService,private router:Router,private sharedservice:SharedService) { 
     // var id=this.sharedservice.getidforcustomeredit();
+    this.selectedmatchingcategory=[];
+
     if(localStorage.getItem("loggedIn")!="true"){
       this.router.navigate(['']);
     }
@@ -131,13 +133,14 @@ export class IndividualcustomerComponent implements OnInit {
   showAdvancePayment(){    
     this.displayincomes=[];
     this.api.getAllCashAccountsCustomer(this.userFullName,this.whose).subscribe((data:any)=>{
-      //console.log(data);
+     // console.log(data);
       data.forEach(element => {
         this.displayincomes.push(element);
         this.matchactive.push(false);
         this.displaycategorynames.push(false);
         this.addnewcategoryenable.push(false);
-        //console.log(element)
+        this.selectedmatchingcategory.push("");       
+              
       });
     })
     this.showinvoice=false;
@@ -187,54 +190,14 @@ export class IndividualcustomerComponent implements OnInit {
   }
 
   savePayment(i:number){
-    // this.whose=localStorage.getItem("uEmail");
-    // var amount=0;
-    // if((!this.payments[i].paidin)&&(!this.payments[i].paidout)) {
-    //   window.alert("Enter Amount");
-    //   return;
-    // }
-    // if(!this.payments[i].category){
-    //   window.alert("Enter Category");
-    //   return;
-    // }
-    //  //update in income table
-    //  this.api.createNextCashAccountNumber(this.email).subscribe((data:any)=>{
-    //   this.payments[i].id=data.msg;
-
-    //   if(this.payments[i].paidin){
-    //     amount=this.payments[i].paidin;
-    //     this.payments[i].amount=-1*this.payments[i].paidin;
-    //     this.api.addCashAccount(this.email,this.payments[i]).subscribe((data:any)=>{
-    //       if(data.msg=="Successfully Saved"){
-    //         window.alert("Saved Successfully");
-    //         this.router.navigate(['/report']);
-    //       }
-    //       else{
-    //         window.alert("Please Try after some time");
-    //       }  
-    //     });
-    //   }
-    //   else if(this.payments[i].paidout){
-    //     amount=-1*this.payments[i].paidout;
-    //     this.payments[i].amount=this.payments[i].paidout;
-    //     this.api.addCashAccount(this.email,this.payments[i]).subscribe((data:any)=>{
-    //       if(data.msg=="Successfully Saved"){
-    //         window.alert("Saved Successfully");
-    //         this.router.navigate(['/report']);
-    //       }
-    //       else{
-    //         window.alert("Please Try after some time");
-    //       }  
-    //     });
-    //   }
-
-    //     //adding to bankStatement
-    //     this.api.addbankstatement(this.payments[i].date,amount,this.payments[i].description,this.email).subscribe((data:any)=>{
-    //       window.alert("Saved Successfully");
-    //      // this.removePayment(i);
-    //     });
-      
-    //  });
+    if(this.selectedmatchingcategory[i].length==0){
+      window.alert("Select category")
+      return;
+    }
+     
+      this.api.updateCashAccount(this.displayincomes[i]._id,this.selectedmatchingcategory[i]).subscribe((data:any)=>{
+        window.alert(data.msg)
+      })
     }
 
   deleteCustomer(){
@@ -301,5 +264,9 @@ export class IndividualcustomerComponent implements OnInit {
   setasSupplier(){   
     this.sharedservice.setCustomerOrSupplier("Supplier");
   }
-
+  selectedProductCategory(c,i:number){
+    //this.invoice.products[i].category=c;  
+    this.selectedmatchingcategory[i]=c; 
+    this.displaycategorynames[i]=false; 
+  }
 }

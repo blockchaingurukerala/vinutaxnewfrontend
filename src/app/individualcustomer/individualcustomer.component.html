@@ -74,12 +74,7 @@
                                             </tr>
                                         </table>  
 
-                                        <!-- <div class="col col-12 col-md-5 col-lg-6 col-sm-6 ">
-                                            <button type="button" class="btn btn-danger" style="width: 50%;" (click)="enableEditing()">DELETE</button>                                     
-                                        </div>
-                                        <div class="col col-12 col-md-6 col-lg-6 col-sm-6 ">
-                                            <button type="button" class="btn btn-primary" style="width: 50%;" (click)="enableEditing()">EDIT</button>                                     
-                                        </div>                                           -->
+                                    
                                     </div>
                                 </div>
                               </div>
@@ -180,7 +175,7 @@
                                 <h4 class="card-title d-flex justify-content-between">Invoices </h4>
                                 <div class="row">
                                   <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
-                                      <table class="table table-hover">
+                                      <table class="table ">                                          
                                           <tr>
                                             <th style="text-align: center;">ID</th>
                                             <th style="text-align: center;">Category</th>
@@ -218,7 +213,7 @@
                                                       </tr>
                                                     <tr *ngIf="!matchactive[i]">                            
                                                       <td>                              
-                                                          <input type="text" class="form-control" name="allocate" id="allocate" [(ngModel)]="     selectedmatchingcategory[i]"
+                                                          <input type="text" class="form-control" name="allocate{{i}}" id="allocate{{i}}" [(ngModel)]="selectedmatchingcategory[i]"
                                                           (input)="onPressKeyboardCategory($event.target.value,i)" required placeholder="Category"> 
                                                           <div *ngIf="displaycategorynames[i]">
                                                             <table class="table ">
