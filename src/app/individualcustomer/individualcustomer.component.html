@@ -183,7 +183,8 @@
                                             <th style="text-align: center;">Description</th>
                                             <th style="text-align: center;">Amount</th>
                                           </tr>
-                                          <tr *ngFor="let displayincome of displayincomes ; let i = index;">  
+                                          <tbody *ngFor="let displayincome of displayincomes ; let i = index;">
+                                          <tr >  
                                             <!-- <td> {{displayincome.category}}</td>                                                    -->
                                             <td><input name="id_{{i}}" class="form-control"  [(ngModel)]="displayincome.cashaccountid" readonly></td> 
                                             <td><input name="cat_{{i}}" class="form-control"  [(ngModel)]="displayincome.category" readonly></td> 
@@ -242,6 +243,7 @@
                                                         </div>    
                                                       </td>
                                                     </tr>
+                                                    
                                                 </table> 
                                               </td>
                                               <td *ngIf="!matchactive[i]">
@@ -249,13 +251,146 @@
                                              
                                             </td>
                                            
-                                            <!-- display matching ends -->    
-                                            
-                                            
+                                            <!-- display matching ends -->  
                                        </tr>
+
+                                       <tr *ngIf="matchactive[i]">
+                                           <td colspan="5">
+                                                <!-- display matching invoices -->
+          <div class="row" *ngIf="matchactive[i]">
+            <div class="col col-12 col-md-12 col-lg-12 col-sm-12 col-xs-12">
+              <table class="table">
+                  <thead>
+                      <th>#</th>
+                      <th>Invoice No</th>
+                      <th>Reference No</th>
+                      <th>To</th>
+                      <th>Due Date</th>
+                      <th>Invoice Amount</th>
+                      <th>Balance Amount</th>
+                      <th>Allocated</th>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let customerinvoice of customerinvoices; let k = index;let last = last;" >
+                          <td><input type="checkbox" [disabled]="customerinvoice.checked" value="{{customerinvoice.value}}" [(ngModel)]="customerinvoice.checked"  (change)="checkValuePositive(k,i)"/> </td>
+                          <td>{{customerinvoice.invoiceid}}</td>
+                          <td>{{customerinvoice.reference}}</td>
+                          <td *ngIf="customerinvoice.link"><a routerLink="/individualcustomer" (click)="customerclicked(customerinvoice.customerid);">{{customerinvoice.customername}}</a></td>
+                          <td *ngIf="!customerinvoice.link">{{customerinvoice.customername}}</td>                            
+                          <td>{{customerinvoice.duedate}}</td>
+                          <td>{{customerinvoice.totalamount}}</td>
+                          <td>{{customerinvoice.balanceamount}}</td>
+                          <td>{{customerinvoice.allocatedAmount}}</td>                                                      
+                      </tr>
+                      <tr *ngFor="let suppliernegativeinvoice of suppliernegativeinvoices; let k = index;let last = last;" >
+                          <td><input type="checkbox" [disabled]="suppliernegativeinvoice.checked" value="{{suppliernegativeinvoice.value}}" [(ngModel)]="suppliernegativeinvoice.checked"  (change)="checkValueNegative(k,i)"/> </td>
+                          <td>{{suppliernegativeinvoice.invoiceid}}</td>
+                          <td>{{suppliernegativeinvoice.reference}}</td>
+                          <td *ngIf="suppliernegativeinvoice.link"><a routerLink="/individualcustomer" (click)="supplierclicked(suppliernegativeinvoice.customerid);">{{suppliernegativeinvoice.customername}}</a></td>
+                          <td *ngIf="!suppliernegativeinvoice.link">{{suppliernegativeinvoice.customername}}</td>                            
+                          <td>{{suppliernegativeinvoice.duedate}}</td>
+                          <td>{{suppliernegativeinvoice.totalamount}}(REFUND)</td>
+                          <td>{{suppliernegativeinvoice.balanceamount}}</td>                             
+                          <td>{{suppliernegativeinvoice.allocatedAmount}}</td>                     
+                      </tr>
+                     
+                      <tr>
+                          <td colspan="8">
+
+                                   <!-- adjustments to cash table start -->
+              <table class="table" style="background-color: lightblue;">
+                  <thead>
+                     <tr>
+                         <th>SI</th>
+                         <th>Description</th>
+                         <th>Account</th>                           
+                         <th>Amount</th>                          
+                     </tr>
+                     <tr *ngFor="let adjustedvalue of adjustedvalues;let t=index">
+                      <td>{{t+1}}</td> 
+                      <td>
+                          <input type="text" class="form-control" [(ngModel)]="adjustedvalue.description"
+                          name="desc_{{t}}">
+                          
+                      </td>
+                      <td>
+                          <input type="text" class="form-control" [(ngModel)]="adjustedvalue.category"
+                          name="category_{{t}}" (input)="onPressKeyboardCategory1($event.target.value,t)">
+                          
+                          <div *ngIf="displaycategorynames1[t]">
+                              <table class="table ">
+                                  <tbody>
+                                       <tr *ngFor="let title of categorynamefront" >
+                                          <td> <b>{{title.titlecategory}}</b></td>
+                                          <td>
+                                              <table class="table table-hover">
+                                                  <tbody>
+                                                      <tr *ngFor="let c of title.category " (click)="selectedProductCategory1(c,t)">        
+                                                          <td> {{c}}</td>         
+                                                      </tr>
+                                                  </tbody>
+                                              </table>
+                                          </td>
+                                      </tr>           
+                                  </tbody>
+                                  <tr *ngIf="addnewcategoryenable1[t]">
+                                      <td align="center">
+                                          <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addnewcategory">
+                                              ADD NEW CATEGORY
+                                          </button>
+                                      </td> 
+                                   </tr>
+                              </table>                                              
+                          </div> 
+                      </td>
+                      <td>
+                          <input type="text" class="form-control" [(ngModel)]="adjustedvalue.amount"
+                          name="amount_{{t}}" (input)="onPressKeyboardAdjustedValue($event.target.value,t,i)">
+                                            
+                      </td>
+                      <td>
+                          <button type="button" (click)="removeNewLine(t)" >X</button>
+                      </td>
+                     </tr>
+                    <tr>
+                        <td colspan="5" style="text-align: left;">
+                          <button type="button" style="color: darkblue;" (click)="addNewLine()">Add a new Line</button>
+                          </td>
+                    </tr>
+                  </thead>
+              </table>
+               <!-- adjustments to cash table Ends -->
+
+                          </td>
+                      </tr>
+                          <tr>
+                              <td colspan="7" style="text-align: right;">
+                                  Total is out by {{recievedamount[i]-(sum[i]+adjustedsum[i])}}
+                              </td>
+                          </tr>
+                      
+
+                      <tr>
+                          <td colspan="8" align="center" >
+                              <button type="button" class="btn btn-primary" [disabled]="savebtndisabled[i]" (click)="allocateAmount(payment.date,payment.description,i)">SAVE</button>
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+
+             
+
+            </div>
+        </div>
+    </td>
+<!-- Matching Ends -->
+                                       </tr>
+                                       </tbody>
+
                                       </table>
                                       </div>
                                 </div>
+                                
                             </div>
                             </div>
                                <!-- display advance payment page ends -->  

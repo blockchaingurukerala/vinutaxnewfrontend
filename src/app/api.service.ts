@@ -270,5 +270,4 @@ getAllJournals(whose:string){
  updateCashAccount(id:string,newcategory:string){
   return this.http.post("http://localhost:3000/updateCashAccount",{"id":id,"newcategory":newcategory});
  }
-
 }
