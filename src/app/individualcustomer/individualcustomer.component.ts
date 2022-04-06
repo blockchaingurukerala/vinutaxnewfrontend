@@ -29,7 +29,18 @@ export class IndividualcustomerComponent implements OnInit {
      categorynamefront=[];
      addnewcategoryenable=[];
      displaycustomerorsupplier="NONE";
-     viewuserdetails="NONE"
+     viewuserdetails="NONE";     
+     adjustedoutby=[];
+     sum=[];
+     adjustedsum=[];
+     recievedamount=[];
+     outby=[];
+     savebtndisabled=[];
+     email=localStorage.getItem("uEmail");
+     suppliernegativeinvoices=[];
+     displaycategorynames1=[];
+     public adjustedvalues: any[] = [{description: '',category: '',amount: ''}];
+     public negativeadjustedvalues: any[] = [{description: '',category: '',amount: ''}];
   EnterValidData(){
    window.alert("Enter Valid Data");
   }
@@ -145,16 +156,95 @@ export class IndividualcustomerComponent implements OnInit {
     })
     this.showinvoice=false;
   }
-  matchSelected(i){
+  // matchSelected(i){
+  //   var p=0;
+  //   for(p=0;p<this.matchactive.length;p++){
+  //     if(p!=i){
+  //       this.matchactive[p]=false;
+  //     }
+  //   }
+  //   this.matchactive[i]=true;
+
+  // }
+
+
+  matchSelected(i){   
+   
     var p=0;
     for(p=0;p<this.matchactive.length;p++){
       if(p!=i){
         this.matchactive[p]=false;
       }
     }
-    this.matchactive[i]=true;
+   if(this.displayincomes[i].amount<0){
+     //customer invoice and Supplier negative inoice;
+     this.matchactive[i]=true;
+     this.outby[i]=this.displayincomes[i].amount;
+     this.customerinvoices=[];
+      this.suppliernegativeinvoices=[];
+     this.api.getAllCustomerInvoioceUnallocated(this.email).subscribe((data:any)=>{
 
+       console.log(data)      
+      data.forEach(element => {
+        var balanceamount=element.autototalamount+element.allocatedAmount;
+       // window.alert(element.autototalamount+","+element.allocatedAmount)
+        if(element.customerid==""){
+          this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":false,"checked":false,"balanceamount":balanceamount,"balanceamount1":balanceamount});
+        }
+        else{
+          this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":true,"checked":false,"balanceamount":balanceamount,"balanceamount1":balanceamount});         
+        }        
+      });
+    }); 
+    this.api.getAllSupplierNegativeInvoioceUnallocated(this.email).subscribe((data:any)=>{        
+      data.forEach(element => {
+       var balanceamount=element.autototalamount-element.allocatedAmount;
+        if(element.customerid==""){
+          this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":false,"checked":false,"balanceamount":balanceamount,"balanceamount1":balanceamount});           
+        }
+        else{
+          this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":true,"checked":false,"balanceamount":balanceamount,"balanceamount1":balanceamount});         
+        }        
+      });
+    }); 
+   }
+
+   else if(this.displayincomes[i].amount>=0){
+     //Supplier invoice and Customer negative invoice
+     this.matchactive[i]=true;
+     this.customerinvoices=[];
+      this.suppliernegativeinvoices=[];
+
+      this.outby[i]=this.displayincomes[i].amount;
+     this.api.getAllSupplierInvoioceUnallocated(this.email).subscribe((data:any)=>{        
+      data.forEach(element => {
+       var balanceamount=element.autototalamount-element.allocatedAmount;
+        if(element.customerid==""){
+          this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":false,"checked":false,"balanceamount":balanceamount,"balanceamount1":-1*balanceamount});
+        }
+        else{
+          this.customerinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":true,"checked":false,"balanceamount":balanceamount,"balanceamount1":-1*balanceamount});         
+        }        
+      });        
+    }); 
+    this.api.getAllCustomerNegativeInvoioceUnallocated(this.email).subscribe((data:any)=>{        
+      data.forEach(element => {
+       var balanceamount=element.autototalamount-element.allocatedAmount;
+        if(element.customerid==""){
+          this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":false,"checked":false,"balanceamount":balanceamount,"balanceamount1":-1*balanceamount});
+        }
+        else{
+          this.suppliernegativeinvoices.push({"customerid":element.customerid,"id":element._id,"invoiceid":element.invoiceid,"reference":element.reference,"customername":element.customername,"date":element.date,"duedate":element.duedate,"totalamount":element.totalamount,"allocatedAmount":0,"status":"approved","link":true,"checked":false,"balanceamount":balanceamount,"balanceamount1":-1*balanceamount});         
+        }        
+      });
+    }); 
+   }
+   else{
+     window.alert("Enter Amount");
+   }
   }
+
+
   createSelected(i){      
     this.matchactive[i]=false;
    }
@@ -258,6 +348,15 @@ export class IndividualcustomerComponent implements OnInit {
   //   }
    
   // }
+  addNewLine(){
+    this.adjustedvalues.push( {description: '',category: '',amount: ''});
+    this.negativeadjustedvalues.push( {description: '',category: '',amount: ''});    
+  }
+  removeNewLine(i: number) {
+    this.displaycategorynames1[i]=false; 
+   this.adjustedvalues.splice(i, 1);
+   this.negativeadjustedvalues.splice(i, 1);
+ }
   setasCustomer(){   
     this.sharedservice.setCustomerOrSupplier("Customer");
   }

@@ -272,7 +272,7 @@
                   </thead>
                   <tbody>
                       <tr *ngFor="let customerinvoice of customerinvoices; let k = index;let last = last;" >
-                          <td><input type="checkbox" [disabled]="customerinvoice.checked" value="{{customerinvoice.value}}" [(ngModel)]="customerinvoice.checked"  (change)="checkValuePositive(k,i)"/> </td>
+                          <td><input type="checkbox" name="chk{{k}}" [disabled]="customerinvoice.checked" value="{{customerinvoice.value}}" [(ngModel)]="customerinvoice.checked"  (change)="checkValuePositive(k,i)"/> </td>
                           <td>{{customerinvoice.invoiceid}}</td>
                           <td>{{customerinvoice.reference}}</td>
                           <td *ngIf="customerinvoice.link"><a routerLink="/individualcustomer" (click)="customerclicked(customerinvoice.customerid);">{{customerinvoice.customername}}</a></td>

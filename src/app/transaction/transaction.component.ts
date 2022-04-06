@@ -170,8 +170,8 @@ export class TransactionComponent implements OnInit {
     });    
   }
   onPressKeyboardAdjustedValue(amt:string,j:number,i:number){
-    console.log(this.adjustedvalues);
-  console.log(this.negativeadjustedvalues);
+  //   console.log(this.adjustedvalues);
+  // console.log(this.negativeadjustedvalues);
 
       var sum=0;
       //this.outby[i]=this.adjustedoutby[i];
@@ -299,7 +299,6 @@ export class TransactionComponent implements OnInit {
          this.matchactive[p]=false;
        }
      }
-
     if(this.payments[i].paidin){
       //customer invoice and Supplier negative inoice;
       this.matchactive[i]=true;
@@ -365,6 +364,8 @@ export class TransactionComponent implements OnInit {
       window.alert("Enter Amount");
     }
    }
+
+
    checkValuePositive(k,i){   
     //window.alert("clicked chkpositive"+this.customerinvoices[k].balanceamount)
      var recievedamount=0;
@@ -678,8 +679,7 @@ export class TransactionComponent implements OnInit {
    }
    addNewLine(){
     this.adjustedvalues.push( {description: '',category: '',amount: ''});
-    this.negativeadjustedvalues.push( {description: '',category: '',amount: ''});
-    
+    this.negativeadjustedvalues.push( {description: '',category: '',amount: ''});    
   }
   removeNewLine(i: number) {
     this.displaycategorynames1[i]=false; 
