@@ -1,0 +1,360 @@
+<div class="container">
+   
+        <ul class="nav nav-tabs">
+            <li ><a routerLink="/summary">Summary</a></li>
+            <li class="active"><a routerLink="/transactions">Transactions</a></li>
+            <!-- <li ><a routerLink="/dashboard">Income</a></li>
+            <li><a routerLink="/expence">Expence</a></li> -->
+            <li ><a routerLink="/report">Report</a></li>    
+            <li ><a routerLink="/allaccount">All Account</a></li>   
+            <li class="dropdown ">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                  Business <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a routerLink="/displaycustomerinvoices" (click)="setasCustomer();" >Invoice</a></li>
+                <li><a routerLink="/allcustomers" (click)="setasCustomer();">Customers</a></li>
+                <li><a routerLink="/displaycustomerinvoices" (click)="setasSupplier();">Bills To Pay</a></li> 
+                <li><a routerLink="/allcustomers" (click)="setasSupplier();">Suppliers</a></li> 
+             </ul>
+          </li>  
+          <li  ><a routerLink="/displayjournals">Journal</a></li>         
+          </ul>
+      <br>
+
+      <div class="row">       
+        <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
+            <button type="button" class="btn btn-info " style="width: 100%" >Transactions Page</button>
+        </div>
+    </div>
+    <br>
+
+  
+    <div class="row">       
+        <div class="col col-12 col-lg-3 col-md-3 col-sm-3">
+
+        </div>  
+        <div class="col col-12 col-lg-5 col-md-5 col-sm-5">
+            <ul class="nav nav-tabs">
+                <li class="active" ><a routerLink="/transactions">Unallocated</a></li>
+                <li ><a routerLink="/allocatedtransactons">Allocated</a></li>
+                <li ><a routerLink="/personaltransactions">Personal</a></li>               
+            </ul>
+        </div>  
+        <div class="col col-12 col-lg-4 col-md-4 col-sm-4">
+            
+        </div>         
+    </div>
+    <div class="row">
+        <h4 class="card-title d-flex justify-content-between">New Payment <button type="button"
+            class="btn btn-primary" (click)="addPayment()"><i class="glyphicon glyphicon-plus"></i></button>
+        </h4> 
+    </div>
+    <div class="row" *ngFor="let payment of payments; let i=index">
+        <div class="col col-12 col-lg-2 col-md-2 col-sm-2">
+              <label for="date{{i}}">Date</label>
+              <input type="date" class="form-control" name="date{{i}}" id="date{{i}}" 
+              [(ngModel)]="payment.date" required>
+        </div>
+        <div class="col col-12 col-lg-2 col-md-2 col-sm-2">
+          <label for="paidin">Paid In#</label>
+          <input type="number" class="form-control" (input)="onPressKeyboardPaidIn($event.target.value,i)" [(ngModel)]="payment.paidin" name="paidin" id="paidin" >
+      </div>
+      <div class="col col-12 col-lg-2 col-md-2 col-sm-2" >
+          <label for="paidout">Paid Out#</label>
+          <input type="number" class="form-control"  (input)="onPressKeyboardPaidOut($event.target.value,i)" [(ngModel)]="payment.paidout" name="paidout" id="paidout"  >
+      </div>
+      <div class="col col-12 col-lg-2 col-md-2 col-sm-2">                                    
+          <label for="desc" >Description#</label>
+          <input type="text" class="form-control"  [(ngModel)]="payment.description" name="desc" id="desc"   >
+      </div>
+      <div class="col col-12 col-lg-1 col-md-1 col-sm-1">                                    
+       
+        </div>
+      <div class="col col-12 col-lg-3 col-md-3 col-sm-3"> 
+          <table>
+              <tr>
+
+                  <td>
+                    <table>
+                        <tr>
+                            <td align="center"> <b>Allocate</b> </td>
+                        </tr>
+                        <tr *ngIf="!matchactive[i]">
+                          <ul class="nav nav-tabs">
+                              <li class="active" ><a routerLink="/transactions" (click)="createSelected(i);">Create</a></li>
+                              <li ><a  (click)="matchSelected(i);" style="cursor: pointer;">Match</a></li> 
+                          </ul>  
+                        </tr>
+                        <tr *ngIf="matchactive[i]">
+                            <ul class="nav nav-tabs">
+                                <li  ><a routerLink="/transactions" (click)="createSelected(i);">Create</a></li>
+                                <li class="active" ><a  (click)="matchSelected(i);">Match</a></li>                                 
+                            </ul>  
+                          </tr>
+                        <tr *ngIf="!matchactive[i]">                            
+                          <td>                              
+                              <input type="text" class="form-control" name="allocate" id="allocate" [(ngModel)]="payment.category"
+                              (input)="onPressKeyboardCategory($event.target.value,i)" required placeholder="Category"> 
+                              <div *ngIf="displaycategorynames[i]">
+                                <table class="table ">
+                                    <tbody>
+                                         <tr *ngFor="let title of categorynamefront" >
+                                            <td> <b>{{title.titlecategory}}</b></td>
+                                            <td>
+                                                <table class="table table-hover">
+                                                    <tbody>
+                                                        <tr *ngFor="let c of title.category " (click)="selectedProductCategory(c,i)">        
+                                                            <td> {{c}}</td>         
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>           
+                                    </tbody>
+                                    <tr *ngIf="addnewcategoryenable[i]">
+                                        <td align="center">
+                                            <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addnewcategory">
+                                                ADD NEW CATEGORY
+                                            </button>
+                                        </td> 
+                                     </tr>
+                                </table>                                              
+                            </div>    
+                          </td>
+                        </tr>
+                    </table> 
+                  </td>
+
+                  
+                  <td *ngIf="!matchactive[i]">
+                      <button type="button"  (click)="savePayment(i)" class="btn btn-primary">SAVE</button>
+                   
+                  </td>
+                  <td><button type="button"  (click)="removePayment(i)" class="btn btn-danger">X</button></td>
+              </tr>
+          </table>  
+          </div>
+          <!-- display matching invoices -->
+          <div class="row" *ngIf="matchactive[i]">
+              <div class="col col-12 col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <table class="table">
+                    <thead>
+                        <th>#</th>
+                        <th>Invoice No</th>
+                        <th>Reference No</th>
+                        <th>To</th>
+                        <th>Due Date</th>
+                        <th>Invoice Amount</th>
+                        <th>Balance Amount</th>
+                        <th>Allocated</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let customerinvoice of customerinvoices; let k = index;let last = last;" >
+                            <td><input type="checkbox" [disabled]="customerinvoice.checked" value="{{customerinvoice.value}}" [(ngModel)]="customerinvoice.checked"  (change)="checkValuePositive(k,i)"/> </td>
+                            <td>{{customerinvoice.invoiceid}}</td>
+                            <td>{{customerinvoice.reference}}</td>
+                            <td *ngIf="customerinvoice.link"><a routerLink="/individualcustomer" (click)="customerclicked(customerinvoice.customerid);">{{customerinvoice.customername}}</a></td>
+                            <td *ngIf="!customerinvoice.link">{{customerinvoice.customername}}</td>                            
+                            <td>{{customerinvoice.duedate}}</td>
+                            <td>{{customerinvoice.totalamount}}</td>
+                            <td>{{customerinvoice.balanceamount}}</td>
+                            <td>{{customerinvoice.allocatedAmount}}</td>                                                      
+                        </tr>
+                        <tr *ngFor="let suppliernegativeinvoice of suppliernegativeinvoices; let k = index;let last = last;" >
+                            <td><input type="checkbox" [disabled]="suppliernegativeinvoice.checked" value="{{suppliernegativeinvoice.value}}" [(ngModel)]="suppliernegativeinvoice.checked"  (change)="checkValueNegative(k,i)"/> </td>
+                            <td>{{suppliernegativeinvoice.invoiceid}}</td>
+                            <td>{{suppliernegativeinvoice.reference}}</td>
+                            <td *ngIf="suppliernegativeinvoice.link"><a routerLink="/individualcustomer" (click)="supplierclicked(suppliernegativeinvoice.customerid);">{{suppliernegativeinvoice.customername}}</a></td>
+                            <td *ngIf="!suppliernegativeinvoice.link">{{suppliernegativeinvoice.customername}}</td>                            
+                            <td>{{suppliernegativeinvoice.duedate}}</td>
+                            <td>{{suppliernegativeinvoice.totalamount}}(REFUND)</td>
+                            <td>{{suppliernegativeinvoice.balanceamount}}</td>                             
+                            <td>{{suppliernegativeinvoice.allocatedAmount}}</td>                     
+                        </tr>
+                       
+                        <tr>
+                            <td colspan="8">
+
+                                     <!-- adjustments to cash table start -->
+                <table class="table" style="background-color: lightblue;">
+                    <thead>
+                       <tr>
+                           <th>SI</th>
+                           <th>Description</th>
+                           <th>Account</th>                           
+                           <th>Amount</th>                          
+                       </tr>
+                       <tr *ngFor="let adjustedvalue of adjustedvalues;let t=index">
+                        <td>{{t+1}}</td> 
+                        <td>
+                            <input type="text" class="form-control" [(ngModel)]="adjustedvalue.description"
+                            name="desc_{{t}}">
+                            
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" [(ngModel)]="adjustedvalue.category"
+                            name="category_{{t}}" (input)="onPressKeyboardCategory1($event.target.value,t)">
+                            
+                            <div *ngIf="displaycategorynames1[t]">
+                                <table class="table ">
+                                    <tbody>
+                                         <tr *ngFor="let title of categorynamefront" >
+                                            <td> <b>{{title.titlecategory}}</b></td>
+                                            <td>
+                                                <table class="table table-hover">
+                                                    <tbody>
+                                                        <tr *ngFor="let c of title.category " (click)="selectedProductCategory1(c,t)">        
+                                                            <td> {{c}}</td>         
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>           
+                                    </tbody>
+                                    <tr *ngIf="addnewcategoryenable1[t]">
+                                        <td align="center">
+                                            <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addnewcategory">
+                                                ADD NEW CATEGORY
+                                            </button>
+                                        </td> 
+                                     </tr>
+                                </table>                                              
+                            </div> 
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" [(ngModel)]="adjustedvalue.amount"
+                            name="amount_{{t}}" (input)="onPressKeyboardAdjustedValue($event.target.value,t,i)">
+                                              
+                        </td>
+                        <td>
+                            <button type="button" (click)="removeNewLine(t)" >X</button>
+                        </td>
+                       </tr>
+                      <tr>
+                          <td colspan="5" style="text-align: left;">
+                            <button type="button" style="color: darkblue;" (click)="addNewLine()">Add a new Line</button>
+                            </td>
+                      </tr>
+                    </thead>
+                </table>
+                 <!-- adjustments to cash table Ends -->
+
+                            </td>
+                        </tr>
+                            <tr>
+                                <td colspan="7" style="text-align: right;">
+                                    Total is out by {{recievedamount[i]-(sum[i]+adjustedsum[i])}}
+                                </td>
+                            </tr>
+                        
+
+                        <tr>
+                            <td colspan="8" align="center" >
+                                <button type="button" class="btn btn-primary" [disabled]="savebtndisabled[i]" (click)="allocateAmount(payment.date,payment.description,i)">SAVE</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+               
+
+              </div>
+          </div>
+
+<!-- Matching Ends -->
+
+
+      </div>  
+      
+      <!-- Modal for adding new category -->
+            <div class="modal fade" id="addnewcategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel" style="text-align: center;">ADD NEW CATEGORY</h3>                    
+                    <button type="button" class="close" data-dismiss="modal" #closebutton aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col col-md-7">
+                                    <table class="table">
+                                        <tr>
+                                            <td>Account Type</td>
+                                            <td> 
+                                                    <select class="form-control" name="" id="" [(ngModel)]="categorytitle">                                                <option value="Sales">Sales</option>                                                
+                                                    <option value="Cost of sales">Cost of sales </option>
+                                                    <option value="Other business income">Other business income </option>
+                                                    <option value="Expenses">Expenses</option>
+                                                    <option value="Plant & machinery">Plant & machinery </option>
+                                                    <option value="Computer equipment">Computer equipment </option>
+                                                    <option value="Motor vehicles">Motor vehicles </option>
+                                                    <option value="Fixtures & fittings">Fixtures & fittings </option>
+                                                    <option value="Land & buildings">Land & buildings </option>
+                                                    <option value="Intangible Fixed Assets">Intangible Fixed Assets </option>
+                                                    <option value="Customers">Customers</option>
+                                                    <option value="Current Assets">Current Assets </option>
+                                                    <option value="Suppliers">Suppliers</option>
+                                                    <option value="Bank">Bank</option>
+                                                    <option value="Liabilities">Liabilities </option>
+                                                    <option value="Capital account">Capital account</option>                                             
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <br>
+                                        <tr>
+                                            <td>Code</td>
+                                            <td><input type="text" class="form-control" [(ngModel)]="categoryCode"></td>
+                                        </tr>
+                                        <br>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td><input type="text" class="form-control" [(ngModel)]="categoryName"></td>
+                                        </tr>
+                                        <br>
+                                        <tr>
+                                            <td>Description <p> (Optional)</p></td>
+                                            <td><textarea class="form-control" rows="5"></textarea></td>
+                                        </tr>
+                                        <br>
+                                    </table>
+
+                                </div>
+                                <div class="col col-md-5">                                    
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">Sales</li>
+                                        <li class="list-group-item">Cost of sales </li>
+                                        <li class="list-group-item">Other business income </li>
+                                        <li class="list-group-item">Expenses</li>
+                                        <li class="list-group-item">Plant & machinery</li>
+                                        <li class="list-group-item">Computer equipment</li>
+                                        <li class="list-group-item">Motor vehicles...</li>
+                                        <!-- <li class="list-group-item">Fixtures & fittings</li>
+                                        <li class="list-group-item">Land & buildings</li>
+                                        <li class="list-group-item">Intangible Fixed Assets</li>
+                                        <li class="list-group-item">Customers</li>
+                                        <li class="list-group-item">Current Assets</li>
+                                        <li class="list-group-item">Suppliers</li>
+                                        <li class="list-group-item">Bank</li>
+                                        <li class="list-group-item">Liabilities</li>
+                                        <li class="list-group-item">Capital account</li> -->
+
+                                      </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary"  (click)="addNewCategory();">Save changes</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+</div>
+
+
+

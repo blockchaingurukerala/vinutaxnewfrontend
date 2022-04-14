@@ -1,0 +1,325 @@
+<div class="container">
+ 
+    <ul class="nav nav-tabs">
+        <li ><a routerLink="/summary">Summary</a></li>
+        <li ><a routerLink="/transactions">Transactions</a></li>
+        <!-- <li ><a routerLink="/dashboard">Income</a></li>
+        <li><a routerLink="/expence">Expence</a></li> -->
+        <li ><a routerLink="/report">Report</a></li>    
+        <li><a routerLink="/allaccount">All Account</a></li>  
+        <li class="dropdown active">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              Business <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a routerLink="/displaycustomerinvoices" (click)="setasCustomer();" >Invoice</a></li>
+            <li><a routerLink="/allcustomers" (click)="setasCustomer();">Customers</a></li>
+            <li><a routerLink="/displaycustomerinvoices" (click)="setasSupplier();">Bills To Pay</a></li> 
+            <li><a routerLink="/allcustomers" (click)="setasSupplier();">Suppliers</a></li> 
+         </ul>
+      </li>  
+      <li ><a routerLink="/displayjournals">Journal</a></li>    
+      </ul>
+
+      <br>
+
+      <div class="row">       
+        <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
+            <button type="button" class="btn btn-info " style="width: 100%" >{{displaycustomerorsupplier}}</button>
+        </div>
+    </div>
+    <br>
+
+      <div class="row">       
+        <form #invoiceForm="ngForm">
+          <div class="container-fluid pt-2 mb-5">
+              <div class="row">
+                  <div class="col-md-8">
+                      <div class="card border-secondary">
+                          <div class="card-body">
+                              <h4 class="card-title">Customer Name</h4>
+                              <div class="row">
+                                  <div class="col-md-12">
+                                      <div class="form-group ">
+                                          <label for="name">Name</label>
+                                          <input type="text" class="form-control" name="name" id="name"   
+                                                [ngClass]="{'is-invalid': invoiceForm.submitted && CustName.invalid}"                                          
+                                              [(ngModel)]="name"  #CustName="ngModel"    readonly>                                                                                       
+                                      </div>                                      
+                                  </div>                                
+                              </div>
+                              <div class="row">
+                                  <div class="col col-12 col-lg-3 col-md-3">
+                                        <label for="datetoday">Date</label>
+                                        <input type="date" class="form-control" name="datetoday" id="datetoday"  [(ngModel)]="invoice.date" required>
+                                  </div>
+                                  <div class="col col-12 col-lg-3 col-md-3">
+                                    <label for="duedate">Due Date</label>
+                                    <input type="date" class="form-control"  name="duedate" id="duedate"  [(ngModel)]="invoice.duedate" required>
+                                </div>
+                                <div class="col col-12 col-lg-3 col-md-3">
+                                    <label for="invoice">Invoice#</label>
+                                    <input type="text" class="form-control" name="invoice" id="invoice"   [(ngModel)]="invoice.invoiceno" required readonly>
+                                </div>
+                                <div class="col col-12 col-lg-3 col-md-3">
+                                    <label for="reference">Reference</label>
+                                    <input type="text" class="form-control" name="reference" id="reference" [(ngModel)]="invoice.referenceno"  >
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                      <br><br>
+                      <div class="card border-secondary mt-2">
+                          <div class="card-body">
+                              <h4 class="card-title d-flex justify-content-between">Order Details <button type="button"
+                                      class="btn btn-secondary" (click)="addProduct()"><i class="glyphicon glyphicon-plus"></i></button></h4>
+                              <div class="row">
+                                  <table class="table">
+                                      <thead>
+                                          <tr>
+                                              <th width="20%">Product</th>
+                                              <th width="20%">Price</th>
+                                              <th width="20%">Quantity</th>
+                                              <th width="20%">Category</th>
+                                              <th width="20%">Amount</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr *ngFor="let product of invoice.products; let i=index">
+                                              <td scope="row">
+                                                  <input type="text" class="form-control" name="productName{{i}}"
+                                                      [ngClass]="{'is-invalid': invoiceForm.submitted && ProductName.invalid}"
+                                                      id="productName" [(ngModel)]="product.name" #ProductName="ngModel"
+                                                      required>
+                                              </td>
+                                              <td>
+                                                  <input type="number" class="form-control" name="price{{i}}" id="price"
+                                                      [ngClass]="{'is-invalid': invoiceForm.submitted && ProductPrice.invalid}"
+                                                      [(ngModel)]="product.price" #ProductPrice="ngModel" required>
+                                              </td>
+                                              <td>
+                                                  <input type="number" class="form-control" name="quantity{{i}}" id="quantity"
+                                                      [ngClass]="{'is-invalid': invoiceForm.submitted && ProductQty.invalid}"
+                                                      [(ngModel)]="product.qty" #ProductQty="ngModel" required>
+                                              </td>
+                                              <td>
+                                                <input type="text" class="form-control" name="category{{i}}"   id="category"
+                                                [ngClass]="{'is-invalid': invoiceForm.submitted && ProductCategory.invalid}" 
+                                                #ProductCategory="ngModel"                                               
+                                                    [(ngModel)]="product.category"  (input)="onPressKeyboardCategory($event.target.value,i)" required>   
+                                                    
+                                                    <div *ngIf="displaycategorynames[i]">
+                                                        <!-- <table class="table table-hover">
+                                                            <tbody>
+                                                                <tr *ngFor="let c of categorynames | filter : product.category" (click)="selectedProductCategory(c.category,i)">
+                                                                    <td> {{c.category}}</td>                                                                                                                                       
+                                                                </tr>                                                       
+                                                            </tbody>
+
+                                                            <tr *ngIf="addnewcategoryenable[i]">
+                                                                <td align="center">
+                                                                 <button type="button" class="btn btn-info" (click)="addNewCategory(i)">  <i class="glyphicon glyphicon-user">ADD THIS CATEGORY</i></button>
+                                                                </td>                                                        
+                                                             </tr>
+                                                        </table>                                               -->
+                                                        <table class="table ">
+                                                            <tbody>                        
+                                                                    <tr *ngFor="let title of categorynamefront" >
+                                                                    <td> <b>{{title.titlecategory}}</b></td>
+                                                                    <td>
+                                                                        <table class="table table-hover">
+                                                                            <tbody>
+                                                                                <tr *ngFor="let c of title.category " (click)="selectedProductCategory(c,i)">
+                                                                                    
+                                                                                    <td> {{c}}</td>         
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>           
+                                                            </tbody>
+                        
+                                                            <tr *ngIf="addnewcategoryenable[i]">
+                                                                <!-- <td>
+                                                                    <select class="form-control" name="selectcategorytt" id="" [(ngModel)]="categorytitle">                                                <option value="Sales">Sales</option>                                                
+                                                                        <option value="Cost of sales">Cost of sales </option>
+                                                                        <option value="Other business income">Other business income </option>
+                                                                        <option value="Expenses">Expenses</option>
+                                                                        <option value="Plant & machinery">Plant & machinery </option>
+                                                                        <option value="Computer equipment">Computer equipment </option>
+                                                                        <option value="Motor vehicles">Motor vehicles </option>
+                                                                        <option value="Fixtures & fittings">Fixtures & fittings </option>
+                                                                        <option value="Land & buildings">Land & buildings </option>
+                                                                        <option value="Intangible Fixed Assets">Intangible Fixed Assets </option>
+                                                                        <option value="Customers">Customers</option>
+                                                                        <option value="Current Assets">Current Assets </option>
+                                                                        <option value="Suppliers">Suppliers</option>
+                                                                        <option value="Bank">Bank</option>
+                                                                        <option value="Liabilities">Liabilities </option>
+                                                                        <option value="Capital account">Capital account</option>                                             
+                                                                    </select>
+                                                                </td> -->
+                                                                <td align="center">
+                                                                    <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addnewcategory">
+                                                                        ADD NEW CATEGORY
+                                                                    </button>
+                                                                </td>                                                       
+                                                                </tr>
+                                                        </table>  
+                                                    </div> 
+                                                    
+                                               </td>
+                                              <td>
+                                                  {{product.price * product.qty || ''}}
+                                              </td>
+                                              <td><button type="button" class="btn btn-danger btn-sm" (click)="removeProduct(i)"><i class="glyphicon glyphicon-trash"></i></button></td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="card border-secondary mt-2">
+                          <div class="card-body">
+                              <h4 class="card-title">Additional Details</h4>
+                              <div class="form-group">
+                                  <textarea class="form-control" name="additionalDetails" rows="3"
+                                      [(ngModel)]="invoice.additionalDetails"></textarea>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row" *ngIf="aprove">
+                          <div class="col col-12 col-md-6 col-lg-6">
+                                <button type="button" class="btn btn-danger" (click)="deleteInvoice()">Delete</button>
+                          </div>
+                          <div class="col col-12 col-md-6 col-lg-6">
+                            <button type="button" class="btn btn-primary" (click)="invoiceForm.valid ? updateInvoice() : EnterValidData() ">Update</button>
+                        </div>
+                        <br>
+                      </div>
+
+                      <div class="row" *ngIf="draft">
+                        <div class="col col-12 col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                              <button type="button" class="btn btn-danger" (click)="deleteInvoice()" style="width: 50%;">Delete</button>
+                        </div>
+                        <div class="col col-12 col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                          <button type="button" class="btn btn-primary" (click)="invoiceForm.valid ? updateInvoice() : EnterValidData()" style="width: 50%;">Update</button>
+                        </div>
+                        <div class="col col-12 col-md-4 col-lg-4 col-sm-4 col-xs-4">                            
+                            <button type="button" class="btn btn-success" (click)="invoiceForm.valid ? aprovedraftinvoice() : EnterValidData()" style="width: 50%;">Aprove</button>
+                        </div>
+                        <br>
+                    </div>
+                   <hr>
+      
+                  </div>
+
+                  <div class="col-md-4">
+                    <button type="button" class="btn btn-secondary btn-lg btn-block"
+                        (click)="invoiceForm.valid ? generatePDF('download') :  EnterValidData()">Download Invoice</button>
+                    <button type="button" class="btn btn-secondary btn-lg btn-block"
+                        (click)="invoiceForm.valid ? generatePDF('print') :  EnterValidData()">Print
+                        Invoice</button>
+                    <button type="submit" class="btn btn-secondary btn-lg btn-block"
+                        (click)="invoiceForm.valid ? generatePDF() : EnterValidData() ">Open
+                        Invoice</button>
+                </div>
+                
+              </div>
+
+          </div>
+      </form>
+      </div>
+      
+      <!-- Modal for adding new category -->
+      <div class="modal fade" id="addnewcategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h3 class="modal-title" id="exampleModalLabel" style="text-align: center;">ADD NEW CATEGORY</h3>                    
+            <button type="button" class="close" data-dismiss="modal" #closebutton aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col col-md-7">
+                            <table class="table">
+                                <tr>
+                                    <td>Account Type</td>
+                                    <td> 
+                                            <select class="form-control" name="" id="" [(ngModel)]="categorytitle">                                                <option value="Sales">Sales</option>                                                
+                                            <option value="Cost of sales">Cost of sales </option>
+                                            <option value="Other business income">Other business income </option>
+                                            <option value="Expenses">Expenses</option>
+                                            <option value="Plant & machinery">Plant & machinery </option>
+                                            <option value="Computer equipment">Computer equipment </option>
+                                            <option value="Motor vehicles">Motor vehicles </option>
+                                            <option value="Fixtures & fittings">Fixtures & fittings </option>
+                                            <option value="Land & buildings">Land & buildings </option>
+                                            <option value="Intangible Fixed Assets">Intangible Fixed Assets </option>
+                                            <option value="Customers">Customers</option>
+                                            <option value="Current Assets">Current Assets </option>
+                                            <option value="Suppliers">Suppliers</option>
+                                            <option value="Bank">Bank</option>
+                                            <option value="Liabilities">Liabilities </option>
+                                            <option value="Capital account">Capital account</option>                                             
+                                        </select>
+                                    </td>
+                                </tr>
+                                <br>
+                                <tr>
+                                    <td>Code</td>
+                                    <td><input type="text" class="form-control" [(ngModel)]="categoryCode"></td>
+                                </tr>
+                                <br>
+                                <tr>
+                                    <td>Name</td>
+                                    <td><input type="text" class="form-control" [(ngModel)]="categoryName"></td>
+                                </tr>
+                                <br>
+                                <tr>
+                                    <td>Description <p> (Optional)</p></td>
+                                    <td><textarea class="form-control" rows="5"></textarea></td>
+                                </tr>
+                                <br>
+                            </table>
+
+                        </div>
+                        <div class="col col-md-5">                                    
+                            <ul class="list-group">
+                                <li class="list-group-item active">Sales</li>
+                                <li class="list-group-item">Cost of sales </li>
+                                <li class="list-group-item">Other business income </li>
+                                <li class="list-group-item">Expenses</li>
+                                <li class="list-group-item">Plant & machinery</li>
+                                <li class="list-group-item">Computer equipment</li>
+                                <li class="list-group-item">Motor vehicles...</li>
+                                <!-- <li class="list-group-item">Fixtures & fittings</li>
+                                <li class="list-group-item">Land & buildings</li>
+                                <li class="list-group-item">Intangible Fixed Assets</li>
+                                <li class="list-group-item">Customers</li>
+                                <li class="list-group-item">Current Assets</li>
+                                <li class="list-group-item">Suppliers</li>
+                                <li class="list-group-item">Bank</li>
+                                <li class="list-group-item">Liabilities</li>
+                                <li class="list-group-item">Capital account</li> -->
+
+                              </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary"  (click)="addNewCategory();">Save changes</button>
+            </div>
+        </div>
+        </div>
+    </div>
+          
+</div>
+
+
+

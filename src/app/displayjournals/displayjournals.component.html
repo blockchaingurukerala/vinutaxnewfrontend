@@ -1,0 +1,78 @@
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li ><a routerLink="/summary">Summary</a></li>
+        <li ><a routerLink="/transactions">Transactions</a></li>
+        <!-- <li ><a routerLink="/dashboard">Income</a></li>
+        <li><a routerLink="/expence">Expence</a></li> -->
+        <li ><a routerLink="/report">Report</a></li>    
+        <li><a routerLink="/allaccount">All Account</a></li>  
+        <li class="dropdown ">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              Business <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a routerLink="/displaycustomerinvoices" (click)="setasCustomer();" >Invoice</a></li>
+            <li><a routerLink="/allcustomers" (click)="setasCustomer();">Customers</a></li>
+            <li><a routerLink="/displaycustomerinvoices" (click)="setasSupplier();">Bills To Pay</a></li> 
+            <li><a routerLink="/allcustomers" (click)="setasSupplier();">Suppliers</a></li> 
+         </ul>
+      </li>  
+      <li class="active"><a routerLink="/displayjournals">Journal</a></li>    
+      </ul>
+      <br>
+
+      <div class="row">       
+        <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
+            <button type="button" class="btn btn-info " style="width: 100%" >Journal Page</button>
+        </div>
+    </div>
+    <br>
+
+    <div class="row">       
+        <div class="col col-12 col-lg-4 col-md-4 col-sm-4"></div> 
+        <div class="col col-12 col-lg-4 col-md-4 col-sm-4">
+           <button type="button" class="btn btn-primary " style="width: 200px" (click)="displayNewJournal()">New Journal</button>
+        </div>      
+        <div class="col col-12 col-lg-4 col-md-4 col-sm-4"></div> 
+    </div>
+    <div class="row">       
+        <div class="col col-12 col-lg-3 col-md-3 col-sm-3">
+
+        </div>  
+        <div class="col col-12 col-lg-5 col-md-5 col-sm-5">
+            <ul class="nav nav-tabs">
+                <li class="active" ><a routerLink="/displaycustomerinvoices">All</a></li>
+                <li ><a routerLink="/displaycustomerdraftinvoices">Draft</a></li>                
+                <li><a routerLink="/customerpaid">Posted</a></li> 
+              </ul>
+        </div>  
+        <div class="col col-12 col-lg-4 col-md-4 col-sm-4">
+            
+        </div>         
+    </div>
+    <div class="row">
+        <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
+            <table class="table table-hover">
+                <tr>
+                    <th>ID</th>
+                    <th>Narration</th>
+                  
+                    <th>Date</th>
+                    
+                    <th>Total Amount</th>
+                   
+                </tr>
+                <tbody>
+                    <tr *ngFor="let journal of journaldetails; let i = index;let last = last;" (click)="editordeleteJournal(journal.id);">
+                        <td>{{journal.jno}}</td>
+                        <td>{{journal.narration}}</td>
+                        <td>{{journal.date}}</td>
+                        <td>{{journal.totalamout}}</td>                        
+                    </tr>
+                </tbody>              
+            </table>
+        </div>
+    </div>
+</div>
+
+

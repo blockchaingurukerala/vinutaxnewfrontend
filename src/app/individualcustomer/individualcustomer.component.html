@@ -1,0 +1,426 @@
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li ><a routerLink="/summary">Summary</a></li>
+        <li><a routerLink="/transactions">Transactions</a></li>
+        <!-- <li ><a routerLink="/dashboard">Income</a></li>
+        <li ><a routerLink="/expence">Expence</a></li> -->
+        <li><a routerLink="/report">Report</a></li>    
+        <li><a routerLink="/allaccount">All Account</a></li> 
+        <li class="dropdown active ">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                Business <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a routerLink="/displaycustomerinvoices" (click)="setasCustomer();" >Invoice</a></li>
+                <li><a routerLink="/allcustomers" (click)="setasCustomer();">Customers</a></li>
+                <li><a routerLink="/displaycustomerinvoices" (click)="setasSupplier();">Bills To Pay</a></li> 
+                <li><a routerLink="/allcustomers" (click)="setasSupplier();">Suppliers</a></li> 
+             </ul>
+             
+        </li>   
+        <li  ><a routerLink="/displayjournals">Journal</a></li>     
+      </ul>
+
+      <br>
+      <div class="row">       
+        <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
+            <button type="button" class="btn btn-info " style="width: 100%" >{{displaycustomerorsupplier}}</button>
+        </div>
+    </div>
+    <br>
+    
+      <div class="row">       
+        <form #invoiceForm="ngForm">
+          <div class="container-fluid pt-2 mb-5">
+              <div class="row">
+                  <div class="col-md-12">  
+                        <p>   
+                            <br>            
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                {{viewuserdetails}}
+                            </button>
+                        </p> 
+                        <div class="collapse" id="collapseExample" [ngClass]="{'in': isOpen}">
+                      <div class="card border-secondary">
+                          <div class="card-body">                              
+                            <h4 class="card-title d-flex justify-content-between">Customer Details </h4>
+                              <div class="row" *ngIf="noediting">
+                                <div class="col col-12 col-lg-6 col-md-6">
+                                    <label for="namecust">Name</label> 
+                                    <input type="text" class="form-control" name="namecust" id="namecust"  [(ngModel)]="userFullName"  readonly>
+                                </div>
+                                <div class="col col-12 col-lg-6 col-md-6">
+                                    <label for="emailcust">Email</label> 
+                                    <input type="email" class="form-control" name="emailcust" id="emailcust"  [(ngModel)]="userEmailId"  readonly>
+                                </div>
+                                <div class="col col-12 col-lg-6 col-md-6">
+                                    <label for="addrcust">Email</label> 
+                                    <textarea name="addrcust" id="addrcust" class="form-control" rows="4"  [(ngModel)]="userAddress" readonly></textarea>
+                                    <!-- <input type="email" class="form-control" name="emailcust" id="emailcust"  [(ngModel)]="userEmailId"  readonly> -->
+                                </div>
+                                <div class="col col-12 col-lg-6 col-md-6">
+                                    <div class="row">
+                                        <div class="col col-12 col-md-12 col-lg-12">
+                                            <label for="phonecust">Contact Number</label> 
+                                            <input type="text" class="form-control" name="phonecust" id="phonecust"  [(ngModel)]="userContactNo"  readonly>                                        
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row ">  
+                                        <table class="table">
+                                            <tr>
+                                                <td align="center"><button type="button" class="btn btn-danger" style="width: 50%;" (click)="deleteCustomer()">DELETE</button> </td>
+                                                <td align="center"> <button type="button" class="btn btn-primary" style="width: 50%;" (click)="enableEditing()">EDIT</button></td>
+                                            </tr>
+                                        </table>  
+
+                                    
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="row" *ngIf="editing">
+                                <div class="col col-12 col-lg-6 col-md-6">
+                                    <label for="namecust">Name</label> 
+                                    <input type="text" class="form-control" name="namecust" id="namecust"  [(ngModel)]="userFullName"  >
+                                </div>
+                                <div class="col col-12 col-lg-6 col-md-6">
+                                    <label for="emailcust">Email</label> 
+                                    <input type="email" class="form-control" name="emailcust" id="emailcust"  [(ngModel)]="userEmailId"  >
+                                </div>
+                                <div class="col col-12 col-lg-6 col-md-6">
+                                    <label for="addrcust">Email</label> 
+                                    <textarea name="addrcust" id="addrcust" class="form-control" rows="4"  [(ngModel)]="userAddress" ></textarea>
+                                    <!-- <input type="email" class="form-control" name="emailcust" id="emailcust"  [(ngModel)]="userEmailId"  readonly> -->
+                                </div>
+                                <div class="col col-12 col-lg-6 col-md-6">
+                                    <div class="row">
+                                        <div class="col col-12 col-md-12 col-lg-12">
+                                            <label for="phonecust">Contact Number</label> 
+                                            <input type="text" class="form-control" name="phonecust" id="phonecust"  [(ngModel)]="userContactNo"  >                                        
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <!-- <div class="col col-12 col-md-12 col-lg-12 col-md-offset-3 col-lg-offset-3  col-sm-offset-3  col-xs-offset-3">
+                                            <button type="button" class="btn btn-primary" style="width: 50%;" (click)="updateCustomer()">SAVE</button>                                     
+                                        </div> -->
+                                        <table class="table">
+                                            <tr>
+                                                <td align="center"><button type="button" class="btn btn-danger" style="width: 50%;" (click)="deleteCustomer()">DELETE</button> </td>
+                                                <td align="center"> <button type="button" class="btn btn-primary" style="width: 50%;" (click)="updateCustomer()">SAVE</button></td>
+                                            </tr>
+                                        </table>  
+                                    </div>
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                    <br><br>
+                    <!-- tab displaying starts -->
+                    <ul class="nav nav-tabs" *ngIf="showinvoice">
+                        <li class="active" ><a (click)="showInvoices()" style="cursor: pointer;">Invoice</a></li>
+                        <li><a (click)="showAdvancePayment()" style="cursor: pointer;">Advance Payment</a></li>
+                    </ul>
+                    <ul class="nav nav-tabs" *ngIf="!showinvoice">
+                        <li  ><a (click)="showInvoices()" style="cursor: pointer;">Invoice</a></li>
+                        <li class="active"><a (click)="showAdvancePayment()" style="cursor: pointer;">Advance Payment</a></li>
+                    </ul>
+                    <!-- tab displyaing ends -->
+
+                      <br><br>
+                      <div class="card border-secondary mt-2" *ngIf="showinvoice">
+                          <div class="card-body">
+                              <h4 class="card-title d-flex justify-content-between">Invoices </h4>
+                              <div class="row">
+                                <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
+                                    <table class="table table-hover">
+                                        <tr>
+                                            <th>Invoice</th>
+                                            <th>Reference</th>
+                                            <th>To</th>
+                                            <th>Date</th>
+                                            <th>Due Date</th>
+                                            <th>Total Amount</th>
+                                            <th>Paid</th>
+                                            <th>Status</th>
+                                        </tr>
+                                        <tbody>
+                                            <tr *ngFor="let customerinvoice of customerinvoices; let i = index;let last = last;" (click)="editordelete(customerinvoice.id,customerinvoice.status);">
+                                                <td>{{customerinvoice.invoiceid}}</td>
+                                                <td>{{customerinvoice.reference}}</td>
+                                                <td>{{customerinvoice.customername}}</td>                                                
+                                                <td>{{customerinvoice.date}}</td>
+                                                <td>{{customerinvoice.duedate}}</td>
+                                                <td>{{customerinvoice.totalamount}}</td>
+                                                <td>0</td>
+                                                <td>{{customerinvoice.status}}</td>
+                                            </tr>
+                                        </tbody>              
+                                    </table>
+                                </div>
+                                  <div class="row ">
+                                      <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+                                      <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+                                      <div class="col col-12 col-lg-4 col-md-4 col-sm-4 col-xs-4" style="border-top: 1px double #333;border-bottom: 2px double #333;">
+                                          <h3>Total  {{totalmamount}}</h3>  
+                                    </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                        <!-- display advance payment page starts -->
+                        <div class="card border-secondary mt-2" *ngIf="!showinvoice">
+                            <div class="card-body">
+                                <h4 class="card-title d-flex justify-content-between">Invoices </h4>
+                                <div class="row">
+                                  <div class="col col-12 col-lg-12 col-md-12 col-sm-12">
+                                      <table class="table ">                                          
+                                          <tr>
+                                            <th style="text-align: center;">ID</th>
+                                            <th style="text-align: center;">Category</th>
+                                            <th style="text-align: center;">Date</th>
+                                            <th style="text-align: center;">Description</th>
+                                            <th style="text-align: center;">Amount</th>
+                                          </tr>
+                                          <tbody *ngFor="let displayincome of displayincomes ; let i = index;">
+                                          <tr >  
+                                            <!-- <td> {{displayincome.category}}</td>                                                    -->
+                                            <td><input name="id_{{i}}" class="form-control"  [(ngModel)]="displayincome.cashaccountid" readonly></td> 
+                                            <td><input name="cat_{{i}}" class="form-control"  [(ngModel)]="displayincome.category" readonly></td> 
+                                            <!-- <td>{{displayincome.category}}</td> -->
+                                            <td><input name="date_{{i}}" type="date" class="form-control"  [(ngModel)]="displayincome.date" readonly ></td> 
+                                            <td><input  name="desc_{{i}}" class="form-control"  [(ngModel)]="displayincome.description" readonly></td> 
+                                            <td><input name="amt_{{i}}" class="form-control"  [(ngModel)]="displayincome.amount" readonly></td> 
+                                            
+
+                                            <!-- display matching starts -->
+                                            <td>
+                                                <table>
+                                                    <tr>
+                                                        <td align="center"> <b>Allocate</b> </td>
+                                                    </tr>
+                                                    <tr *ngIf="!matchactive[i]">
+                                                      <ul class="nav nav-tabs">
+                                                          <li class="active" ><a  (click)="createSelected(i);" style="cursor: pointer;">Create</a></li>
+                                                          <li ><a  (click)="matchSelected(i);" style="cursor: pointer;">Match</a></li> 
+                                                      </ul>  
+                                                    </tr>
+                                                    <tr *ngIf="matchactive[i]">
+                                                        <ul class="nav nav-tabs">
+                                                            <li  ><a style="cursor: pointer;" (click)="createSelected(i);">Create</a></li>
+                                                            <li class="active" ><a  (click)="matchSelected(i);">Match</a></li>                                 
+                                                        </ul>  
+                                                      </tr>
+                                                    <tr *ngIf="!matchactive[i]">                            
+                                                      <td>                              
+                                                          <input type="text" class="form-control" name="allocate{{i}}" id="allocate{{i}}" [(ngModel)]="selectedmatchingcategory[i]"
+                                                          (input)="onPressKeyboardCategory($event.target.value,i)" required placeholder="Category"> 
+                                                          <div *ngIf="displaycategorynames[i]">
+                                                            <table class="table ">
+                                                                <tbody>
+                                                                     <tr *ngFor="let title of categorynamefront" >
+                                                                        <td> <b>{{title.titlecategory}}</b></td>
+                                                                        <td>
+                                                                            <table class="table table-hover">
+                                                                                <tbody>
+                                                                                    <tr *ngFor="let c of title.category " (click)="selectedProductCategory(c,i)">        
+                                                                                        <td> {{c}}</td>         
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>           
+                                                                </tbody>
+                                                                <tr *ngIf="addnewcategoryenable[i]">
+                                                                    <td align="center">
+                                                                        <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addnewcategory">
+                                                                            ADD NEW CATEGORY
+                                                                        </button>
+                                                                    </td> 
+                                                                 </tr>
+                                                            </table>  
+                                                        </div>    
+                                                      </td>
+                                                    </tr>
+                                                    
+                                                </table> 
+                                              </td>
+                                              <td *ngIf="!matchactive[i]">
+                                                <button type="button"  (click)="savePayment(i)" class="btn btn-primary">SAVE</button>
+                                             
+                                            </td>
+                                           
+                                            <!-- display matching ends -->  
+                                       </tr>
+
+                                       <tr *ngIf="matchactive[i]">
+                                           <td colspan="5">
+                                                <!-- display matching invoices -->
+          <div class="row" *ngIf="matchactive[i]">
+            <div class="col col-12 col-md-12 col-lg-12 col-sm-12 col-xs-12">
+              <table class="table">
+                  <thead>
+                      <th>#</th>
+                      <th>Invoice No</th>
+                      <th>Reference No</th>
+                      <th>To</th>
+                      <th>Due Date</th>
+                      <th>Invoice Amount</th>
+                      <th>Balance Amount</th>
+                      <th>Allocated</th>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let customerinvoice of customerinvoices; let k = index;let last = last;" >
+                          <td><input type="checkbox" name="chk{{k}}" [disabled]="customerinvoice.checked" value="{{customerinvoice.value}}" [(ngModel)]="customerinvoice.checked"  (change)="checkValuePositive(k,i)"/> </td>
+                          <td>{{customerinvoice.invoiceid}}</td>
+                          <td>{{customerinvoice.reference}}</td>
+                          <td *ngIf="customerinvoice.link"><a routerLink="/individualcustomer" (click)="customerclicked(customerinvoice.customerid);">{{customerinvoice.customername}}</a></td>
+                          <td *ngIf="!customerinvoice.link">{{customerinvoice.customername}}</td>                            
+                          <td>{{customerinvoice.duedate}}</td>
+                          <td>{{customerinvoice.totalamount}}</td>
+                          <td>{{customerinvoice.balanceamount}}</td>
+                          <td>{{customerinvoice.allocatedAmount}}</td>                                                      
+                      </tr>
+                      <tr *ngFor="let suppliernegativeinvoice of suppliernegativeinvoices; let k = index;let last = last;" >
+                          <td><input type="checkbox" [disabled]="suppliernegativeinvoice.checked" value="{{suppliernegativeinvoice.value}}" [(ngModel)]="suppliernegativeinvoice.checked"  (change)="checkValueNegative(k,i)"/> </td>
+                          <td>{{suppliernegativeinvoice.invoiceid}}</td>
+                          <td>{{suppliernegativeinvoice.reference}}</td>
+                          <td *ngIf="suppliernegativeinvoice.link"><a routerLink="/individualcustomer" (click)="supplierclicked(suppliernegativeinvoice.customerid);">{{suppliernegativeinvoice.customername}}</a></td>
+                          <td *ngIf="!suppliernegativeinvoice.link">{{suppliernegativeinvoice.customername}}</td>                            
+                          <td>{{suppliernegativeinvoice.duedate}}</td>
+                          <td>{{suppliernegativeinvoice.totalamount}}(REFUND)</td>
+                          <td>{{suppliernegativeinvoice.balanceamount}}</td>                             
+                          <td>{{suppliernegativeinvoice.allocatedAmount}}</td>                     
+                      </tr>
+                     
+                      <tr>
+                          <td colspan="8">
+
+                                   <!-- adjustments to cash table start -->
+              <table class="table" style="background-color: lightblue;">
+                  <thead>
+                     <tr>
+                         <th>SI</th>
+                         <th>Description</th>
+                         <th>Account</th>                           
+                         <th>Amount</th>                          
+                     </tr>
+                     <tr *ngFor="let adjustedvalue of adjustedvalues;let t=index">
+                      <td>{{t+1}}</td> 
+                      <td>
+                          <input type="text" class="form-control" [(ngModel)]="adjustedvalue.description"
+                          name="desc_{{t}}">
+                          
+                      </td>
+                      <td>
+                          <input type="text" class="form-control" [(ngModel)]="adjustedvalue.category"
+                          name="category_{{t}}" (input)="onPressKeyboardCategory1($event.target.value,t)">
+                          
+                          <div *ngIf="displaycategorynames1[t]">
+                              <table class="table ">
+                                  <tbody>
+                                       <tr *ngFor="let title of categorynamefront" >
+                                          <td> <b>{{title.titlecategory}}</b></td>
+                                          <td>
+                                              <table class="table table-hover">
+                                                  <tbody>
+                                                      <tr *ngFor="let c of title.category " (click)="selectedProductCategory1(c,t)">        
+                                                          <td> {{c}}</td>         
+                                                      </tr>
+                                                  </tbody>
+                                              </table>
+                                          </td>
+                                      </tr>           
+                                  </tbody>
+                                  <tr *ngIf="addnewcategoryenable1[t]">
+                                      <td align="center">
+                                          <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addnewcategory">
+                                              ADD NEW CATEGORY
+                                          </button>
+                                      </td> 
+                                   </tr>
+                              </table>                                              
+                          </div> 
+                      </td>
+                      <td>
+                          <input type="text" class="form-control" [(ngModel)]="adjustedvalue.amount"
+                          name="amount_{{t}}" (input)="onPressKeyboardAdjustedValue($event.target.value,t,i)">
+                                            
+                      </td>
+                      <td>
+                          <button type="button" (click)="removeNewLine(t)" >X</button>
+                      </td>
+                     </tr>
+                    <tr>
+                        <td colspan="5" style="text-align: left;">
+                          <button type="button" style="color: darkblue;" (click)="addNewLine()">Add a new Line</button>
+                          </td>
+                    </tr>
+                  </thead>
+              </table>
+               <!-- adjustments to cash table Ends -->
+
+                          </td>
+                      </tr>
+                          <tr>
+                              <td colspan="7" style="text-align: right;">
+                                  Total is out by {{recievedamount[i]-(sum[i]+adjustedsum[i])}}
+                              </td>
+                          </tr>
+                      
+
+                      <tr>
+                          <td colspan="8" align="center" >
+                              <button type="button" class="btn btn-primary" [disabled]="savebtndisabled[i]" (click)="allocateAmount(displayincome.date,displayincome.description,i)">SAVE1</button>
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+
+             
+
+            </div>
+        </div>
+    </td>
+<!-- Matching Ends -->
+                                       </tr>
+                                       </tbody>
+
+                                      </table>
+                                      </div>
+                                </div>
+                                
+                            </div>
+                            </div>
+                               <!-- display advance payment page ends -->  
+                      <br>
+                      <br>
+                      <hr>
+                      <!-- <div class="card border-secondary ">
+                          <div class="card-body">
+                            <div class="row">
+                                <div class="col col-12 col-md-6 col-lg-6 col-sm-6 col-xs-6" style="text-align: center;">
+                                      <button type="button" class="btn btn-danger" (click)="deleteInvoice()" style="width: 50%">Delete</button>
+                                </div>
+                                <div class="col col-12 col-md-6 col-lg-6 col-sm-6 col-xs-6" style="text-align: center;">
+                                  <button type="button" class="btn btn-primary" (click)="invoiceForm.valid ? editInvoice() : EnterValidData() " style="width: 50%">Edit</button>
+                              </div>
+                            </div>  
+                          </div>
+                      </div> -->
+                           
+                  </div>                 
+              </div>
+          </div>
+      </form>
+
+
+      </div>
+          
+</div>
+
+
+
+
+

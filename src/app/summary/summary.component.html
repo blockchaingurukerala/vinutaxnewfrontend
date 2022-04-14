@@ -1,0 +1,103 @@
+<div class="container">
+  <ul class="nav nav-tabs">
+    <li class="active"><a routerLink="/summary">Summary</a></li>
+    <li ><a routerLink="/transactions">Transactions</a></li>
+    <!-- <li ><a routerLink="/dashboard">Income</a></li>
+    <li><a routerLink="/expence">Expence</a></li> -->
+    <li ><a routerLink="/report">Report</a></li>    
+    <li><a routerLink="/allaccount">All Account</a></li>  
+    <li class="dropdown ">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          Business <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a routerLink="/displaycustomerinvoices" (click)="setasCustomer();" >Invoice</a></li>
+        <li><a routerLink="/allcustomers" (click)="setasCustomer();">Customers</a></li>
+        <li><a routerLink="/displaycustomerinvoices" (click)="setasSupplier();">Bills To Pay</a></li> 
+        <li><a routerLink="/allcustomers" (click)="setasSupplier();">Suppliers</a></li> 
+     </ul>
+  </li>  
+  <li><a routerLink="/displayjournals">Journal</a></li>    
+  </ul>
+      <!-- <div class="col col-sm-4 col-md-2 col-lg-2">
+
+      </div> -->
+      <!-- <div class="col col-sm-4 col-md-8 col-lg-8">
+        <div class="container"> -->
+          <div class="row">
+            <select class="form-control" [(ngModel)]="selectedYear" (change)="yearChange()">
+              <option value="19">19-20</option>                    
+              <option value="20"  selected>20-21</option>                    
+              <option value="21">21-22</option>
+              <option value="22">22-23</option>
+              <option value="23">23-24</option>
+              <option value="24">24-25</option>
+              <option value="25">25-26</option>
+            </select>   
+          </div>
+          <div class="row">
+            <!-- <h2 class="text-center" style="font-weight: 900;">Incomes</h2> -->
+            <!-- display barchart -->
+
+            <div class="col col-sm-6 col-md-6 col-lg-6">
+              <div style="display: block">
+                <canvas baseChart
+                      [datasets]="barChartData"
+                      [labels]="barChartLabels"
+                      [options]="barChartOptions"
+                      [legend]="barChartLegend"
+                      [chartType]="barChartType">
+                </canvas>
+              </div>
+            </div>
+             <!-- display barchart Ends -->
+             <!-- display Piechart -->
+            <div class="col col-sm-6 col-md-6 col-lg-6">
+              <div style="display: block">
+                <canvas baseChart
+                        [data]="pieChartData"
+                        [labels]="pieChartLabels"
+                        [options]="pieChartOptions"
+                        [colors]="pieChartColors"
+                        [chartType]="pieChartType">
+
+                </canvas>
+              </div>
+            </div>
+            <!-- <h2 class="text-center" style="font-weight: 900;">Expence</h2> -->
+            <!-- display Piechart Ends -->
+            <!-- display barchart for Expences -->
+            <div class="col col-sm-6 col-md-6 col-lg-6">
+              <div style="display: block">
+                <canvas baseChart
+                      [datasets]="barChartDataexpences"
+                      [labels]="barChartLabelsexpences"
+                      [options]="barChartOptions"
+                      [legend]="barChartLegendexpences"
+                      [chartType]="barChartType">
+                </canvas>
+              </div>
+            </div>
+             <!-- display barchart Expences Ends -->
+              <!-- display Piechart for Expence -->
+            <div class="col col-sm-6 col-md-6 col-lg-6">
+              <div style="display: block">
+                <canvas baseChart
+                        [data]="pieChartDataExpence"
+                        [labels]="pieChartLabelsExpence"
+                        [chartType]="pieChartTypeExpence"
+                        [colors]="pieChartColors"
+                        >
+                </canvas>
+              </div>
+            </div>
+            <!-- display Piechart expence Ends -->
+          </div> 
+        <!-- </div>            
+      </div> -->
+      <!-- <div class="col col-sm-4 col-md-2 col-lg-2">
+
+      </div> -->          
+</div>
+
+
